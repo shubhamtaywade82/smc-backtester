@@ -1,0 +1,262 @@
+<!DOCTYPE html>                                        
+                                                                                                                                                                                             
+   <html lang="en">                                                                                                                                                                          
+   <head>                                                                                                                                                                                    
+   <meta charset="UTF-8">                                                                                                                                                                    
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">                                                                                                                    
+   <title>SMC + ICT Institutional Trading Playbook v4.0</title>                                                                                                                              
+   <style>                                                                                                                                                                                   
+     :root {                                                                                                                                                                                 
+       --bg:       #0a0c10;                                                                                                                                                                  
+       --surface:  #0f1218;                                                                                                                                                                  
+       --card:     #141820;                                                                                                                                                                  
+       --border:   #1e2530;                                                                                                                                                                  
+       --accent:   #f0a500;                                                                                                                                                                  
+       --accent2:  #2ee8b0;                                                                                                                                                                  
+       --red:      #e84040;                                                                                                                                                                  
+       --green:    #2ee880;                                                                                                                                                                  
+       --blue:     #4090ff;                                                                                                                                                                  
+       --purple:   #9060ff;                                                                                                                                                                  
+       --muted:    #6b7280;                                                                                                                                                                  
+       --text:     #d1d9e6;                                                                                                                                                                  
+       --textdim:  #8892a0;                                                                                                                                                                  
+       --mono:     'JetBrains Mono', 'Fira Code', monospace;                                                                                                                                 
+       --sans:     'Inter', system-ui, sans-serif;                                                                                                                                           
+     }                                                                                                                                                                                       
+   - { box-sizing: border-box; margin: 0; padding: 0; }                                                                                                                                      
+                                                                                                                                                                                             
+     body {                                                                                                                                                                                  
+       background: var(--bg);                                                                                                                                                                
+       color: var(--text);                                                                                                                                                                   
+       font-family: var(--sans);                                                                                                                                                             
+       font-size: 14px;                                                                                                                                                                      
+       line-height: 1.6;                                                                                                                                                                     
+       min-height: 100vh;                                                                                                                                                                    
+     }                                                                                                                                                                                       
+                                                                                                                                                                                             
+     /* ── NAV ── */                                                                                                                                                                         
+     nav {                                                                                                                                                                                   
+       position: sticky;                                                                                                                                                                     
+       top: 0;                                                                                                                                                                               
+       z-index: 100;                                                                                                                                                                         
+       background: rgba(10,12,16,0.96);                                                                                                                                                      
+       backdrop-filter: blur(10px);                                                                                                                                                          
+       border-bottom: 1px solid var(--border);                                                                                                                                               
+       padding: 0 24px;                                                                                                                                                                      
+       display: flex;                                                                                                                                                                        
+       align-items: center;                                                                                                                                                                  
+       gap: 6px;                                                                                                                                                                             
+       overflow-x: auto;                                                                                                                                                                     
+       height: 48px;                                                                                                                                                                         
+       scrollbar-width: none;                                                                                                                                                                
+     }                                                                                                                                                                                       
+     nav::-webkit-scrollbar { display: none; }                                                                                                                                               
+                                                                                                                                                                                             
+     .nav-logo {                                                                                                                                                                             
+       font-family: var(--mono);                                                                                                                                                             
+       font-size: 13px;                                                                                                                                                                      
+       font-weight: 700;                                                                                                                                                                     
+       color: var(--accent);                                                                                                                                                                 
+       letter-spacing: 0.08em;                                                                                                                                                               
+       white-space: nowrap;                                                                                                                                                                  
+       margin-right: 12px;                                                                                                                                                           
+       flex-shrink: 0;                                                                                                                                                                       
+     }                                                                                                                                                                                       
+                                                                                                                                                                                             
+     .nav-btn {                                                                                                                                                                              
+       background: none;                                                                                                                                                                     
+       border: 1px solid transparent;                                                                                                                                                        
+       color: var(--muted);                                                                                                                                                                  
+       font-family: var(--sans);                                                                                                                                                             
+       font-size: 12px;                                                                                                                                                                      
+       padding: 4px 10px;                                                                                                                                                                    
+       border-radius: 4px;                                                                                                                                                                   
+       cursor: pointer;                                                                                                                                                                      
+       white-space: nowrap;                                                                                                                                                                  
+       transition: all 0.15s;                                                                                                                                                                
+       flex-shrink: 0;                                                                                                                                                                       
+     }                                                                                                                                                                                       
+     .nav-btn:hover { color: var(--text); border-color: var(--border); }                                                                                                                     
+     .nav-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(240,165,0,0.08); }                                                                                
+                                                                                                                                                                                             
+     /* ── LAYOUT ── */                                                                                                                                                                      
+     main {                                                                                                                                                                                  
+       max-width: 1100px;                                                                                                                                                                    
+       margin: 0 auto;                                                                                                                                                                       
+       padding: 32px 20px 80px;                                                                                                                                                              
+     }                                                                                                                                                                                       
+                                                                                                                                                                                             
+     .section { display: none; }                                                                                                                                                             
+     .section.visible { display: block; }                                                                                                                                                    
+                                                                                                                                                                                             
+     /* ── HERO ── */                                                                                                                                                                        
+     .hero {                                                                                                                                                                                 
+       border-bottom: 1px solid var(--border);                                                                                                                                               
+       padding-bottom: 28px;                                                                                                                                                                 
+       margin-bottom: 32px;                                                                                                                                                                  
+     }                                                                                                                                                                                       
+     .hero-eyebrow {                                                                                                                                                                         
+       font-family: var(--mono);                                                                                                                                                             
+       font-size: 11px;                                                                                                                                                                      
+       letter-spacing: 0.18em;                                                                                                                                                               
+       color: var(--accent);                                                                                                                                                                 
+       text-transform: uppercase;                                                                                                                                                            
+       margin-bottom: 10px;                                                                                                                                                                  
+     }                                                                                                                                                                                       
+     .hero h1 {                                                                                                                                                                              
+       font-size: 28px;                                                                                                                                                                      
+       font-weight: 800;                                                                                                                                                                     
+       line-height: 1.15;                                                                                                                                                                    
+       letter-spacing: -0.02em;                                                                                                                                                              
+       margin-bottom: 10px;                                                                                                                                                                  
+     }                                                                                                                                                                                       
+     .hero h1 span { color: var(--accent); }                                                                                                                                                 
+     .hero-sub                                                                                                                                                               
+       color: var(--textdim);                                                                                                                                                                
+       font-size: 13px;                                                                                                                                                                      
+       max-width: 600px;                                                                                                                                                                     
+     }                                                                                                                                                                                       
+                                                                                                                                                                                             
+     /* ── PHASE PIPELINE ── */                                                                                                                                                              
+     .pipeline {                                                                                                                                                                             
+       display: flex;                                                                                                                                                                        
+       flex-wrap: wrap;                                                                                                                                                                      
+       gap: 0;                                                                                                                                                                               
+       margin: 24px 0;                                                                                                                                                                       
+     }                                                                                                                                                                                       
+     .phase {                                                                                                                                                                                
+       display: flex;                                                                                                                                                                        
+       align-items: center;                                                                                                                                                                  
+       gap: 0;                                                                                                                                                                               
+     }                                                                                                                                                                                       
+     .phase-label {                                                                                                                                                                          
+       background: var(--card);                                                                                                                                                              
+       border: 1px solid var(--border);                                                                                                                                                      
+       font-family: var(--mono);                                                                                                                                                             
+       font-size: 10px;                                                                                                                                                                      
+       padding: 6px 10px;                                                                                                                                                                    
+       color: var(--textdim);                                                                                                                                                                
+       letter-spacing: 0.06em;                                                                                                                                                               
+       white-space: nowrap;                                                                                                                                                                  
+     }                                                                                                                                                                                       
+     .phase-arrow {                                                                                                                                                                          
+       color: var(--accent);                                                                                                                                                                 
+       font-size: 12px;                                                                                                                                                                      
+       padding: 0 4px;                                                                                                                                                                       
+     }                                                                                                                                                                                       
+     .phase-label.lit { color: var(--accent); border-color: var(--accent); background: rgba(240,165,0,0.07); }                                                                               
+                                                                                                                                                                                             
+     /* ── GRID ── */                                                                                                                                                                        
+     .grid-2 {                                                                                                                                                                               
+       display: grid;                                                                                                                                                                        
+       grid-template-columns: 1fr 1fr;                                                                                                                                                       
+       gap: 16px;                                                                                                                                                                            
+       margin-bottom: 20px;                                                                                                                                                                  
+     }                                                                                                                                                                                       
+     @media (max-width: 680px) { .grid-2 { grid-template-columns: 1fr; } }                                                                                                                   
+                                                                                                                                                                                             
+     .grid-3 {                                                                                                                                                                               
+       display: grid;                                                                                                                                                                        
+       grid-template-columns: 1fr 1fr 1fr;                                                                                                                                                   
+       gap: 14px;                                                                                                                                                                            
+       margin-bottom: 20px;                                                                                                                                                                  
+     }                                                                                                                                                                                       
+     @media (max-width: 780px) { .grid-3 { grid-template-columns: 1fr 1fr; } }                                                                                                               
+     @media (max-width: 480px) { .grid-3 { grid-tempr; } }                                                                                                                   
+                                                                                                                                                                                             
+     /* ── CARD ── */                                                                                                                                                                        
+     .card {                                                                                                                                                                                 
+       background: var(--card);                                                                                                                                                              
+       border: 1px solid var(--border);                                                                                                                                                      
+       border-radius: 6px;                                                                                                                                                                   
+       padding: 18px 20px;                                                                                                                                                                   
+       position: relative;                                                                                                                                                                   
+       overflow: hidden;                                                                                                                                                                     
+     }                                                                                                                                                                                       
+     .card::before {                                                                                                                                                                         
+       content: '';                                                                                                                                                                          
+       position: absolute;                                                                                                                                                                   
+       left: 0; top: 0; bottom: 0;                                                                                                                                                           
+       width: 3px;                                                                                                                                                                           
+       background: var(--accent);                                                                                                                                                            
+     }                                                                                                                                                                                       
+     .card.bull::before { background: var(--green); }                                                                                                                                        
+     .card.bear::before { background: var(--red); }                                                                                                                                          
+     .card.neutral::before { background: var(--blue); }                                                                                                                                      
+     .card.purple::before { background: var(--purple); }                                                                                                                                     
+                                                                                                                                                                                             
+     .card-title {                                                                                                                                                                           
+       font-family: var(--mono);                                                                                                                                                             
+       font-size: 11px;                                                                                                                                                                      
+       letter-spacing: 0.12em;                                                                                                                                                               
+       color: var(--muted);                                                                                                                                                                  
+       text-transform: uppercase;                                                                                                                                                            
+       margin-bottom: 10px;                                                                                                                                                                  
+       display: flex;                                                                                                                                                                        
+       align-items: center;                                                                                                                                                                  
+       gap: 8px;                                                                                                                                                                             
+     }                                                                                                                                                                                       
+     .card-title .badge {                                                                                                                                                                    
+       background: rgba(240,165,0,0.12);                                                                                                                                                     
+       color: var(--accent);                                                                                                                                                                 
+       border: 1px solid rgba(240,165,0,0.25);                                                                                                                                               
+       font-size: 9px;                                                                                                                                                                       
+       padding: 1px 6px;                                                                                                                                                                     
+       border-radius: 3px;                                                                                                                                                                   
+     }                                                                                                                                                                                       
+     .card-title .badge.bull { background: rgba(46,232,128,0.1); color: var(--green); border-color: rgba(46,232,128,0.25); }                                                                 
+     .card-title .badge.bear { background: rgba(232,64,64,0.1); color: var(--red); border-color: rgba(232,64,64,0.25); }                                                                     
+                                                                                                                                                                                             
+     .card h3 {                                                                                                                                                                              
+       font-size: 15px;                                                                                                                                                                      
+       font-weight: 700;                                                                                                                                                                     
+       margin-bottom: 8px;                                                                                                                                                                   
+       letter-spacing: -0.01em;                                                                                                                                                              
+     }                                                                                                                                                                                       
+                                                                                                                                                                                     
+     .card p { color: var(--textdim); font-size: 13px; line-height: 1.55; }                                                                                                                  
+                                                                                                                                                                                             
+     /* ── CHECKLIST ── */                                                                                                                                                                   
+     .checklist {                                                                                                                                                                            
+       list-style: none;                                                                                                                                                                     
+       margin-top: 10px;                                                                                                                                                                     
+     }                                                                                                                                                                                       
+     .checklist li {                                                                                                                                                                         
+       display: flex;                                                                                                                                                                        
+       align-items: flex-start;                                                                                                                                                              
+       gap: 8px;                                                                                                                                                                             
+       padding: 4px 0;                                                                                                                                                                       
+       font-size: 13px;                                                                                                                                                                      
+       color: var(--textdim);                                                                                                                                                                
+       border-bottom: 1px solid rgba(255,255,255,0.04);                                                                                                                                      
+     }                                                                                                                                                                                       
+     .checklist li:last-child { border-bottom: none; }                                                                                                                                       
+     .checklist li::before {                                                                                                                                                                 
+       content: '□';                                                                                                                                                                         
+       font-family: var(--mono);                                                                                                                                                             
+       color: var(--border);                                                                                                                                                                 
+       font-size: 13px;                                                                                                                                                                      
+       flex-shrink: 0;                                                                                                                                                                       
+       margin-top: 1px;                                                                                                                                                                      
+     }                                                                                                                                                                                       
+     .checklist li.required::before {                                                                                                                                                        
+       content: '◈';                                                                                                                                                                         
+       color: var(--accent);                                                                                                                                                                 
+     }                                                                                                                                                                                       
+     .checklist li.bull-item::before { content: '▲'; color: var(--green); font-size: 9px; margin-top: 5px; }                                                                                 
+     .checklist li.bear-item::before { content: '▼'; color: var(--red); font-size: 9px; margin-top: 5px; }                                                                                   
+                                                                                                                                                                                             
+     /* ── FLOW STEPS ── */                                                                                                                                                                  
+     .steps {                                                                                                                                                                                
+       display: flex;                                                                                                                                                                        
+       flex-direction: column;                                                                                                                                                               
+       gap: 0;                                                                                                                                                                               
+     }                                                                                                                                                                                       
+     .step {                                                                                                                                                                                 
+       display: grid;                                                                                                                                                                        
+       grid-template-columns: 36px 1fr;                                                                                                                                                      
+       gap: 0;                                                                                                                                                                               
+       position: relative;                                                                     
+<truncated 439124 bytes>
+
+NOTE: The output was truncated because it was too long. Use a more targeted query or a smaller range to get the information you need.

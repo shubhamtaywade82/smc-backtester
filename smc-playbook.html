@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMC + ICT Institutional Trading Playbook v3.0</title>
+<title>SMC + ICT Institutional Trading Playbook v4.0</title>
 <style>
   :root {
     --bg:       #0a0c10;
@@ -719,6 +719,49 @@
     font-style: italic;
     line-height: 1.6;
   }
+
+  /* ── MTF FLOWCHART ── */
+  .mtf-flowchart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .mtf-step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px 20px;
+    border-radius: 6px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    border-left: 3px solid var(--accent);
+  }
+  .mtf-step.htf { border-left-color: var(--blue); }
+  .mtf-step.itf { border-left-color: var(--purple); }
+  .mtf-step.ltf { border-left-color: var(--green); }
+
+  .mtf-arrow {
+    color: var(--accent);
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(240,165,0,0.3);
+  }
+  .tf-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: inline-block;
+  }
+  .tf-badge.htf { background: rgba(64,144,255,0.08); color: var(--blue); border: 1px solid rgba(64,144,255,0.2); }
+  .tf-badge.itf { background: rgba(144,96,255,0.08); color: var(--purple); border: 1px solid rgba(144,96,255,0.2); }
+  .tf-badge.ltf { background: rgba(46,232,128,0.08); color: var(--green); border: 1px solid rgba(46,232,128,0.2); }
 </style>
 <script src="backtest_results.js" defer></script>
 </head>
@@ -733,6 +776,7 @@
   <button class="nav-btn" onclick="showSection('advanced', this)">Advanced ICT</button>
   <button class="nav-btn" onclick="showSection('pd', this)">Premium/Discount</button>
   <button class="nav-btn" onclick="showSection('rules', this)">Golden Rules</button>
+  <button class="nav-btn" onclick="showSection('mtf-playbook', this)">MTF Playbook</button>
   <button class="nav-btn" onclick="showSection('backtest', this)">Backtest Simulator</button>
 </nav>
 
@@ -741,9 +785,9 @@
 <!-- ═══════════════════════════════════ OVERVIEW ═══════════════════════════════════ -->
 <div id="overview" class="section visible">
   <div class="hero">
-    <div class="hero-eyebrow">Smart Money Concepts + ICT · v3.0 — 14 Playbooks</div>
+    <div class="hero-eyebrow">Smart Money Concepts + ICT · v4.0 — 15 Playbooks</div>
     <h1>Institutional <span>Trading Playbook</span></h1>
-    <p class="hero-sub">14 complete playbooks covering trendline liquidity, S/R flips, BOS pullbacks, CHoCH reversals, OB retests, sweep+OB, FVG-breaker entries, AMD session plays, Silver Bullet, and the Unicorn. From beginner setups to full A+ confluence.</p>
+    <p class="hero-sub">15 complete playbooks covering trendline liquidity, S/R flips, BOS pullbacks, CHoCH reversals, OB retests, sweep+OB, FVG-breaker entries, AMD session plays, and Multi-Timeframe Confluence. From beginner setups to full A+ confluence.</p>
   </div>
 
   <div class="sec-header">
@@ -2234,6 +2278,74 @@
 
   <div class="footer-note">
     This playbook combines SMC (trendline liquidity, OB, CHoCH/BOS) with ICT models (AMD, OTE, Silver Bullet, Unicorn, PD Arrays). The underlying thesis is identical: institutions move price to take liquidity, then execute large orders at imbalances, then distribute. Your edge comes from reading those footprints — not predicting the next candle. Discipline, patience, and a minimum 1:3 R:R will mathematically produce results over a large sample.
+</div>
+
+<!-- ═══════════════════════════════════ MULTI-TIMEFRAME PLAYBOOK ═══════════════════════════════════ -->
+<div id="mtf-playbook" class="section">
+  <div class="hero">
+    <div class="hero-eyebrow">Advanced Confluence · HTF Bias + ITF Sweep + LTF Entry</div>
+    <h1>Multi-Timeframe <span>Trading Playbook</span></h1>
+    <p class="hero-sub">The ultimate confluenced execution model. By combining structures across three distinct timeframes, we align our trades with institutional momentum while entering at high-precision low-timeframe zones.</p>
+  </div>
+
+  <div class="sec-header">
+    <h2><span class="sec-icon y">⚡</span> Multi-Timeframe Alignment Pipeline</h2>
+    <p class="sec-sub">Visualizing how HTF, ITF, and LTF states confluence to trigger a trade</p>
+  </div>
+
+  <div class="mtf-flowchart">
+    <div class="mtf-step htf">
+      <span class="tf-badge htf">HTF Bias (15M / 1H)</span>
+      <h3 style="margin-bottom:4px;">Trend Classification</h3>
+      <p style="font-size:12.5px;color:var(--textdim);">Enforces directional bias. We only look for LONGS if HTF is Bullish (HL-HH chain), or SHORTS if HTF is Bearish (LH-LL chain).</p>
+    </div>
+    <div class="mtf-arrow">↓</div>
+    <div class="mtf-step itf">
+      <span class="tf-badge itf">ITF Structure (5M / 15M)</span>
+      <h3 style="margin-bottom:4px;">Liquidity Sweeps</h3>
+      <p style="font-size:12.5px;color:var(--textdim);">Identifies retail trap zones. Wait for buy-side (BSL) or sell-side (SSL) liquidity sweeps and reclaims on this intermediate structure.</p>
+    </div>
+    <div class="mtf-arrow">↓</div>
+    <div class="mtf-step ltf">
+      <span class="tf-badge ltf">LTF Precision (5M / 1M)</span>
+      <h3 style="margin-bottom:4px;">CHoCH Reversal & Order Block Retest</h3>
+      <p style="font-size:12.5px;color:var(--textdim);">Precise entry. Look for a LTF structure break (CHoCH/BOS) forming an Order Block. Enter inside the OB range, protected by the swing low/high, but only in discount/premium.</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card bull">
+      <div class="card-title">CONFLUENCED LONG ENTRY RULES</div>
+      <ul class="checklist">
+        <li class="required"><strong>HTF (15M/1H) Trend:</strong> Confirmed Bullish trend (recent Higher Low and Higher High).</li>
+        <li class="required"><strong>ITF (5M/15M) Sweep:</strong> Sell-Side Liquidity (SSL) swept and candle closed back inside support.</li>
+        <li class="required"><strong>LTF (5M/1M) CHoCH:</strong> Reversal break of the last LTF swing high.</li>
+        <li class="required"><strong>LTF (5M/1M) OB Retest:</strong> Candle low penetrates the top of the LTF Bullish Order Block.</li>
+        <li class="required"><strong>Discount Zone:</strong> Entry price must be in discount territory (below dealing range midpoint).</li>
+        <li class="required"><strong>Sizing:</strong> Max 1.5% capital risk per trade. Stop Loss placed below the OB or Sweep low.</li>
+      </ul>
+    </div>
+    <div class="card bear">
+      <div class="card-title">CONFLUENCED SHORT ENTRY RULES</div>
+      <ul class="checklist">
+        <li class="required"><strong>HTF (15M/1H) Trend:</strong> Confirmed Bearish trend (recent Lower High and Lower Low).</li>
+        <li class="required"><strong>ITF (5M/15M) Sweep:</strong> Buy-Side Liquidity (BSL) swept and candle closed back below resistance.</li>
+        <li class="required"><strong>LTF (5M/1M) CHoCH:</strong> Reversal break of the last LTF swing low.</li>
+        <li class="required"><strong>LTF (5M/1M) OB Retest:</strong> Candle high penetrates the bottom of the LTF Bearish Order Block.</li>
+        <li class="required"><strong>Premium Zone:</strong> Entry price must be in premium territory (above dealing range midpoint).</li>
+        <li class="required"><strong>Sizing:</strong> Max 1.5% capital risk per trade. Stop Loss placed above the OB or Sweep high.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <div class="card-title">BENEFITS OF MTF CONFLUENCE</div>
+    <p style="margin-bottom: 12px;">By combining multiple timeframes, we mathematically optimize our reward-to-risk (R:R) ratio while filtering out false setups. In our backtests, this multi-timeframe strategy yields higher consistency because:</p>
+    <ul class="checklist">
+      <li class="bull-item"><strong>Directional Filter:</strong> Operating only in the direction of the HTF trend ensures we aren't trading against institutional momentum.</li>
+      <li class="bull-item"><strong>Precision Entries:</strong> Entering on LTF order blocks enables very tight stop losses, scaling our average R:R to 1:3 or higher.</li>
+      <li class="bull-item"><strong>Trap Avoidance:</strong> Waiting for the ITF sweep ensures that retail stop-losses have already been taken out before we get involved.</li>
+    </ul>
   </div>
 </div>
 

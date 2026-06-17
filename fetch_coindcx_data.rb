@@ -1,0 +1,226 @@
+# frozen_string_literal: true
+
+require 'optparse'
+require 'json'
+require 'time'
+
+# Load coindcx-client local library
+$LOAD_PATH.unshift("/home/nemesis/project/trading-workspace/coindcx/coindcx-client/lib")
+begin
+  require 'coindcx'
+rescue LoadError => e
+  puts "Failed to load coindcx-client from local path: #{e.message}"
+  exit 1
+end
+
+# Load SMC library components
+require_relative 'lib/smc/candle'
+require_relative 'lib/smc/pivot_detector'
+require_relative 'lib/smc/market_structure'
+require_relative 'lib/smc/liquidity_sweep'
+require_relative 'lib/smc/order_block'
+require_relative 'lib/smc/strategy'
+require_relative 'lib/smc/risk_manager'
+require_relative 'lib/smc/backtester'
+
+# Helper to load .env if present in client folder
+def load_dotenv
+  env_path = "/home/nemesis/project/trading-workspace/coindcx/coindcx-client/.env"
+  return unless File.file?(env_path)
+  
+  File.foreach(env_path) do |line|
+    line = line.strip
+    next if line.empty? || line.start_with?("#")
+    key, _, value = line.partition("=")
+    ENV[key.strip] = value.strip.gsub(/\A["']|["']\z/, "")
+  end
+end
+
+def parse_options
+  options = {
+    pair: "B-BTC_USDT",
+    interval: "5m",
+    limit: 150,
+    output: "coindcx_candles.json",
+    backtest: true
+  }
+
+  OptionParser.new do |opts|
+    opts.banner = "Usage: ruby fetch_coindcx_data.rb [options]"
+
+    opts.on("-p", "--pair PAIR", "CoinDCX pair name (default: B-BTC_USDT)") do |p|
+      options[:pair] = p
+    end
+
+    opts.on("-i", "--interval INTERVAL", "Candle interval, e.g. 1m, 5m, 1h (default: 5m)") do |i|
+      options[:interval] = i
+    end
+
+    opts.on("-l", "--limit LIMIT", Integer, "Number of candles to fetch (default: 150)") do |l|
+      options[:limit] = l
+    end
+
+    opts.on("-o", "--output FILE", "JSON file to save raw candles (default: coindcx_candles.json)") do |o|
+      options[:output] = o
+    end
+
+    opts.on("--[no-]backtest", "Run SMC backtester after fetching (default: true)") do |b|
+      options[:backtest] = b
+    end
+  end.parse!
+
+  options
+end
+
+def main
+  options = parse_options
+
+  puts "=================================================="
+  puts "        CoinDCX Market Data Fetcher & Backtester   "
+  puts "=================================================="
+  
+  load_dotenv
+
+  # Configure CoinDCX Client
+  CoinDCX.configure do |config|
+    config.api_key = ENV.fetch("COINDCX_API_KEY", "dummy_key")
+    config.api_secret = ENV.fetch("COINDCX_API_SECRET", "dummy_secret")
+  end
+
+  client = CoinDCX.client
+
+  puts "\n[1/3] Fetching candles from CoinDCX API..."
+  puts "      Pair     : #{options[:pair]}"
+  puts "      Interval : #{options[:interval]}"
+  puts "      Limit    : #{options[:limit]}"
+
+  begin
+    raw_candles = client.public.market_data.list_candles(
+      pair: options[:pair],
+      interval: options[:interval],
+      limit: options[:limit]
+    )
+
+    if raw_candles.nil? || raw_candles.empty?
+      puts "Error: No candle data returned from API."
+      exit 1
+    end
+
+    # The API returns newest candles first. We must sort chronologically (oldest first).
+    # Reversing the array will accomplish this.
+    chronological_candles = raw_candles.reverse
+
+    # Map raw data to standardized JSON structure
+    formatted_candles = chronological_candles.map do |c|
+      # CoinDCX time is in milliseconds. Convert to human readable string.
+      t_sec = c["time"] / 1000
+      time_str = Time.at(t_sec).utc.strftime("%Y-%m-%d %H:%M:%S UTC")
+
+      {
+        t: time_str,
+        o: c["open"].to_f,
+        h: c["high"].to_f,
+        l: c["low"].to_f,
+        c: c["close"].to_f,
+        v: c["volume"].to_f
+      }
+    end
+
+    # Save to file
+    File.write(options[:output], JSON.pretty_generate(formatted_candles))
+    puts "      Saved #{formatted_candles.size} candles to '#{options[:output]}'."
+
+    if options[:backtest]
+      puts "\n[2/3] Mapping candles to SMC objects..."
+      smc_candles = formatted_candles.map do |c|
+        SMC::Candle.new(
+          time: c[:t],
+          open: c[:o],
+          high: c[:h],
+          low: c[:l],
+          close: c[:c],
+          volume: c[:v]
+        )
+      end
+
+      puts "[3/3] Running backtest simulation over CoinDCX candles..."
+      pivot_detector = SMC::PivotDetector.new(left_bars: 4, right_bars: 4)
+      market_structure = SMC::MarketStructure.new
+      liquidity_sweep = SMC::LiquiditySweep.new(tolerance_pct: 0.001)
+      ob_detector = SMC::OrderBlockDetector.new
+      strategy = SMC::Strategy::SweepOB.new(lookback_candles: 15)
+      risk_manager = SMC::RiskManager.new(initial_capital: 100000.0, max_risk_pct: 0.01)
+
+      tester = SMC::Backtester.new(
+        candles: smc_candles,
+        pivot_detector: pivot_detector,
+        market_structure: market_structure,
+        liquidity_sweep: liquidity_sweep,
+        ob_detector: ob_detector,
+        strategy: strategy,
+        risk_manager: risk_manager
+      )
+
+      stats = tester.run
+
+      puts "\n================  BACKTEST SUMMARY  ================"
+      puts "Market Symbol   : #{options[:pair]} (#{options[:interval]})"
+      puts "Initial Capital : $#{'%.2f' % stats[:initial_capital]}"
+      puts "Final Capital   : $#{'%.2f' % stats[:final_capital]}"
+      puts "Net Profit      : $#{'%.2f' % stats[:net_profit]} (#{stats[:net_profit_pct]}%)"
+      puts "Total Trades    : #{stats[:total_trades]}"
+      puts "Wins / Losses   : #{stats[:wins]} wins / #{stats[:losses]} losses"
+      puts "Win Rate        : #{stats[:win_rate]}%"
+      puts "Profit Factor   : #{stats[:profit_factor]}"
+      puts "======================================================"
+
+      # Export results to backtest_results.js for dashboard
+      export_data = {
+        summary: {
+          initial_capital: stats[:initial_capital],
+          final_capital: stats[:final_capital],
+          net_profit: stats[:net_profit],
+          net_profit_pct: stats[:net_profit_pct],
+          total_trades: stats[:total_trades],
+          wins: stats[:wins],
+          losses: stats[:losses],
+          win_rate: stats[:win_rate],
+          profit_factor: stats[:profit_factor]
+        },
+        trades: stats[:trades],
+        equity_curve: stats[:equity_curve],
+        candles: smc_candles.map(&:to_h),
+        swings: market_structure.swings.map { |s| { type: s.type, price: s.price, index: s.index } },
+        sweeps: liquidity_sweep.sweeps.map { |s| { type: s[:type], index: s[:index], price: s[:price] } },
+        bos_events: market_structure.bos_events.map { |e| { direction: e[:direction], index: e[:index], price: e[:price] } },
+        choch_events: market_structure.choch_events.map { |e| { direction: e[:direction], index: e[:index], price: e[:price] } },
+        order_blocks: ob_detector.order_blocks.map do |ob|
+          {
+            type: ob.type,
+            high: ob.high,
+            low: ob.low,
+            index: ob.index,
+            created_at: ob.created_at,
+            mitigated: ob.mitigated,
+            mitigated_at: ob.mitigated_at,
+            invalidated: ob.invalidated,
+            invalidated_at: ob.invalidated_at
+          }
+        end
+      }
+
+      js_content = "window.SMC_BACKTEST_RESULTS = #{JSON.pretty_generate(export_data)};"
+      File.write('backtest_results.js', js_content)
+      puts "      Exported results to 'backtest_results.js' successfully."
+    end
+
+  rescue CoinDCX::Errors::AuthError => e
+    puts "Auth error config keys: #{e.message}"
+  rescue StandardError => e
+    puts "Error occurred: #{e.class} - #{e.message}"
+    puts e.backtrace.join("\n")
+  end
+  puts "=================================================="
+end
+
+main if __FILE__ == $0

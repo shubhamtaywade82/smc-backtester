@@ -84,10 +84,31 @@ class TestSMCBacktester < Test::Unit::TestCase
 
   def test_risk_manager_size
     rm = SMC::RiskManager.new(initial_capital: 100000.0, max_risk_pct: 0.01)
-    # Allowed risk: $1,000
-    # Entry: 100, SL: 98 (Risk per share: $2)
-    # Position size: 1000 / 2 = 500 shares
     size = rm.calculate_position_size(100.0, 98.0)
     assert_equal 500, size
+  end
+
+  def test_mtf_alignment
+    require_relative 'lib/smc/mtf_engine'
+    
+    # 5M ltf, 15M itf, 1H htf
+    engine = SMC::MTFEngine.new(ltf_interval: "5m", itf_interval: "15m", htf_interval: "1h")
+    
+    # Create 5M candle representing 09:10-09:15 (closed at 09:15)
+    ltf_candle = SMC::Candle.new(time: Time.utc(2026, 6, 1, 9, 10), open: 100, high: 101, low: 99, close: 100)
+    
+    # Create 15M candles:
+    # 1. 09:00-09:15 (closed at 09:15) -> should be processed
+    # 2. 09:15-09:30 (closed at 09:30) -> should NOT be processed
+    itf_candle1 = SMC::Candle.new(time: Time.utc(2026, 6, 1, 9, 0), open: 100, high: 102, low: 98, close: 101)
+    itf_candle2 = SMC::Candle.new(time: Time.utc(2026, 6, 1, 9, 15), open: 101, high: 103, low: 99, close: 102)
+    
+    engine.set_feed(:itf, [itf_candle1, itf_candle2])
+    
+    engine.align_and_process(ltf_candle)
+    
+    # Check that only the first 15m candle is processed
+    assert_equal 1, engine.engines[:itf].candles.size
+    assert_equal Time.utc(2026, 6, 1, 9, 0), engine.engines[:itf].candles.first.time
   end
 end

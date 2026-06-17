@@ -16,44 +16,72 @@ def main
   puts "   SMC/ICT Institutional Backtest Engine v1.0     "
   puts "=================================================="
 
-  # 1. Generate full sequence of test data
-  # We will concatenate a bullish setup and a bearish setup to test both directions
-  puts "\n[1/4] Generating high-fidelity mock market data..."
-  bull_candles = SMC::DataGenerator.generate_bullish_setup(start_price: 100.0, num_candles: 80)
-  
-  # Transition candles to bridge bullish and bearish setups
-  last_bull_price = bull_candles.last.close
-  bridge_candles = []
-  time = bull_candles.last.time
-  (1..10).each do |i|
-    bridge_candles << SMC::Candle.new(
-      time: time + (i * 300),
-      open: last_bull_price,
-      high: last_bull_price + 0.5,
-      low: last_bull_price - 0.5,
-      close: last_bull_price - 0.2,
-      volume: 1000
-    )
-    last_bull_price -= 0.2
+  # 1. Load data from JSON feed if provided, otherwise generate mock data
+  feed_file = nil
+  if ARGV[0] == '--feed' && ARGV[1]
+    feed_file = ARGV[1]
   end
 
-  bear_candles = SMC::DataGenerator.generate_bearish_setup(start_price: last_bull_price, num_candles: 80)
-  
-  # Adjust times for bear candles to follow bridge candles
-  start_bear_time = bridge_candles.last.time + 300
-  adjusted_bear_candles = bear_candles.each_with_index.map do |c, idx|
-    SMC::Candle.new(
-      time: start_bear_time + (idx * 300),
-      open: c.open,
-      high: c.high,
-      low: c.low,
-      close: c.close,
-      volume: c.volume
-    )
+  all_candles = []
+  if feed_file && File.file?(feed_file)
+    puts "\n[1/4] Loading candles from JSON feed file '#{feed_file}'..."
+    begin
+      raw_data = JSON.parse(File.read(feed_file))
+      all_candles = raw_data.map do |c|
+        SMC::Candle.new(
+          time: c["t"],
+          open: c["o"],
+          high: c["h"],
+          low: c["l"],
+          close: c["c"],
+          volume: c["v"]
+        )
+      end
+    rescue StandardError => e
+      puts "Error loading feed file: #{e.message}. Falling back to mock data."
+      feed_file = nil
+    end
   end
 
-  all_candles = bull_candles + bridge_candles + adjusted_bear_candles
-  puts "      Generated #{all_candles.size} total 5-minute candles."
+  if feed_file.nil?
+    puts "\n[1/4] Generating high-fidelity mock market data..."
+    bull_candles = SMC::DataGenerator.generate_bullish_setup(start_price: 100.0, num_candles: 80)
+    
+    # Transition candles to bridge bullish and bearish setups
+    last_bull_price = bull_candles.last.close
+    bridge_candles = []
+    time = bull_candles.last.time
+    (1..10).each do |i|
+      bridge_candles << SMC::Candle.new(
+        time: time + (i * 300),
+        open: last_bull_price,
+        high: last_bull_price + 0.5,
+        low: last_bull_price - 0.5,
+        close: last_bull_price - 0.2,
+        volume: 1000
+      )
+      last_bull_price -= 0.2
+    end
+
+    bear_candles = SMC::DataGenerator.generate_bearish_setup(start_price: last_bull_price, num_candles: 80)
+    
+    # Adjust times for bear candles to follow bridge candles
+    start_bear_time = bridge_candles.last.time + 300
+    adjusted_bear_candles = bear_candles.each_with_index.map do |c, idx|
+      SMC::Candle.new(
+        time: start_bear_time + (idx * 300),
+        open: c.open,
+        high: c.high,
+        low: c.low,
+        close: c.close,
+        volume: c.volume
+      )
+    end
+
+    all_candles = bull_candles + bridge_candles + adjusted_bear_candles
+  end
+
+  puts "      Loaded #{all_candles.size} total candles."
 
   # 2. Initialize SMC Engine Components
   puts "[2/4] Initializing engine components (SOLID design)..."
