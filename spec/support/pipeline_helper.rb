@@ -74,6 +74,20 @@ module PipelineHelper
       state[:ob_detector]
     )
   end
+
+  def evaluate_st_pullback(candles, index:, strategy: nil, **pipeline_options)
+    state = run_pipeline(candles, up_to_index: index, **pipeline_options)
+    strategy ||= SMC::Strategy::SupertrendPullbackStrategy.new
+
+    strategy.evaluate(
+      candles,
+      index,
+      state[:pivot_detector],
+      state[:market_structure],
+      state[:liquidity_sweep],
+      state[:ob_detector]
+    )
+  end
 end
 
 RSpec.configure do |config|

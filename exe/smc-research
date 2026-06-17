@@ -243,6 +243,18 @@ def run_configured_backtest(candles_5m, candles_15m, candles_1h, config)
       pivot_left_right: params[:pivot_left_right],
       tolerance_pct: params[:tolerance_pct]
     )
+  when 'SupertrendPullback'
+    run_strategy_backtest(
+      candles_5m,
+      SMC::Strategy::SupertrendPullbackStrategy.new(
+        period: params[:period],
+        multiplier: params[:multiplier],
+        htf_group_size: params[:htf_group_size],
+        proximity_threshold_pct: params[:proximity_threshold_pct]
+      ),
+      pivot_left_right: 3,
+      tolerance_pct: 0.001
+    )
   when 'MTFConfluence'
     run_mtf_backtest(
       candles_5m,
@@ -308,6 +320,29 @@ def optimize_playbook_grid(candles_5m, candles_15m, candles_1h)
         )
         best_score, best_config, best_result = consider_grid_candidate(
           result, best_score, best_config, best_result, strategy: 'SweepReversal', params: params
+        )
+      end
+    end
+  end
+
+  puts '  Optimizing Supertrend Pullback (5m LTF / 1h HTF bias)...'
+  [8, 10, 12].each do |period|
+    [2.0, 3.0].each do |multiplier|
+      [0.003, 0.005].each do |proximity|
+        params = {
+          period: period,
+          multiplier: multiplier,
+          htf_group_size: 12,
+          proximity_threshold_pct: proximity
+        }
+        result = run_strategy_backtest(
+          candles_5m,
+          SMC::Strategy::SupertrendPullbackStrategy.new(**params),
+          pivot_left_right: 3,
+          tolerance_pct: 0.001
+        )
+        best_score, best_config, best_result = consider_grid_candidate(
+          result, best_score, best_config, best_result, strategy: 'SupertrendPullback', params: params
         )
       end
     end
