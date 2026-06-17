@@ -63,7 +63,8 @@ Goal: implement every detection module the playbooks depend on.
 | ⚠️ | 🔧 | `lib/smc/liquidity_sweep.rb` | Switch tolerance from fixed `%` to `ATR × 0.1` (KB Level 9) |
 | ✅ | ➕ | `lib/smc/liquidity/strong_low_detector.rb` | Swing low → bullish displacement → BOS ⇒ protected low — **done** |
 | ✅ | ➕ | `spec/liquidity/strong_low_detector_spec.rb` | Full rule chain, CHoCH option, integration — **done** |
-| ❌ | ➕ | `lib/smc/liquidity/strong_high_detector.rb` | Mirror for bearish |
+| ✅ | ➕ | `lib/smc/liquidity/strong_high_detector.rb` | Swing high → bearish displacement → BOS ⇒ protected high — **done** |
+| ✅ | ➕ | `spec/liquidity/strong_high_detector_spec.rb` | Mirror of strong low scenarios + integration — **done** |
 | ✅ | ➕ | `lib/smc/liquidity/displacement.rb` | Body/range threshold vs prior-bar ATR — **done** |
 | ✅ | ➕ | `spec/liquidity/displacement_spec.rb` | Bullish/bearish, swing follow-through, range scan — **done** |
 | ❌ | ➕ | `spec/liquidity/sweep_spec.rb` | SSL: break below + reclaim; BSL mirror |
@@ -194,11 +195,11 @@ Goal: one strategy class per playbook; compose shared rules.
 
 | Status | Action | File | Work |
 |--------|--------|------|------|
-| ⚠️ | 🔧 | `lib/smc/strategy.rb` (`SweepOB`) | Enforce sequence: sweep → CHoCH → BOS → OB → retest |
-| ⚠️ | 🔧 | `lib/smc/strategy.rb` (`SweepOB`) | Require strong low/high; entry confirmation (engulfing or wick) |
-| ⚠️ | 🔧 | `lib/smc/strategy.rb` (`SweepOB`) | SL = `min(sweep_low, ob_low)`; never inside OB |
-| ⚠️ | 🔧 | `lib/smc/strategy.rb` (`SweepOB`) | TP2 = internal liquidity; TP3 = external (swing pool) |
-| ❌ | ➕ | `spec/strategies/pb7_sweep_ob_spec.rb` | Full long flow from `DataGenerator` fixture |
+| ✅ | 🔧 | `lib/smc/strategy/sweep_ob.rb` | Enforce sequence: sweep → CHoCH → BOS → OB → retest |
+| ✅ | 🔧 | `lib/smc/strategy/sweep_ob.rb` | Require strong low/high; entry confirmation (engulfing or wick) |
+| ✅ | 🔧 | `lib/smc/strategy/sweep_ob.rb` | SL = `min(sweep_low, ob_low, protected)`; guard against SL inside OB |
+| ✅ | 🔧 | `lib/smc/strategy/sweep_ob.rb` | TP1/TP2/TP3 + min R:R ≥ 3 |
+| ✅ | ➕ | `spec/strategies/pb7_sweep_ob_spec.rb` | Deterministic long/short fixtures via `spec/support/pb7_fixture.rb` |
 
 ### PB8 — A+ Full Confluence
 
@@ -329,13 +330,14 @@ Phase 8–9 (optional)
 
 ## Suggested Sprint Slices
 
-### Sprint 1 — Close PB7 gaps (1–2 days)
-- `lib/smc/atr.rb`
-- `lib/smc/liquidity/displacement.rb`
-- `lib/smc/liquidity/strong_low_detector.rb`
-- `lib/smc/liquidity/strong_high_detector.rb`
-- 🔧 `lib/smc/strategy.rb` (`SweepOB`)
-- `spec/strategies/pb7_sweep_ob_spec.rb`
+### Sprint 1 — Close PB7 gaps ✅
+- ✅ `lib/smc/atr.rb`
+- ✅ `lib/smc/liquidity/displacement.rb`
+- ✅ `lib/smc/liquidity/strong_low_detector.rb`
+- ✅ `lib/smc/liquidity/strong_high_detector.rb`
+- ✅ `lib/smc/strategy/sweep_ob.rb`
+- ✅ `spec/strategies/pb7_sweep_ob_spec.rb`
+- ✅ `spec/support/pb7_fixture.rb`
 
 ### Sprint 2 — PB3 + PB6 (1–2 days)
 - `lib/smc/strategy/structure/bos_pullback_strategy.rb`

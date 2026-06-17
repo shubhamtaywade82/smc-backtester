@@ -1,0 +1,24 @@
+{
+  "SOLUSDT": {
+    "strategy": "SweepOB",
+    "params": {
+      "lookback_candles": 20,
+      "pivot_left_right": 3,
+      "tolerance_pct": 0.001
+    },
+    "status": "APPROVED",
+    "in_sample": {
+      "profit_factor": 1.05,
+      "net_profit": 1711.21,
+      "win_rate": 52.24,
+      "trades": 67
+    },
+    "out_of_sample": {
+      "profit_factor": 1.39,
+      "net_profit": 9350.73,
+      "win_rate": 50.0,
+      "trades": 48
+    },
+    "analysis": "No analysis generated due to communication timeout."
+  }
+}

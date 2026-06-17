@@ -46,6 +46,34 @@ module SMC
       @high - @low
     end
 
+    def bullish_engulfing?(prior_candle)
+      return false if prior_candle.nil? || !prior_candle.bearish? || !bullish?
+
+      open <= prior_candle.close &&
+        close >= prior_candle.open &&
+        body_size > prior_candle.body_size
+    end
+
+    def bearish_engulfing?(prior_candle)
+      return false if prior_candle.nil? || !prior_candle.bullish? || !bearish?
+
+      open >= prior_candle.close &&
+        close <= prior_candle.open &&
+        body_size > prior_candle.body_size
+    end
+
+    def bullish_rejection_wick?(min_wick_ratio: 0.5)
+      return false if size.zero?
+
+      lower_wick >= (size * min_wick_ratio) && close > (low + (size * 0.25))
+    end
+
+    def bearish_rejection_wick?(min_wick_ratio: 0.5)
+      return false if size.zero?
+
+      upper_wick >= (size * min_wick_ratio) && close < (high - (size * 0.25))
+    end
+
     def to_h
       {
         t: @time,
