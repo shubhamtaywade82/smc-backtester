@@ -17,7 +17,7 @@ This playbook combines:
 
 ---
 
-# PART I – MARKET PHASES
+## PART I – MARKET PHASES
 
 The market usually moves through these phases:
 
@@ -66,9 +66,9 @@ Profit Taking
 
 ---
 
-# PART II – LONG PLAYBOOK
+## PART II – LONG PLAYBOOK
 
-## LONG SETUP FLOW
+### LONG SETUP FLOW
 
 ```
 Bullish Trend
@@ -116,7 +116,7 @@ Expansion Higher
 
 ---
 
-# STEP 1 – BULLISH TREND IDENTIFICATION
+### STEP 1 – BULLISH TREND IDENTIFICATION
 
 Need:
 
@@ -138,7 +138,7 @@ NO TRADE.
 
 ---
 
-# STEP 2 – TRENDLINE FORMATION
+### STEP 2 – TRENDLINE FORMATION
 
 Draw trendline:
 
@@ -185,7 +185,7 @@ Checklist:
 
 ---
 
-# STEP 3 – SUPPORT CREATION
+### STEP 3 – SUPPORT CREATION
 
 Trendline coincides with support.
 
@@ -211,7 +211,7 @@ Checklist:
 
 ---
 
-# STEP 4 – SMART MONEY STOP HUNT
+### STEP 4 – SMART MONEY STOP HUNT
 
 Before moving higher:
 
@@ -257,7 +257,7 @@ Checklist:
 
 ---
 
-# STEP 5 – STRONG LOW FORMS
+### STEP 5 – STRONG LOW FORMS
 
 Strong Low:
 
@@ -285,7 +285,7 @@ Protected Low = Strong Low.
 
 ---
 
-# STEP 6 – BULLISH CHoCH / BOS
+### STEP 6 – BULLISH CHoCH / BOS
 
 Need:
 
@@ -323,7 +323,7 @@ Checklist:
 
 ---
 
-# STEP 7 – BULLISH ORDER BLOCK
+### STEP 7 – BULLISH ORDER BLOCK
 
 Bullish OB:
 
@@ -351,7 +351,7 @@ Checklist:
 
 ---
 
-# STEP 8 – RETURN TO OB
+### STEP 8 – RETURN TO OB
 
 Price retraces.
 
@@ -369,7 +369,7 @@ Checklist:
 
 ---
 
-# STEP 9 – LONG ENTRY
+### STEP 9 – LONG ENTRY
 
 Entry:
 
@@ -391,7 +391,7 @@ Execute CALL/LONG.
 
 ---
 
-# LONG STOP LOSS
+### LONG STOP LOSS
 
 Place below:
 
@@ -405,7 +405,7 @@ Never place SL inside OB.
 
 ---
 
-# LONG TARGETS
+### LONG TARGETS
 
 TP1:
 
@@ -453,7 +453,7 @@ Take final:
 
 ---
 
-# LONG FLOW SUMMARY
+### LONG FLOW SUMMARY
 
 Bull Trend
 
@@ -503,9 +503,9 @@ TP1 TP2 TP3
 
 ---
 
-# PART III – SHORT PLAYBOOK
+## PART III – SHORT PLAYBOOK
 
-## SHORT SETUP FLOW
+### SHORT SETUP FLOW
 
 ```
 Bearish Trend
@@ -554,7 +554,7 @@ Expansion Lower
 
 ---
 
-# STEP 1 – BEARISH TREND
+### STEP 1 – BEARISH TREND
 
 Need:
 
@@ -570,7 +570,7 @@ Checklist:
 
 ---
 
-# STEP 2 – TRENDLINE
+### STEP 2 – TRENDLINE
 
 Connect:
 
@@ -608,7 +608,7 @@ Checklist:
 
 ---
 
-# STEP 3 – RESISTANCE
+### STEP 3 – RESISTANCE
 
 Resistance tested.
 
@@ -620,7 +620,7 @@ Checklist:
 
 ---
 
-# STEP 4 – BUY-SIDE LIQUIDITY SWEEP
+### STEP 4 – BUY-SIDE LIQUIDITY SWEEP
 
 Price:
 
@@ -642,7 +642,7 @@ Checklist:
 
 ---
 
-# STEP 5 – STRONG HIGH
+### STEP 5 – STRONG HIGH
 
 Strong High:
 
@@ -670,7 +670,7 @@ Checklist:
 
 ---
 
-# STEP 6 – BEARISH CHoCH / BOS
+### STEP 6 – BEARISH CHoCH / BOS
 
 Need:
 
@@ -708,7 +708,7 @@ Checklist:
 
 ---
 
-# STEP 7 – BEARISH ORDER BLOCK
+### STEP 7 – BEARISH ORDER BLOCK
 
 Bearish OB:
 
@@ -734,7 +734,7 @@ Checklist:
 
 ---
 
-# STEP 8 – RETURN TO OB
+### STEP 8 – RETURN TO OB
 
 Price retraces.
 
@@ -746,7 +746,7 @@ Checklist:
 
 ---
 
-# STEP 9 – SHORT ENTRY
+### STEP 9 – SHORT ENTRY
 
 Entry inside OB.
 
@@ -766,7 +766,7 @@ Execute PUT/SHORT.
 
 ---
 
-# SHORT STOP LOSS
+### SHORT STOP LOSS
 
 Place above:
 
@@ -780,7 +780,7 @@ Never place SL inside OB.
 
 ---
 
-# SHORT TARGETS
+### SHORT TARGETS
 
 TP1:
 
@@ -822,7 +822,7 @@ Take:
 
 ---
 
-# SHORT FLOW SUMMARY
+### SHORT FLOW SUMMARY
 
 Bear Trend
 
@@ -872,7 +872,7 @@ TP1 TP2 TP3
 
 ---
 
-# GOLDEN RULES
+## GOLDEN RULES
 
 Take the trade only if:
 
@@ -1571,11 +1571,11 @@ The answer is surprisingly encouraging.
 
 ## A. Swing Trading (Stocks/Crypto)
 
-| Purpose   | HTF | ITF | Entry TF |
-| --------- | --: | --: | -------: |
-| Bias      |  4H |  1H |      15m |
-| Structure |  1H | 15m |       5m |
-| Execution | 15m |  5m |       1m |
+| Purpose   |  HTF |  ITF | Entry TF |
+| --------- | ---: | ---: | -------: |
+| Bias      |   4H |   1H |      15m |
+| Structure |   1H |  15m |       5m |
+| Execution |  15m |   5m |       1m |
 
 ---
 
@@ -5080,7 +5080,7 @@ Everything else becomes an adapter.
 
 ---
 
-# The Real Architecture
+## The Real Architecture
 
 Instead of:
 
@@ -5101,7 +5101,7 @@ Adapters
 
 ---
 
-# Layer 1: Domain Specification (The Truth)
+## Layer 1: Domain Specification (The Truth)
 
 Define everything as a specification.
 
@@ -5138,7 +5138,7 @@ This YAML becomes the source of truth.
 
 ---
 
-# Layer 2: Trading DSL
+## Layer 2: Trading DSL
 
 Create a DSL.
 
@@ -5170,7 +5170,7 @@ Not code.
 
 ---
 
-# Layer 3: Canonical Domain Objects
+## Layer 3: Canonical Domain Objects
 
 Every implementation uses these.
 
@@ -5197,7 +5197,7 @@ These never change.
 
 ---
 
-# Layer 4: Rule Engine
+## Layer 4: Rule Engine
 
 Rules evaluate domain objects.
 
@@ -5222,7 +5222,7 @@ end
 
 ---
 
-# Layer 5: Playbook Engine
+## Layer 5: Playbook Engine
 
 Composes rules.
 
@@ -5239,7 +5239,7 @@ PB7 =
 
 ---
 
-# Layer 6: Event Engine
+## Layer 6: Event Engine
 
 The engine publishes events.
 
@@ -5267,11 +5267,11 @@ Everything reacts to events.
 
 ---
 
-# Layer 7: Adapters
+## Layer 7: Adapters
 
 This is the magic.
 
-## Pine Adapter
+### Pine Adapter
 
 Generates:
 
@@ -5283,7 +5283,7 @@ from DSL.
 
 ---
 
-## Ruby Adapter
+### Ruby Adapter
 
 Generates:
 
@@ -5295,7 +5295,7 @@ for backtesting.
 
 ---
 
-## Python Adapter
+### Python Adapter
 
 Generates:
 
@@ -5309,7 +5309,7 @@ strategies.
 
 ---
 
-## CoinDCX Adapter
+### CoinDCX Adapter
 
 Uses:
 
@@ -5321,7 +5321,7 @@ for execution.
 
 ---
 
-## REST Adapter
+### REST Adapter
 
 Exposes:
 
@@ -5347,7 +5347,7 @@ Output:
 
 ---
 
-## TradingView Webhook Adapter
+### TradingView Webhook Adapter
 
 Consumes:
 
@@ -5360,7 +5360,7 @@ Consumes:
 
 ---
 
-# Layer 8: Multi-Timeframe Engine
+## Layer 8: Multi-Timeframe Engine
 
 Independent of platform.
 
@@ -5390,7 +5390,7 @@ MarketState
 
 ---
 
-# Layer 9: Strategy Registry
+## Layer 9: Strategy Registry
 
 Example:
 
@@ -5423,7 +5423,7 @@ returns:
 
 ---
 
-# Layer 10: Risk Engine
+## Layer 10: Risk Engine
 
 Completely separate.
 
@@ -5453,7 +5453,7 @@ Can be reused everywhere.
 
 ---
 
-# Layer 11: Execution Engine
+## Layer 11: Execution Engine
 
 Separate again.
 
@@ -5477,7 +5477,7 @@ TradingViewExecutor
 
 ---
 
-# Layer 12: Analytics Engine
+## Layer 12: Analytics Engine
 
 Consumes trades.
 
@@ -5503,7 +5503,7 @@ Timeframe Rankings
 
 ---
 
-# Why This Is Powerful
+## Why This Is Powerful
 
 Suppose tomorrow you discover:
 
@@ -5532,7 +5532,7 @@ No rewriting.
 
 ---
 
-# The Ideal Repository
+## The Ideal Repository
 
 ```text
 trading-domain-engine/
@@ -5556,7 +5556,7 @@ trading-domain-engine/
 
 ---
 
-# The Principle
+## The Principle
 
 The biggest mistake trading developers make is coupling:
 

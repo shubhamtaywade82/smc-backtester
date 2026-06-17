@@ -720,18 +720,20 @@
     line-height: 1.6;
   }
 </style>
+<script src="backtest_results.js" defer></script>
 </head>
 <body>
 
 <nav>
   <div class="nav-logo">SMC · PLAYBOOK</div>
-  <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
-  <button class="nav-btn" onclick="showSection('playbooks')">8 Playbooks</button>
-  <button class="nav-btn" onclick="showSection('long')">Long Setups</button>
-  <button class="nav-btn" onclick="showSection('short')">Short Setups</button>
-  <button class="nav-btn" onclick="showSection('advanced')">Advanced ICT</button>
-  <button class="nav-btn" onclick="showSection('pd')">Premium/Discount</button>
-  <button class="nav-btn" onclick="showSection('rules')">Golden Rules</button>
+  <button class="nav-btn active" onclick="showSection('overview', this)">Overview</button>
+  <button class="nav-btn" onclick="showSection('playbooks', this)">8 Playbooks</button>
+  <button class="nav-btn" onclick="showSection('long', this)">Long Setups</button>
+  <button class="nav-btn" onclick="showSection('short', this)">Short Setups</button>
+  <button class="nav-btn" onclick="showSection('advanced', this)">Advanced ICT</button>
+  <button class="nav-btn" onclick="showSection('pd', this)">Premium/Discount</button>
+  <button class="nav-btn" onclick="showSection('rules', this)">Golden Rules</button>
+  <button class="nav-btn" onclick="showSection('backtest', this)">Backtest Simulator</button>
 </nav>
 
 <main>
@@ -2235,21 +2237,463 @@
   </div>
 </div>
 
+<!-- ═══════════════════════════════════ BACKTEST SIMULATOR ═══════════════════════════════════ -->
+<div id="backtest" class="section">
+  <div class="hero">
+    <div class="hero-eyebrow">Deterministic Rules Engine · FSM Simulation</div>
+    <h1>SMC <span>Backtester Results</span></h1>
+    <p class="hero-sub">Visual analysis of the OOP trading rules engine execution. This panel displays live backtest stats, equity path, and rules verification metrics generated directly from <code>smc_backtester.rb</code>.</p>
+  </div>
+
+  <!-- Fallback div if data not loaded -->
+  <div id="backtest-fallback" class="callout warning">
+    <strong>Backtest data not found!</strong> Please run the Ruby backtester script in your workspace to generate live simulation results:
+    <div style="margin-top: 8px; font-family: var(--mono); background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border);">
+      ruby smc_backtester.rb
+    </div>
+    Once executed, refresh this page to view interactive charts, trade metrics, and rule validations.
+  </div>
+
+  <!-- Main backtest UI (hidden initially, shown if window.SMC_BACKTEST_RESULTS exists) -->
+  <div id="backtest-content" style="display:none;">
+    
+    <!-- METRICS GRID -->
+    <div class="grid-3" style="margin-bottom: 24px;">
+      <div class="card neutral">
+        <div class="card-title">ACCOUNT BALANCE</div>
+        <h3 id="stat-final-balance" style="font-size: 24px; color: var(--accent); margin: 6px 0;">$100,000.00</h3>
+        <p id="stat-net-profit" style="color: var(--green); font-family: var(--mono); font-size: 13px;">+$0.00 (0.00%) net profit</p>
+      </div>
+      
+      <div class="card bull">
+        <div class="card-title">WIN RATE</div>
+        <h3 id="stat-win-rate" style="font-size: 24px; color: var(--green); margin: 6px 0;">0.00%</h3>
+        <p id="stat-wins-losses" style="color: var(--textdim); font-size: 13px;">0 wins / 0 losses</p>
+      </div>
+
+      <div class="card neutral" style="border-left-color: var(--purple);">
+        <div class="card-title">PROFIT FACTOR</div>
+        <h3 id="stat-profit-factor" style="font-size: 24px; color: var(--purple); margin: 6px 0;">1.00</h3>
+        <p id="stat-total-trades" style="color: var(--textdim); font-size: 13px;">0 total closed trades</p>
+      </div>
+    </div>
+
+    <!-- EQUITY CURVE AND RULES MATRIX -->
+    <div class="grid-2" style="margin-bottom: 24px;">
+      <div class="card">
+        <div class="card-title">EQUITY CURVE</div>
+        <div style="height: 250px; position: relative;" id="equity-chart-container">
+          <!-- SVG injected here -->
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-title">RULE CHECK CONFIRMATIONS</div>
+        <div id="rules-radar-container">
+          <ul class="checklist" id="backtest-rules-checklist">
+            <li class="required bull-item">HTF Trend Aligned (Bullish/Bearish)</li>
+            <li class="required bull-item">Liquidity Pool Formed (Equal Highs/Lows)</li>
+            <li class="required bull-item">Liquidity Sweep Triggered (SSL/BSL Swept)</li>
+            <li class="required bull-item">Market Shift Confirmed (CHoCH / BOS Break)</li>
+            <li class="required bull-item">Order Block Formed & Identified</li>
+            <li class="required bull-item">Retrace mitigation entry inside OB</li>
+            <li class="required bull-item">Entry executed in Discount/Premium zone</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRADE LOG TABLE -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-title">EXECUTED TRADES LOG</div>
+      <div class="matrix" id="backtest-trades-matrix">
+        <!-- Rows dynamically injected -->
+      </div>
+    </div>
+
+    <!-- INTEGRATED CHART VIEW -->
+    <div class="card">
+      <div class="card-title">SIMULATION CHART FEED (OHLCV + OVERLAYS)</div>
+      <div style="overflow-x: auto;">
+        <div style="min-width: 1000px; height: 350px; position: relative;" id="candle-chart-container">
+          <!-- Interactive candlestick SVG injected here -->
+        </div>
+      </div>
+      <div style="margin-top: 16px; font-family: var(--mono); font-size: 11px; color: var(--textdim); display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
+        <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; background:var(--green); border-radius: 2px;"></span> Bullish Candle</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; background:var(--red); border-radius: 2px;"></span> Bearish Candle</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ffd700;"></span> Swings (High/Low)</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:8px; border:1px dashed var(--blue); background: rgba(64,144,255,0.05);"></span> Order Blocks</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="color:var(--green); font-weight: bold;">▲</span> Long Entry</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="color:var(--red); font-weight: bold;">▼</span> Short Entry</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </main>
 
 <script>
-  function showSection(id) {
+  function showSection(id, btn) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
-    document.getElementById(id).classList.add('visible');
+    const target = document.getElementById(id);
+    if (target) target.classList.add('visible');
+    
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    if (btn) {
+      btn.classList.add('active');
+    } else if (event && event.target) {
+      event.target.classList.add('active');
+    }
   }
 
-  function showPlaybook(id) {
+  function showPlaybook(id, btn) {
     document.querySelectorAll('.pbook').forEach(p => p.classList.remove('visible'));
-    document.getElementById(id).classList.add('visible');
-    document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    const target = document.getElementById(id);
+    if (target) target.classList.add('visible');
+    
+    document.querySelectorAll('#playbooks .ptab').forEach(t => t.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    } else if (event && event.target) {
+      event.target.classList.add('active');
+    }
+  }
+
+  function showPB8(id, btn) {
+    document.querySelectorAll('.pb8-panel').forEach(p => p.classList.remove('visible'));
+    const target = document.getElementById(id);
+    if (target) target.classList.add('visible');
+    
+    document.querySelectorAll('#pb8tabs .ptab').forEach(t => t.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    } else if (event && event.target) {
+      event.target.classList.add('active');
+    }
+  }
+
+  // ─── DYNAMIC BACKTEST ENGINE RENDERER ───
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.SMC_BACKTEST_RESULTS) {
+      renderBacktest(window.SMC_BACKTEST_RESULTS);
+    }
+  });
+
+  function renderBacktest(data) {
+    document.getElementById('backtest-fallback').style.display = 'none';
+    document.getElementById('backtest-content').style.display = 'block';
+
+    const summary = data.summary;
+    document.getElementById('stat-final-balance').textContent = '$' + Number(summary.final_capital).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    
+    const profitEl = document.getElementById('stat-net-profit');
+    const netProfitSign = summary.net_profit >= 0 ? '+' : '';
+    profitEl.textContent = `${netProfitSign}$${Number(summary.net_profit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${summary.net_profit_pct}%)`;
+    if (summary.net_profit < 0) {
+      profitEl.style.color = 'var(--red)';
+    } else {
+      profitEl.style.color = 'var(--green)';
+    }
+
+    document.getElementById('stat-win-rate').textContent = summary.win_rate + '%';
+    document.getElementById('stat-wins-losses').textContent = `${summary.wins} wins / ${summary.losses} losses`;
+    document.getElementById('stat-profit-factor').textContent = summary.profit_factor;
+    document.getElementById('stat-total-trades').textContent = `${summary.total_trades} total closed trades`;
+
+    renderEquityCurve(data.equity_curve);
+    renderTradesList(data.trades);
+    renderCandleChart(data.candles, data.swings, data.sweeps, data.bos_events, data.choch_events, data.order_blocks, data.trades);
+  }
+
+  function renderEquityCurve(curve) {
+    if (!curve || curve.length === 0) return;
+    const container = document.getElementById('equity-chart-container');
+    const width = container.clientWidth || 500;
+    const height = 250;
+
+    const values = curve.map(c => c.equity);
+    const minVal = Math.min(...values) * 0.995;
+    const maxVal = Math.max(...values) * 1.005;
+    const range = maxVal - minVal;
+
+    let points = '';
+    let areaPoints = `0,${height} `;
+    
+    curve.forEach((c, idx) => {
+      const x = (idx / (curve.length - 1)) * width;
+      const y = height - ((c.equity - minVal) / range) * (height - 40) - 20;
+      points += `${x.toFixed(1)},${y.toFixed(1)} `;
+      areaPoints += `${x.toFixed(1)},${y.toFixed(1)} `;
+    });
+    areaPoints += `${width},${height}`;
+
+    container.innerHTML = `
+      <svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" style="overflow:visible;">
+        <defs>
+          <linearGradient id="eq-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--green)" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="var(--green)" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+        <!-- Horizontal grid line at 100k start capital -->
+        <line x1="0" y1="${height - ((100000 - minVal) / range) * (height - 40) - 20}" x2="${width}" y2="${height - ((100000 - minVal) / range) * (height - 40) - 20}" stroke="var(--border)" stroke-dasharray="3" />
+        <polygon points="${areaPoints}" fill="url(#eq-grad)" />
+        <path d="M 0 ${height - ((curve[0].equity - minVal) / range) * (height - 40) - 20} L ${points}" fill="none" stroke="var(--green)" stroke-width="2" />
+        <text x="10" y="20" fill="var(--textdim)" font-family="var(--mono)" font-size="10">$${Math.round(maxVal).toLocaleString()}</text>
+        <text x="10" y="${height - 10}" fill="var(--textdim)" font-family="var(--mono)" font-size="10">$${Math.round(minVal).toLocaleString()}</text>
+      </svg>
+    `;
+  }
+
+  function renderTradesList(trades) {
+    const matrix = document.getElementById('backtest-trades-matrix');
+    let html = `
+      <div class="mat-row header">
+        <div class="mat-cell" style="flex:0.5;">ID</div>
+        <div class="mat-cell" style="flex:0.8;">Type</div>
+        <div class="mat-cell">Entry Price</div>
+        <div class="mat-cell">Exit Price</div>
+        <div class="mat-cell">PnL</div>
+        <div class="mat-cell" style="flex:0.8;">Outcome</div>
+      </div>
+    `;
+
+    if (!trades || trades.length === 0) {
+      html += `
+        <div class="mat-row" style="justify-content:center; color:var(--muted);">
+          No trades executed during backtest.
+        </div>
+      `;
+    } else {
+      trades.forEach((t, idx) => {
+        const typeText = t.type.toUpperCase();
+        const typeBadge = t.type === 'long' ? 'bull' : 'bear';
+        const pnlColor = t.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+        const outcomeText = t.win ? 'WIN' : 'LOSS';
+        const outcomeBadge = t.win ? 'bull' : 'bear';
+
+        html += `
+          <div class="mat-row" style="cursor:pointer;" onclick="focusTrade(${t.entry_idx}, ${t.exit_idx})">
+            <div class="mat-cell" style="flex:0.5; font-family:var(--mono); color:var(--muted);">#${idx + 1}</div>
+            <div class="mat-cell" style="flex:0.8;"><span class="badge ${typeBadge}">${typeText}</span></div>
+            <div class="mat-cell" style="font-family:var(--mono);">$${t.entry_price.toFixed(2)} <span style="font-size:10px;color:var(--textdim)">[Bar ${t.entry_idx}]</span></div>
+            <div class="mat-cell" style="font-family:var(--mono);">$${t.exit_price.toFixed(2)} <span style="font-size:10px;color:var(--textdim)">[Bar ${t.exit_idx}]</span></div>
+            <div class="mat-cell" style="font-family:var(--mono); color:${pnlColor}; font-weight:700;">$${t.pnl >= 0 ? '+' : ''}${t.pnl.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+            <div class="mat-cell" style="flex:0.8;"><span class="badge ${outcomeBadge}">${outcomeText}</span></div>
+          </div>
+        `;
+      });
+    }
+
+    matrix.innerHTML = html;
+  }
+
+  let focusedCandleRange = null;
+
+  function focusTrade(entryIdx, exitIdx) {
+    focusedCandleRange = { start: Math.max(0, entryIdx - 15), end: Math.min(170, exitIdx + 15) };
+    if (window.SMC_BACKTEST_RESULTS) {
+      const d = window.SMC_BACKTEST_RESULTS;
+      renderCandleChart(d.candles, d.swings, d.sweeps, d.bos_events, d.choch_events, d.order_blocks, d.trades);
+    }
+  }
+
+  function renderCandleChart(candles, swings, sweeps, bos, choch, obs, trades) {
+    if (!candles || candles.length === 0) return;
+    
+    const container = document.getElementById('candle-chart-container');
+    const width = container.clientWidth || 1000;
+    const height = 350;
+
+    // Filter viewport if focused
+    let startIdx = 0;
+    let endIdx = candles.length - 1;
+    if (focusedCandleRange) {
+      startIdx = focusedCandleRange.start;
+      endIdx = focusedCandleRange.end;
+    }
+
+    const visibleCandles = candles.slice(startIdx, endIdx + 1);
+    const highs = visibleCandles.map(c => c.h);
+    const lows = visibleCandles.map(c => c.l);
+    
+    const maxPrice = Math.max(...highs) * 1.005;
+    const minPrice = Math.min(...lows) * 0.995;
+    const priceRange = maxPrice - minPrice;
+
+    const scaleY = (price) => height - 30 - ((price - minPrice) / priceRange) * (height - 60);
+    const scaleX = (idx) => {
+      const relIdx = idx - startIdx;
+      return 20 + (relIdx / (visibleCandles.length - 1)) * (width - 40);
+    };
+
+    const cWidth = Math.max(2, ((width - 40) / visibleCandles.length) * 0.7);
+
+    let svgElements = '';
+
+    // Draw grid lines
+    for (let p = Math.ceil(minPrice); p <= maxPrice; p += (priceRange / 5)) {
+      const y = scaleY(p);
+      svgElements += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="var(--border)" stroke-opacity="0.5" stroke-dasharray="3" />`;
+      svgElements += `<text x="5" y="${y - 4}" fill="var(--textdim)" font-family="var(--mono)" font-size="9">$${Math.round(p)}</text>`;
+    }
+
+    // Draw active Order Blocks
+    obs.forEach(ob => {
+      // check if inside viewport
+      if (ob.index >= startIdx && ob.index <= endIdx) {
+        const xStart = scaleX(ob.index);
+        let endOBIdx = ob.mitigated_at || ob.invalidated_at || endIdx;
+        const xEnd = scaleX(Math.min(endOBIdx, endIdx));
+        const yHigh = scaleY(ob.high);
+        const yLow = scaleY(ob.low);
+        const color = ob.type === 'bullish' ? 'var(--blue)' : 'var(--purple)';
+        const opacity = ob.mitigated ? 0.04 : 0.12;
+
+        svgElements += `
+          <rect x="${xStart}" y="${yHigh}" width="${xEnd - xStart + cWidth}" height="${yLow - yHigh}" 
+                fill="${color}" fill-opacity="${opacity}" stroke="${color}" stroke-dasharray="3" stroke-opacity="0.3" />
+        `;
+      }
+    });
+
+    // Draw candles
+    visibleCandles.forEach((c, idx) => {
+      const globalIdx = idx + startIdx;
+      const x = scaleX(globalIdx);
+      const yOpen = scaleY(c.o);
+      const yClose = scaleY(c.c);
+      const yHigh = scaleY(c.h);
+      const yLow = scaleY(c.l);
+
+      const color = c.c >= c.o ? 'var(--green)' : 'var(--red)';
+      const bodyTop = Math.min(yOpen, yClose);
+      const bodyHeight = Math.max(1.5, Math.abs(yOpen - yClose));
+
+      // Wick
+      svgElements += `<line x1="${x}" y1="${yHigh}" x2="${x}" y2="${yLow}" stroke="${color}" stroke-width="1.2" />`;
+      // Body
+      svgElements += `<rect x="${x - cWidth/2}" y="${bodyTop}" width="${cWidth}" height="${bodyHeight}" fill="${color}" stroke="${color}" stroke-width="0.5" />`;
+    });
+
+    // Draw swings
+    swings.forEach(s => {
+      if (s.index >= startIdx && s.index <= endIdx) {
+        const x = scaleX(s.index);
+        const y = scaleY(s.price);
+        const color = s.type === 'high' ? 'var(--accent)' : '#ffd700';
+        svgElements += `<circle cx="${x}" cy="${y}" r="3.5" fill="${color}" stroke="var(--bg)" stroke-width="1" />`;
+      }
+    });
+
+    // Draw sweeps
+    sweeps.forEach(s => {
+      if (s.index >= startIdx && s.index <= endIdx) {
+        const x = scaleX(s.index);
+        const y = scaleY(s.price);
+        const color = s.type === 'ssl_sweep' ? 'var(--green)' : 'var(--red)';
+        svgElements += `
+          <circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${color}" stroke-width="1.5" stroke-dasharray="2" />
+          <line x1="${x - 10}" y1="${y}" x2="${x + 10}" y2="${y}" stroke="${color}" stroke-width="1" />
+        `;
+      }
+    });
+
+    // Draw BOS and CHoCH labels
+    bos.forEach(b => {
+      if (b.index >= startIdx && b.index <= endIdx) {
+        const x = scaleX(b.index);
+        const y = scaleY(b.price);
+        svgElements += `
+          <line x1="${x - 15}" y1="${y}" x2="${x}" y2="${y}" stroke="var(--accent)" stroke-width="1" />
+          <text x="${x - 12}" y="${y - 4}" fill="var(--accent)" font-family="var(--mono)" font-size="8">BOS</text>
+        `;
+      }
+    });
+
+    choch.forEach(c => {
+      if (c.index >= startIdx && c.index <= endIdx) {
+        const x = scaleX(c.index);
+        const y = scaleY(c.price);
+        svgElements += `
+          <line x1="${x - 15}" y1="${y}" x2="${x}" y2="${y}" stroke="var(--accent)" stroke-width="1" />
+          <text x="${x - 15}" y="${y - 4}" fill="var(--accent)" font-family="var(--mono)" font-size="8">CHoCH</text>
+        `;
+      }
+    });
+
+    // Draw Trade entries/exits
+    trades.forEach(t => {
+      // Entry marker
+      if (t.entry_idx >= startIdx && t.entry_idx <= endIdx) {
+        const x = scaleX(t.entry_idx);
+        const y = scaleY(t.entry_price);
+        if (t.type === 'long') {
+          svgElements += `
+            <polygon points="${x},${y + 12} ${x - 5},${y + 22} ${x + 5},${y + 22}" fill="var(--green)" />
+            <text x="${x - 12}" y="${y + 32}" fill="var(--green)" font-family="var(--mono)" font-size="8" font-weight="bold">LONG</text>
+          `;
+        } else {
+          svgElements += `
+            <polygon points="${x},${y - 12} ${x - 5},${y - 22} ${x + 5},${y - 22}" fill="var(--red)" />
+            <text x="${x - 15}" y="${y - 26}" fill="var(--red)" font-family="var(--mono)" font-size="8" font-weight="bold">SHORT</text>
+          `;
+        }
+      }
+
+      // Exit marker
+      if (t.exit_idx >= startIdx && t.exit_idx <= endIdx) {
+        const x = scaleX(t.exit_idx);
+        const y = scaleY(t.exit_price);
+        const color = t.win ? 'var(--green)' : 'var(--red)';
+        svgElements += `
+          <line x1="${x}" y1="${y - 10}" x2="${x}" y2="${y + 10}" stroke="${color}" stroke-width="1.5" />
+          <line x1="${x - 10}" y1="${y}" x2="${x + 10}" y2="${y}" stroke="${color}" stroke-width="1.5" />
+          <text x="${x + 4}" y="${y - 4}" fill="${color}" font-family="var(--mono)" font-size="8" font-weight="bold">EXIT</text>
+        `;
+      }
+
+      // Draw trade range rectangle
+      if (t.entry_idx >= startIdx && t.exit_idx <= endIdx) {
+        const xStart = scaleX(t.entry_idx);
+        const xEnd = scaleX(t.exit_idx);
+        const yEntry = scaleY(t.entry_price);
+        const yExit = scaleY(t.exit_price);
+        const color = t.win ? 'var(--green)' : 'var(--red)';
+        svgElements += `
+          <rect x="${xStart}" y="${Math.min(yEntry, yExit)}" width="${xEnd - xStart}" height="${Math.abs(yEntry - yExit)}" 
+                fill="${color}" fill-opacity="0.03" stroke="${color}" stroke-opacity="0.15" stroke-width="1" />
+        `;
+      }
+    });
+
+    // Reset view button if viewport focused
+    let resetBtnHtml = '';
+    if (focusedCandleRange) {
+      resetBtnHtml = `
+        <button onclick="resetCandleChart()" style="position:absolute; right:10px; top:10px; background:var(--card); border:1px solid var(--border); color:var(--text); padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">
+          Reset Zoom
+        </button>
+      `;
+    }
+
+    container.innerHTML = `
+      <svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" style="overflow:visible; background:#0c0f16; border:1px solid var(--border); border-radius:4px;">
+        ${svgElements}
+      </svg>
+      ${resetBtnHtml}
+    `;
+  }
+
+  function resetCandleChart() {
+    focusedCandleRange = null;
+    if (window.SMC_BACKTEST_RESULTS) {
+      const d = window.SMC_BACKTEST_RESULTS;
+      renderCandleChart(d.candles, d.swings, d.sweeps, d.bos_events, d.choch_events, d.order_blocks, d.trades);
+    }
   }
 </script>
 
