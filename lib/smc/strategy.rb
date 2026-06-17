@@ -20,3 +20,6 @@ module SMC
 end
 
 require_relative 'strategy/sweep_ob'
+require_relative 'strategy/playbook_helpers'
+require_relative 'strategy/structure/bos_pullback_strategy'
+require_relative 'strategy/liquidity/sweep_reversal_strategy'

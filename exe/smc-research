@@ -5,10 +5,12 @@ $LOAD_PATH.unshift(File.expand_path('../lib', __dir__)) unless $LOAD_PATH.includ
 
 require 'bundler/setup'
 
+require 'dotenv'
+ollama_env = ENV.fetch('OLLAMA_AGENT_ENV', File.expand_path('~/.config/ollama_agent/.env'))
+Dotenv.overload(ollama_env) if File.exist?(ollama_env)
 
 require 'json'
 require 'time'
-require 'dotenv/load'
 require 'smc'
 require 'trading_agent'
 
@@ -194,12 +196,12 @@ def main
   # Initialize Binance client
   exchange = TradingAgent::Exchanges::BinanceFutures.new(testnet: false)
   
-  # Load env for Ollama orchestrator
-  Dotenv.load("/home/nemesis/.config/ollama_agent/.env")
+  # Load env for Ollama orchestrator (applied at top via Dotenv.overload)
   state = TradingAgent::Market::State.new
-  
-  puts "Initializing LLM Orchestrator..."
-  orchestrator = TradingAgent::Llm::Orchestrator.new(state, exchange, think: true)
+  llm_model = ENV['OLLAMA_AGENT_MODEL'] || ENV['OLLAMA_MODEL'] || ENV['MODEL'] || 'qwen2.5-coder:7b'
+
+  puts "Initializing LLM Orchestrator (model: #{llm_model})..."
+  orchestrator = TradingAgent::Llm::Orchestrator.new(state, exchange, model: llm_model, think: true)
   puts "LLM Orchestrator loaded successfully."
 
   research_reports = {}
@@ -323,8 +325,17 @@ def main
     oos_trades = best_result_oos ? best_result_oos[:total_trades] : 0
 
     degradation = (is_pf == "Infinity" || is_pf == 99.0 ? 5.0 : is_pf.to_f) - (oos_pf == "Infinity" || oos_pf == 99.0 ? 5.0 : oos_pf.to_f)
-    approved = oos_pf != 0.0 && (oos_pf == "Infinity" || oos_pf.to_f >= 1.2) && degradation <= 0.8
-    status = approved ? "APPROVED" : "REJECTED (Possible Overfitting)"
+    oos_pf_value = oos_pf == "Infinity" || oos_pf == 99.0 ? 99.0 : oos_pf.to_f
+    approved = oos_pf != 0.0 && oos_pf_value >= 1.2 && degradation <= 0.8
+    status = if approved
+               'APPROVED'
+             elsif oos_pf_value < 1.2
+               "REJECTED (OOS profit factor #{oos_pf} below 1.2)"
+             elsif degradation > 0.8
+               "REJECTED (IS/OOS profit factor degradation #{degradation.round(2)})"
+             else
+               'REJECTED'
+             end
 
     puts "  Out-of-Sample Metrics: Trades: #{oos_trades} | Win Rate: #{oos_wr}% | PF: #{oos_pf} | PnL: $#{oos_pnl}"
     puts "  Validation Status: #{status}"

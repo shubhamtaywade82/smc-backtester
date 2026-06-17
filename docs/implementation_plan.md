@@ -167,8 +167,9 @@ Goal: one strategy class per playbook; compose shared rules.
 
 | Status | Action | File | Work |
 |--------|--------|------|------|
-| ❌ | ➕ | `lib/smc/strategy/structure/bos_pullback_strategy.rb` | Bullish BOS → pullback → HL → long (no OB required) |
-| ❌ | ➕ | `spec/strategies/pb3_bos_pullback_spec.rb` | Highest automation priority per KB |
+| ✅ | ➕ | `lib/smc/strategy/structure/bos_pullback_strategy.rb` | Bullish BOS → pullback → HL → long (no OB required) |
+| ✅ | ➕ | `lib/smc/strategy/playbook_helpers.rb` | Shared structure/sweep/entry helpers used by PB3/PB6 |
+| ✅ | ➕ | `spec/strategies/pb3_bos_pullback_spec.rb` | Deterministic long/short via `spec/support/pb3_fixture.rb` |
 
 ### PB4 — CHoCH Reversal
 
@@ -188,8 +189,8 @@ Goal: one strategy class per playbook; compose shared rules.
 
 | Status | Action | File | Work |
 |--------|--------|------|------|
-| ❌ | ➕ | `lib/smc/strategy/liquidity/sweep_reversal_strategy.rb` | SSL sweep → bullish CHoCH → long |
-| ❌ | ➕ | `spec/strategies/pb6_sweep_reversal_spec.rb` | CHoCH required (gap in current PB7) |
+| ✅ | ➕ | `lib/smc/strategy/liquidity/sweep_reversal_strategy.rb` | SSL sweep → bullish CHoCH → long; rejects BOS after sweep |
+| ✅ | ➕ | `spec/strategies/pb6_sweep_reversal_spec.rb` | PB7-derived fixture (no BOS bar); long/short + negative cases |
 
 ### PB7 — Sweep + OB (complete existing)
 
@@ -339,10 +340,13 @@ Phase 8–9 (optional)
 - ✅ `spec/strategies/pb7_sweep_ob_spec.rb`
 - ✅ `spec/support/pb7_fixture.rb`
 
-### Sprint 2 — PB3 + PB6 (1–2 days)
-- `lib/smc/strategy/structure/bos_pullback_strategy.rb`
-- `lib/smc/strategy/liquidity/sweep_reversal_strategy.rb`
-- Specs for both
+### Sprint 2 — PB3 + PB6 ✅
+- ✅ `lib/smc/strategy/playbook_helpers.rb`
+- ✅ `lib/smc/strategy/structure/bos_pullback_strategy.rb`
+- ✅ `lib/smc/strategy/liquidity/sweep_reversal_strategy.rb`
+- ✅ `spec/support/pb3_fixture.rb`, `spec/support/pb6_fixture.rb`
+- ✅ `spec/strategies/pb3_bos_pullback_spec.rb`, `spec/strategies/pb6_sweep_reversal_spec.rb`
+- **142 specs passing** (full suite)
 
 ### Sprint 3 — S/R + PB2 (2–3 days)
 - `lib/smc/support_resistance/*`

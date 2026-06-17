@@ -33,6 +33,34 @@ module PipelineHelper
     }
   end
 
+  def evaluate_pb3(candles, index:, strategy: nil, **pipeline_options)
+    state = run_pipeline(candles, up_to_index: index, **pipeline_options)
+    strategy ||= SMC::Strategy::BosPullbackStrategy.new
+
+    strategy.evaluate(
+      candles,
+      index,
+      state[:pivot_detector],
+      state[:market_structure],
+      state[:liquidity_sweep],
+      state[:ob_detector]
+    )
+  end
+
+  def evaluate_pb6(candles, index:, strategy: nil, **pipeline_options)
+    state = run_pipeline(candles, up_to_index: index, **pipeline_options)
+    strategy ||= SMC::Strategy::SweepReversalStrategy.new
+
+    strategy.evaluate(
+      candles,
+      index,
+      state[:pivot_detector],
+      state[:market_structure],
+      state[:liquidity_sweep],
+      state[:ob_detector]
+    )
+  end
+
   def evaluate_pb7(candles, index:, strategy: nil, **pipeline_options)
     state = run_pipeline(candles, up_to_index: index, **pipeline_options)
     strategy ||= SMC::Strategy::SweepOB.new
