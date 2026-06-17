@@ -4,6 +4,8 @@ $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__)) unless $LOAD_PATH.in
 
 require 'smc'
 
+Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |file| require file }
+
 RSpec.configure do |config|
   # Enforce expect syntax only
   config.expect_with :rspec do |c|

@@ -5,6 +5,9 @@ require 'time'
 
 # Require all files in smc/ directory
 require_relative 'smc/candle'
+require_relative 'smc/atr'
+require_relative 'smc/liquidity/displacement'
+require_relative 'smc/liquidity/strong_low_detector'
 require_relative 'smc/pivot_detector'
 require_relative 'smc/market_structure'
 require_relative 'smc/liquidity_sweep'

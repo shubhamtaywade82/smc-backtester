@@ -1,0 +1,400 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__)) unless $LOAD_PATH.include?(File.expand_path('../lib', __dir__))
+
+require 'bundler/setup'
+
+
+require 'json'
+require 'time'
+require 'dotenv/load'
+require 'smc'
+require 'trading_agent'
+
+# Helper to aggregate 5M candles into higher timeframes (15M and 1H)
+def aggregate_candles(ltf_candles, group_size)
+  aggregated = []
+  ltf_candles.each_slice(group_size) do |slice|
+    next if slice.size < group_size # omit incomplete tail
+    
+    first = slice.first
+    last = slice.last
+    
+    highs = slice.map(&:high)
+    lows = slice.map(&:low)
+    total_volume = slice.map(&:volume).sum
+    
+    aggregated << SMC::Candle.new(
+      time: first.time,
+      open: first.open,
+      high: highs.max,
+      low: lows.min,
+      close: last.close,
+      volume: total_volume
+    )
+  end
+  aggregated
+end
+
+# Download historical 5M candles from Binance Futures public API
+def fetch_historical_candles(exchange, symbol, duration_days)
+  limit = 1500
+  end_time = Time.now.utc.to_i * 1000
+  start_time = end_time - (duration_days * 24 * 3600 * 1000)
+  
+  puts "  Fetching historical candles for #{symbol}..."
+  all_klines = []
+  cursor = start_time
+  
+  loop do
+    batch = exchange.fetch_candles(symbol, "5m", limit: limit, start_time: cursor, end_time: end_time)
+    break if batch.nil? || batch.empty?
+    
+    all_klines.concat(batch)
+    last_t = batch.last[0].to_i
+    break if last_t >= end_time || batch.size < limit
+    
+    cursor = last_t + 60_000 # Step forward
+    sleep 0.12 # Stay safe under rate limit
+  end
+  
+  all_klines.uniq! { |c| c[0] }
+  all_klines.sort_by! { |c| c[0] }
+  
+  puts "  Total candles retrieved: #{all_klines.size}"
+  
+  all_klines.map do |c|
+    SMC::Candle.new(
+      time: Time.at(c[0].to_i / 1000.0).utc,
+      open: c[1].to_f,
+      high: c[2].to_f,
+      low: c[3].to_f,
+      close: c[4].to_f,
+      volume: c[5].to_f
+    )
+  end
+end
+
+def run_single_tf_backtest(candles, lookback_candles, pivot_left_right, tolerance_pct)
+  pivot_detector = SMC::PivotDetector.new(left_bars: pivot_left_right, right_bars: pivot_left_right)
+  market_structure = SMC::MarketStructure.new
+  liquidity_sweep = SMC::LiquiditySweep.new(tolerance_pct: tolerance_pct)
+  ob_detector = SMC::OrderBlockDetector.new
+  strategy = SMC::Strategy::SweepOB.new(lookback_candles: lookback_candles)
+  risk_manager = SMC::RiskManager.new(initial_capital: 100000.0, max_risk_pct: 0.01)
+
+  tester = SMC::Backtester.new(
+    candles: candles,
+    pivot_detector: pivot_detector,
+    market_structure: market_structure,
+    liquidity_sweep: liquidity_sweep,
+    ob_detector: ob_detector,
+    strategy: strategy,
+    risk_manager: risk_manager
+  )
+  tester.run
+end
+
+def run_mtf_backtest(all_5m_candles, all_15m_candles, itf_lookback, ltf_lookback)
+  mtf_engine = SMC::MTFEngine.new(ltf_interval: "5m", itf_interval: "5m", htf_interval: "15m")
+  mtf_engine.set_feed(:ltf, all_5m_candles)
+  mtf_engine.set_feed(:itf, all_5m_candles)
+  mtf_engine.set_feed(:htf, all_15m_candles)
+
+  strategy = SMC::Strategy::MTFConfluence.new(itf_lookback: itf_lookback, ltf_lookback: ltf_lookback)
+  risk_manager = SMC::RiskManager.new(initial_capital: 100000.0, max_risk_pct: 0.015)
+  
+  equity_curve = []
+  start_idx = 120
+  
+  (start_idx..(all_5m_candles.size - 1)).each do |i|
+    ltf_candle = all_5m_candles[i]
+    mtf_engine.align_and_process(ltf_candle)
+    mtf_engine.engines[:ltf].process_candle(ltf_candle)
+
+    active_positions = risk_manager.trades.select { |t| t.status == :open }
+    risk_manager.update_positions(active_positions, ltf_candle, i)
+
+    if active_positions.empty?
+      signal = strategy.evaluate_mtf(all_5m_candles, i, mtf_engine)
+      if signal
+        risk_manager.open_position(
+          type: signal[:type],
+          entry: signal[:entry],
+          sl: signal[:sl],
+          tp1: signal[:tp1],
+          tp2: signal[:tp2],
+          tp3: signal[:tp3],
+          index: i
+        )
+      end
+    end
+
+    floating_pnl = risk_manager.trades.select { |t| t.status == :open }.map do |pos|
+      pos.long? ? pos.size * (ltf_candle.close - pos.entry_price) : pos.size * (pos.entry_price - ltf_candle.close)
+    end.sum
+    
+    equity_curve << {
+      index: i,
+      time: ltf_candle.time.is_a?(Time) ? ltf_candle.time.strftime("%Y-%m-%d %H:%M:%S UTC") : ltf_candle.time,
+      equity: risk_manager.capital + floating_pnl
+    }
+  end
+
+  closed_trades = risk_manager.trades.select { |t| t.status == :closed }
+  total_trades = closed_trades.size
+  wins = closed_trades.select { |t| t.pnl > 0 }.size
+  losses = closed_trades.select { |t| t.pnl < 0 }.size
+  win_rate = total_trades > 0 ? (wins.to_f / total_trades * 100).round(2) : 0.0
+  
+  winning_trades = closed_trades.select { |t| t.pnl > 0 }
+  losing_trades = closed_trades.select { |t| t.pnl < 0 }
+  gross_profit = winning_trades.map(&:pnl).sum
+  gross_loss = losing_trades.map(&:pnl).sum.abs
+  profit_factor = gross_loss > 0 ? (gross_profit / gross_loss).round(2) : (gross_profit > 0 ? 99.0 : 0.0)
+
+  net_profit = risk_manager.capital - risk_manager.initial_capital
+  net_profit_pct = (net_profit / risk_manager.initial_capital * 100).round(2)
+
+  {
+    initial_capital: risk_manager.initial_capital,
+    final_capital: risk_manager.capital,
+    net_profit: net_profit,
+    net_profit_pct: net_profit_pct,
+    total_trades: total_trades,
+    wins: wins,
+    losses: losses,
+    win_rate: win_rate,
+    profit_factor: profit_factor,
+    trades: closed_trades.map do |t|
+      {
+        type: t.type,
+        entry_price: t.entry_price,
+        entry_idx: t.entry_idx,
+        exit_price: t.exit_price,
+        exit_idx: t.exit_idx,
+        pnl: t.pnl.round(2),
+        win: t.pnl > 0
+      }
+    end,
+    equity_curve: equity_curve
+  }
+end
+
+def main
+  puts "=================================================="
+  puts "   SMC/ICT Playbook Research & Optimization Tool "
+  puts "=================================================="
+
+  symbols = ARGV.empty? ? ["SOLUSDT", "ETHUSDT", "BTCUSDT", "XRPUSDT", "BNBUSDT"] : ARGV.map { |s| s.end_with?("USDT") ? s.upcase : "#{s.upcase}USDT" }
+  # Use 45 days for fast execution while keeping enough data for robust analysis
+  duration_days = 45 
+
+  # Initialize Binance client
+  exchange = TradingAgent::Exchanges::BinanceFutures.new(testnet: false)
+  
+  # Load env for Ollama orchestrator
+  Dotenv.load("/home/nemesis/.config/ollama_agent/.env")
+  state = TradingAgent::Market::State.new
+  
+  puts "Initializing LLM Orchestrator..."
+  orchestrator = TradingAgent::Llm::Orchestrator.new(state, exchange, think: true)
+  puts "LLM Orchestrator loaded successfully."
+
+  research_reports = {}
+
+  symbols.each do |symbol|
+    puts "\n--------------------------------------------------"
+    puts "Processing #{symbol}..."
+    puts "--------------------------------------------------"
+
+    # 1. Fetch candles
+    candles_5m = fetch_historical_candles(exchange, symbol, duration_days)
+    if candles_5m.size < 500
+      puts "Insufficient candles fetched for #{symbol}. Skipping."
+      next
+    end
+
+    candles_15m = aggregate_candles(candles_5m, 3)
+
+    # 2. Split into In-Sample (IS) and Out-of-Sample (OOS)
+    # IS: first 60% of data, OOS: last 40% of data
+    is_size = (candles_5m.size * 0.60).to_i
+    
+    is_candles_5m = candles_5m[0...is_size]
+    oos_candles_5m = candles_5m[is_size..]
+    
+    is_candles_15m = candles_15m[0...(is_size / 3)]
+    oos_candles_15m = candles_15m[(is_size / 3)..]
+
+    puts "  In-Sample period:  #{is_candles_5m.first.time} to #{is_candles_5m.last.time} (#{is_candles_5m.size} bars)"
+    puts "  Out-of-Sample period: #{oos_candles_5m.first.time} to #{oos_candles_5m.last.time} (#{oos_candles_5m.size} bars)"
+
+    # 3. Grid Search over Parameters on In-Sample Data
+    best_is_score = -9999.0
+    best_config = nil
+    best_result_is = nil
+
+    # Single Timeframe Strategy grid (SweepOB)
+    puts "  Optimizing Single-Timeframe SweepOB Strategy..."
+    [10, 15, 20].each do |lookback|
+      [3, 4].each do |pivot_lr|
+        [0.001, 0.002].each do |tol|
+          res = run_single_tf_backtest(is_candles_15m, lookback, pivot_lr, tol)
+          next if res.nil? || res[:total_trades] < 2
+
+          pf = res[:profit_factor] == "Infinity" ? 99.0 : res[:profit_factor].to_f
+          # Score heavily based on profit factor and net profit
+          score = pf * res[:net_profit_pct]
+          
+          if score > best_is_score
+            best_is_score = score
+            best_config = {
+              strategy: "SweepOB",
+              params: { lookback_candles: lookback, pivot_left_right: pivot_lr, tolerance_pct: tol },
+              score: score
+            }
+            best_result_is = res
+          end
+        end
+      end
+    end
+
+    # Multi-Timeframe Strategy grid (MTFConfluence)
+    puts "  Optimizing Multi-Timeframe Confluence Strategy..."
+    [6, 8].each do |itf_lookback|
+      [10, 15].each do |ltf_lookback|
+        res = run_mtf_backtest(is_candles_5m, is_candles_15m, itf_lookback, ltf_lookback)
+        next if res.nil? || res[:total_trades] < 2
+
+        pf = res[:profit_factor] == 99.0 ? 99.0 : res[:profit_factor].to_f
+        score = pf * res[:net_profit_pct]
+
+        if score > best_is_score
+          best_is_score = score
+          best_config = {
+            strategy: "MTFConfluence",
+            params: { itf_lookback: itf_lookback, ltf_lookback: ltf_lookback },
+            score: score
+          }
+          best_result_is = res
+        end
+      end
+    end
+
+    if best_config.nil?
+      puts "  No profitable strategy found on In-Sample data for #{symbol}. Using default SweepOB parameters."
+      best_config = {
+        strategy: "SweepOB",
+        params: { lookback_candles: 15, pivot_left_right: 4, tolerance_pct: 0.0015 }
+      }
+      best_result_is = run_single_tf_backtest(is_candles_15m, 15, 4, 0.0015)
+    end
+
+    puts "  Best In-Sample Strategy: #{best_config[:strategy]}"
+    puts "  Best In-Sample Parameters: #{best_config[:params]}"
+    is_pf = best_result_is[:profit_factor]
+    is_pnl = best_result_is[:net_profit].round(2)
+    is_wr = best_result_is[:win_rate]
+    puts "  In-Sample Metrics: Trades: #{best_result_is[:total_trades]} | Win Rate: #{is_wr}% | PF: #{is_pf} | PnL: $#{is_pnl}"
+
+    # 4. Out-of-Sample Validation
+    puts "  Running Out-of-Sample validation..."
+    best_result_oos = if best_config[:strategy] == "SweepOB"
+      run_single_tf_backtest(
+        oos_candles_15m,
+        best_config[:params][:lookback_candles],
+        best_config[:params][:pivot_left_right],
+        best_config[:params][:tolerance_pct]
+      )
+    else
+      run_mtf_backtest(
+        oos_candles_5m,
+        oos_candles_15m,
+        best_config[:params][:itf_lookback],
+        best_config[:params][:ltf_lookback]
+      )
+    end
+
+    oos_pf = best_result_oos ? best_result_oos[:profit_factor] : 0.0
+    oos_pnl = best_result_oos ? best_result_oos[:net_profit].round(2) : 0.0
+    oos_wr = best_result_oos ? best_result_oos[:win_rate] : 0.0
+    oos_trades = best_result_oos ? best_result_oos[:total_trades] : 0
+
+    degradation = (is_pf == "Infinity" || is_pf == 99.0 ? 5.0 : is_pf.to_f) - (oos_pf == "Infinity" || oos_pf == 99.0 ? 5.0 : oos_pf.to_f)
+    approved = oos_pf != 0.0 && (oos_pf == "Infinity" || oos_pf.to_f >= 1.2) && degradation <= 0.8
+    status = approved ? "APPROVED" : "REJECTED (Possible Overfitting)"
+
+    puts "  Out-of-Sample Metrics: Trades: #{oos_trades} | Win Rate: #{oos_wr}% | PF: #{oos_pf} | PnL: $#{oos_pnl}"
+    puts "  Validation Status: #{status}"
+
+    # 5. LLM Qualitative Research Analysis
+    # Get last 5 hourly candles for context
+    last_5_candles = aggregate_candles(candles_5m.last(100), 12).last(5)
+    last_5_candles_str = last_5_candles.map do |c|
+      "Time: #{c.time.strftime('%Y-%m-%d %H:%M')} | O: #{c.open} | H: #{c.high} | L: #{c.low} | C: #{c.close} | Vol: #{c.volume}"
+    end.join("\n")
+
+    prompt = <<~PROMPT
+      You are an expert crypto quantitative research analyst. We have just completed a rigorous historical backtesting optimization on the symbol #{symbol} using our SMC + Trendline Liquidity Playbook.
+
+      BACKTEST RESULTS FOR #{symbol}:
+      - Best Strategy: #{best_config[:strategy]}
+      - Best Parameters: #{best_config[:params]}
+      - In-Sample Profit Factor: #{is_pf}
+      - In-Sample Win Rate: #{is_wr}%
+      - In-Sample Net Profit: $#{is_pnl}
+      - Out-of-Sample Profit Factor: #{oos_pf}
+      - Out-of-Sample Win Rate: #{oos_wr}%
+      - Out-of-Sample Net Profit: $#{oos_pnl}
+      - Validation Status: #{status}
+
+      LATEST MARKET STATE DATA (Last 5 1-Hour candles):
+      #{last_5_candles_str}
+
+      Please write a detailed, thorough quantitative analysis for #{symbol} (approx 200-300 words). Include:
+      1. Market Context: Interpret the latest price action, trend direction, and volatility structure.
+      2. Playbook Alignment: Explain why the chosen parameters and strategy are well-suited (or not) for this symbol's structure.
+      3. Risk Assessment & Recommendations: Propose execution tips (e.g. leverage limits, liquidity trap areas, or news event guidelines) for this specific symbol.
+
+      Respond in clean Markdown. Do not include introductory conversational filler, code fences, or wrappers—just start directly with the markdown headers.
+    PROMPT
+
+    puts "  Querying LLM Orchestrator for qualitative analysis..."
+    analysis = "No analysis generated due to communication timeout."
+    begin
+      analysis = orchestrator.free_chat(prompt)
+    rescue StandardError => e
+      puts "  LLM Query error: #{e.message}"
+    end
+
+    research_reports[symbol] = {
+      strategy: best_config[:strategy],
+      params: best_config[:params],
+      status: status,
+      in_sample: {
+        profit_factor: is_pf,
+        net_profit: is_pnl,
+        win_rate: is_wr,
+        trades: best_result_is[:total_trades]
+      },
+      out_of_sample: {
+        profit_factor: oos_pf,
+        net_profit: oos_pnl,
+        win_rate: oos_wr,
+        trades: oos_trades
+      },
+      analysis: analysis
+    }
+  end
+
+  # Export results to JSON file
+  output_path = File.join(Dir.pwd, 'research_results.json')
+  File.write(output_path, JSON.pretty_generate(research_reports))
+  puts "\n=================================================="
+  puts "Research reports compiled and written to '#{output_path}'."
+  puts "=================================================="
+end
+
+main if __FILE__ == $0
