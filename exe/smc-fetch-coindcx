@@ -1,27 +1,25 @@
+#!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'optparse'
-require 'json'
-require 'time'
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__)) unless $LOAD_PATH.include?(File.expand_path('../../lib', __FILE__))
 
 # Load coindcx-client local library
 $LOAD_PATH.unshift("/home/nemesis/project/trading-workspace/coindcx/coindcx-client/lib")
 begin
   require 'coindcx'
-rescue LoadError => e
-  puts "Failed to load coindcx-client from local path: #{e.message}"
-  exit 1
+rescue LoadError
+  begin
+    require 'coindcx'
+  rescue LoadError => e
+    puts "Failed to load coindcx gem: #{e.message}"
+    exit 1
+  end
 end
 
-# Load SMC library components
-require_relative 'lib/smc/candle'
-require_relative 'lib/smc/pivot_detector'
-require_relative 'lib/smc/market_structure'
-require_relative 'lib/smc/liquidity_sweep'
-require_relative 'lib/smc/order_block'
-require_relative 'lib/smc/strategy'
-require_relative 'lib/smc/risk_manager'
-require_relative 'lib/smc/backtester'
+require 'optparse'
+require 'json'
+require 'time'
+require 'smc'
 
 # Helper to load .env if present in client folder
 def load_dotenv
@@ -46,7 +44,7 @@ def parse_options
   }
 
   OptionParser.new do |opts|
-    opts.banner = "Usage: ruby fetch_coindcx_data.rb [options]"
+    opts.banner = "Usage: smc-fetch-coindcx [options]"
 
     opts.on("-p", "--pair PAIR", "CoinDCX pair name (default: B-BTC_USDT)") do |p|
       options[:pair] = p
@@ -127,8 +125,9 @@ def main
     end
 
     # Save to file
-    File.write(options[:output], JSON.pretty_generate(formatted_candles))
-    puts "      Saved #{formatted_candles.size} candles to '#{options[:output]}'."
+    dest_json = File.join(Dir.pwd, options[:output])
+    File.write(dest_json, JSON.pretty_generate(formatted_candles))
+    puts "      Saved #{formatted_candles.size} candles to '#{dest_json}'."
 
     if options[:backtest]
       puts "\n[2/3] Mapping candles to SMC objects..."
@@ -210,8 +209,9 @@ def main
       }
 
       js_content = "window.SMC_BACKTEST_RESULTS = #{JSON.pretty_generate(export_data)};"
-      File.write('backtest_results.js', js_content)
-      puts "      Exported results to 'backtest_results.js' successfully."
+      dest_results = File.join(Dir.pwd, 'backtest_results.js')
+      File.write(dest_results, js_content)
+      puts "      Exported results to '#{dest_results}' successfully."
     end
 
   rescue CoinDCX::Errors::AuthError => e

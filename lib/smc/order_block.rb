@@ -26,6 +26,14 @@ module SMC
     def mean_threshold # 50% equilibrium level of the OB
       @low + (range / 2.0)
     end
+
+    def mitigated?
+      @mitigated
+    end
+
+    def invalidated?
+      @invalidated
+    end
   end
 
   class OrderBlockDetector

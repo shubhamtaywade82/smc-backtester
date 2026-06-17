@@ -1,17 +1,11 @@
+#!/usr/bin/env ruby
 # frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__)) unless $LOAD_PATH.include?(File.expand_path('../../lib', __FILE__))
 
 require 'json'
 require 'time'
-require_relative 'lib/smc/candle'
-require_relative 'lib/smc/pivot_detector'
-require_relative 'lib/smc/market_structure'
-require_relative 'lib/smc/liquidity_sweep'
-require_relative 'lib/smc/order_block'
-require_relative 'lib/smc/strategy/mtf_confluence'
-require_relative 'lib/smc/risk_manager'
-require_relative 'lib/smc/backtester'
-require_relative 'lib/smc/mtf_engine'
-require_relative 'lib/smc/data_generator'
+require 'smc'
 
 # Helper to aggregate 5M candles into higher timeframes (15M and 1H)
 # Handles open, high, low, close, volume, and starting timestamp alignment
@@ -222,8 +216,9 @@ def main
   }
 
   js_content = "window.SMC_BACKTEST_RESULTS = #{JSON.pretty_generate(export_data)};"
-  File.write('backtest_results.js', js_content)
-  puts "      Successfully updated 'backtest_results.js' with MTF simulation results."
+  dest_file = File.join(Dir.pwd, 'backtest_results.js')
+  File.write(dest_file, js_content)
+  puts "      Successfully updated '#{dest_file}' with MTF simulation results."
   puts "=================================================="
 end
 

@@ -1,15 +1,10 @@
+#!/usr/bin/env ruby
 # frozen_string_literal: true
 
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__)) unless $LOAD_PATH.include?(File.expand_path('../../lib', __FILE__))
+
 require 'json'
-require_relative 'lib/smc/candle'
-require_relative 'lib/smc/pivot_detector'
-require_relative 'lib/smc/market_structure'
-require_relative 'lib/smc/liquidity_sweep'
-require_relative 'lib/smc/order_block'
-require_relative 'lib/smc/strategy'
-require_relative 'lib/smc/risk_manager'
-require_relative 'lib/smc/backtester'
-require_relative 'lib/smc/data_generator'
+require 'smc'
 
 def main
   puts "=================================================="
@@ -165,8 +160,9 @@ def main
 
   js_content = "window.SMC_BACKTEST_RESULTS = #{JSON.pretty_generate(export_data)};"
   
-  File.write('/home/nemesis/project/trading-workspace/smc-backtester/backtest_results.js', js_content)
-  puts "      Successfully wrote 'backtest_results.js'."
+  dest_file = File.join(Dir.pwd, 'backtest_results.js')
+  File.write(dest_file, js_content)
+  puts "      Successfully wrote '#{dest_file}'."
   puts "=================================================="
 end
 
