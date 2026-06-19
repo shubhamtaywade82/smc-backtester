@@ -1,23 +1,27 @@
 {
   "SOLUSDT": {
-    "strategy": "MTFConfluence",
+    "strategy": "SupertrendPullback",
     "params": {
-      "itf_lookback": 8,
-      "ltf_lookback": 10
+      "period": 8,
+      "multiplier": 2.0,
+      "htf_group_size": 12,
+      "proximity_threshold_pct": 0.003
     },
-    "status": "REJECTED (OOS profit factor 0.9 below 1.2)",
+    "status": "APPROVED",
+    "diagnostic": false,
     "in_sample": {
-      "profit_factor": 0.94,
-      "net_profit": -10942.26,
-      "win_rate": 49.63,
-      "trades": 272
+      "profit_factor": 1.33,
+      "net_profit": 26884.43,
+      "win_rate": 59.54,
+      "trades": 173,
+      "score": 34.0204
     },
     "out_of_sample": {
-      "profit_factor": 0.9,
-      "net_profit": -12276.21,
-      "win_rate": 44.52,
-      "trades": 155
+      "profit_factor": 1.42,
+      "net_profit": 23106.28,
+      "win_rate": 57.89,
+      "trades": 114
     },
-    "analysis": "## Market Context  \nThe last five 1‑hour candles show SOLUSDT in a clear down‑trend. Open‑to‑close moves have been negative on three of the five bars, and the most recent candle closed 0.93 % lower than the prior close (72.45 vs 73.38). The high‑low range has been widening: volume‑weighted price swing fell from a 0.61 % range (73.58‑73.47) to a 1.12 % range (73.39‑72.73) and then to a 0.83 % range (72.94‑72.11). Volume has accelerated sharply, rising from ~0.32 M to >1.25 M contracts, indicating increasing participation on the sell side. The price is now testing the 72‑71 USD support band that has acted as a swing low over the past week. Momentum indicators (e.g., 1‑hour RSI) would likely be sub‑50, confirming bearish pressure. Volatility, measured by the expanding candle bodies and rising ATR, suggests the market is still in a volatile contraction‑to‑expansion phase, favoring short‑term bearish entries.\n\n## Playbook Alignment  \nThe MTFConfluence strategy with `itf_lookback=8` (inter‑time‑frame) and `ltf_lookback=10` (long‑time‑frame) is designed to capture multi‑scale liquidity imbalances. In SOL’s current structure, the 8‑hour look‑back aligns with the recent rapid volume surge, while the 10‑hour look‑back captures the broader down‑trend swing that began ~10 hours ago. However, back‑test results show a profit factor below 1.0 (0.94 in‑sample, 0.9 out‑of‑sample) and win rates under 50 %, indicating the confluence signals are being over‑triggered in a choppy environment. The strategy’s reliance on liquidity traps (order‑block breaks) may be less effective when price is already inside a strong bearish zone, as the market is likely to continue sliding rather than reversing into a liquidity pool.\n\n## Risk Assessment & Recommendations  \n- **Leverage:** Keep leverage modest (≤ 5×) to accommodate the high volatility and avoid liquidation on rapid down‑ticks.  \n- **Entry:** Target short entries near the 72.00 USD level, where a prior swing low and potential order‑block reside. Confirm with a bearish 1‑hour candlestick engulfing pattern and a negative volume delta on the 1‑minute micro‑structure.  \n- **Stop‑Loss:** Place SL just above the recent high of 73.39 USD (≈ 73.60) to stay beyond the nearest structural resistance. This yields a risk‑to‑reward of roughly 1:2 if TP is set near the 70.50 USD support.  \n- **Take‑Profit:** Aim for the 70.50 USD zone, which aligns with the next major swing low and a historical liquidity pool.  \n- **News Guard:** SOL is sensitive to Solana network upgrades and major DeFi announcements. Avoid initiating new positions within 30 minutes of scheduled network events or major ecosystem news releases.  \n- **Position Sizing:** Limit exposure to ≤ 1 % of account equity per trade, respecting the 2 % maximum risk rule. Adjust size downward if volatility spikes (ATR > 1.5 %).  \n\nOverall, the current market favors disciplined short positions with tight risk controls; the MTFConfluence parameters provide some alignment but require stricter filtering to improve edge."
+    "analysis": "## Market Context  \nThe last five 1‑hour candles show SOLUSDT in a clear down‑trend. Open‑to‑close progression: 73.29 → 73.14 → 72.77 → 72.43 → 71.97, a 1.3 % decline over three hours. Each candle’s high is lower than the prior high, and lows are also descending, confirming lower‑high/lower‑low structure. Volatility is moderate‑high: volume spikes on the 07:30 (1.11 M) and 08:30 (1.19 M) candles, coinciding with the strongest price drops, while the 09:30 candle contracts sharply (0.45 M) as price stabilises near 72.4. The 10:30 candle again sees elevated volume (1.12 M) as price breaks below the 72.3 support zone, suggesting fresh selling pressure. Overall, the market is in a bearish swing with increasing downside momentum and intermittent volume‑driven pull‑backs.\n\n## Playbook Alignment  \nThe **SupertrendPullback** strategy with `period=8`, `multiplier=2.0` is designed to capture pull‑backs against a prevailing trend while filtering out noise. An 8‑period ATR on a 1‑hour chart smooths short‑term spikes, and a 2.0 multiplier yields a relatively wide band, preventing premature exits during volatile moves—exactly the condition observed in the recent high‑volume swings. The `htf_group_size=12` (12‑hour grouping) aligns with the current multi‑hour bearish structure, allowing the algorithm to respect higher‑time support/resistance zones that have been breached. The `proximity_threshold_pct=0.003` (0.3 %) ensures entries are placed close to the Supertrend line, which is appropriate given the tight price range between 72.4 and 73.0 before the latest break. The back‑tested win‑rate (~58 %) and profit factor (>1.3) indicate the model tolerates the observed volatility while still extracting upside from short‑term reversals.\n\n## Risk Assessment & Recommendations  \n- **Leverage:** Use modest leverage (≤ 5×) to accommodate the observed 1‑hour ATR (~0.4 USDT) and avoid margin calls on sudden volume spikes.  \n- **Stop‑Loss Placement:** Set SL just below the most recent swing low (≈ 71.60 USDT) to stay beyond the nearest structural level, giving a risk‑to‑reward ratio of at least 1:2 for typical target zones near 73.5 USDT.  \n- **Entry Zone:** Look for price re‑testing the Supertrend line around 72.2‑72.4 with a bullish candle and decreasing volume delta, indicating a pull‑back absorption.  \n- **Liquidity Traps:** Monitor the 07:30–08:30 high‑volume sell zones; price often retraces from these levels, offering short‑term buying opportunities but beware of rapid re‑entry of sellers.  \n- **News Guard:** SOL’s price can be sensitive to network upgrades or macro‑risk events (e.g., US dollar strength). Avoid initiating new positions within 30 minutes of major announcements.  \n\nBy adhering to these guidelines, the SupertrendPullback framework can be applied with disciplined risk while capitalising on the current bearish swing and intermittent pull‑backs."
   }
 }

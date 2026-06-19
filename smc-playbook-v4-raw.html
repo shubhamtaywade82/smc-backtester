@@ -1,262 +1,2827 @@
-<!DOCTYPE html>                                        
-                                                                                                                                                                                             
-   <html lang="en">                                                                                                                                                                          
-   <head>                                                                                                                                                                                    
-   <meta charset="UTF-8">                                                                                                                                                                    
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">                                                                                                                    
-   <title>SMC + ICT Institutional Trading Playbook v4.0</title>                                                                                                                              
-   <style>                                                                                                                                                                                   
-     :root {                                                                                                                                                                                 
-       --bg:       #0a0c10;                                                                                                                                                                  
-       --surface:  #0f1218;                                                                                                                                                                  
-       --card:     #141820;                                                                                                                                                                  
-       --border:   #1e2530;                                                                                                                                                                  
-       --accent:   #f0a500;                                                                                                                                                                  
-       --accent2:  #2ee8b0;                                                                                                                                                                  
-       --red:      #e84040;                                                                                                                                                                  
-       --green:    #2ee880;                                                                                                                                                                  
-       --blue:     #4090ff;                                                                                                                                                                  
-       --purple:   #9060ff;                                                                                                                                                                  
-       --muted:    #6b7280;                                                                                                                                                                  
-       --text:     #d1d9e6;                                                                                                                                                                  
-       --textdim:  #8892a0;                                                                                                                                                                  
-       --mono:     'JetBrains Mono', 'Fira Code', monospace;                                                                                                                                 
-       --sans:     'Inter', system-ui, sans-serif;                                                                                                                                           
-     }                                                                                                                                                                                       
-   - { box-sizing: border-box; margin: 0; padding: 0; }                                                                                                                                      
-                                                                                                                                                                                             
-     body {                                                                                                                                                                                  
-       background: var(--bg);                                                                                                                                                                
-       color: var(--text);                                                                                                                                                                   
-       font-family: var(--sans);                                                                                                                                                             
-       font-size: 14px;                                                                                                                                                                      
-       line-height: 1.6;                                                                                                                                                                     
-       min-height: 100vh;                                                                                                                                                                    
-     }                                                                                                                                                                                       
-                                                                                                                                                                                             
-     /* ── NAV ── */                                                                                                                                                                         
-     nav {                                                                                                                                                                                   
-       position: sticky;                                                                                                                                                                     
-       top: 0;                                                                                                                                                                               
-       z-index: 100;                                                                                                                                                                         
-       background: rgba(10,12,16,0.96);                                                                                                                                                      
-       backdrop-filter: blur(10px);                                                                                                                                                          
-       border-bottom: 1px solid var(--border);                                                                                                                                               
-       padding: 0 24px;                                                                                                                                                                      
-       display: flex;                                                                                                                                                                        
-       align-items: center;                                                                                                                                                                  
-       gap: 6px;                                                                                                                                                                             
-       overflow-x: auto;                                                                                                                                                                     
-       height: 48px;                                                                                                                                                                         
-       scrollbar-width: none;                                                                                                                                                                
-     }                                                                                                                                                                                       
-     nav::-webkit-scrollbar { display: none; }                                                                                                                                               
-                                                                                                                                                                                             
-     .nav-logo {                                                                                                                                                                             
-       font-family: var(--mono);                                                                                                                                                             
-       font-size: 13px;                                                                                                                                                                      
-       font-weight: 700;                                                                                                                                                                     
-       color: var(--accent);                                                                                                                                                                 
-       letter-spacing: 0.08em;                                                                                                                                                               
-       white-space: nowrap;                                                                                                                                                                  
-       margin-right: 12px;                                                                                                                                                           
-       flex-shrink: 0;                                                                                                                                                                       
-     }                                                                                                                                                                                       
-                                                                                                                                                                                             
-     .nav-btn {                                                                                                                                                                              
-       background: none;                                                                                                                                                                     
-       border: 1px solid transparent;                                                                                                                                                        
-       color: var(--muted);                                                                                                                                                                  
-       font-family: var(--sans);                                                                                                                                                             
-       font-size: 12px;                                                                                                                                                                      
-       padding: 4px 10px;                                                                                                                                                                    
-       border-radius: 4px;                                                                                                                                                                   
-       cursor: pointer;                                                                                                                                                                      
-       white-space: nowrap;                                                                                                                                                                  
-       transition: all 0.15s;                                                                                                                                                                
-       flex-shrink: 0;                                                                                                                                                                       
-     }                                                                                                                                                                                       
-     .nav-btn:hover { color: var(--text); border-color: var(--border); }                                                                                                                     
-     .nav-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(240,165,0,0.08); }                                                                                
-                                                                                                                                                                                             
-     /* ── LAYOUT ── */                                                                                                                                                                      
-     main {                                                                                                                                                                                  
-       max-width: 1100px;                                                                                                                                                                    
-       margin: 0 auto;                                                                                                                                                                       
-       padding: 32px 20px 80px;                                                                                                                                                              
-     }                                                                                                                                                                                       
-                                                                                                                                                                                             
-     .section { display: none; }                                                                                                                                                             
-     .section.visible { display: block; }                                                                                                                                                    
-                                                                                                                                                                                             
-     /* ── HERO ── */                                                                                                                                                                        
-     .hero {                                                                                                                                                                                 
-       border-bottom: 1px solid var(--border);                                                                                                                                               
-       padding-bottom: 28px;                                                                                                                                                                 
-       margin-bottom: 32px;                                                                                                                                                                  
-     }                                                                                                                                                                                       
-     .hero-eyebrow {                                                                                                                                                                         
-       font-family: var(--mono);                                                                                                                                                             
-       font-size: 11px;                                                                                                                                                                      
-       letter-spacing: 0.18em;                                                                                                                                                               
-       color: var(--accent);                                                                                                                                                                 
-       text-transform: uppercase;                                                                                                                                                            
-       margin-bottom: 10px;                                                                                                                                                                  
-     }                                                                                                                                                                                       
-     .hero h1 {                                                                                                                                                                              
-       font-size: 28px;                                                                                                                                                                      
-       font-weight: 800;                                                                                                                                                                     
-       line-height: 1.15;                                                                                                                                                                    
-       letter-spacing: -0.02em;                                                                                                                                                              
-       margin-bottom: 10px;                                                                                                                                                                  
-     }                                                                                                                                                                                       
-     .hero h1 span { color: var(--accent); }                                                                                                                                                 
-     .hero-sub                                                                                                                                                               
-       color: var(--textdim);                                                                                                                                                                
-       font-size: 13px;                                                                                                                                                                      
-       max-width: 600px;                                                                                                                                                                     
-     }                                                                                                                                                                                       
-                                                                                                                                                                                             
-     /* ── PHASE PIPELINE ── */                                                                                                                                                              
-     .pipeline {                                                                                                                                                                             
-       display: flex;                                                                                                                                                                        
-       flex-wrap: wrap;                                                                                                                                                                      
-       gap: 0;                                                                                                                                                                               
-       margin: 24px 0;                                                                                                                                                                       
-     }                                                                                                                                                                                       
-     .phase {                                                                                                                                                                                
-       display: flex;                                                                                                                                                                        
-       align-items: center;                                                                                                                                                                  
-       gap: 0;                                                                                                                                                                               
-     }                                                                                                                                                                                       
-     .phase-label {                                                                                                                                                                          
-       background: var(--card);                                                                                                                                                              
-       border: 1px solid var(--border);                                                                                                                                                      
-       font-family: var(--mono);                                                                                                                                                             
-       font-size: 10px;                                                                                                                                                                      
-       padding: 6px 10px;                                                                                                                                                                    
-       color: var(--textdim);                                                                                                                                                                
-       letter-spacing: 0.06em;                                                                                                                                                               
-       white-space: nowrap;                                                                                                                                                                  
-     }                                                                                                                                                                                       
-     .phase-arrow {                                                                                                                                                                          
-       color: var(--accent);                                                                                                                                                                 
-       font-size: 12px;                                                                                                                                                                      
-       padding: 0 4px;                                                                                                                                                                       
-     }                                                                                                                                                                                       
-     .phase-label.lit { color: var(--accent); border-color: var(--accent); background: rgba(240,165,0,0.07); }                                                                               
-                                                                                                                                                                                             
-     /* ── GRID ── */                                                                                                                                                                        
-     .grid-2 {                                                                                                                                                                               
-       display: grid;                                                                                                                                                                        
-       grid-template-columns: 1fr 1fr;                                                                                                                                                       
-       gap: 16px;                                                                                                                                                                            
-       margin-bottom: 20px;                                                                                                                                                                  
-     }                                                                                                                                                                                       
-     @media (max-width: 680px) { .grid-2 { grid-template-columns: 1fr; } }                                                                                                                   
-                                                                                                                                                                                             
-     .grid-3 {                                                                                                                                                                               
-       display: grid;                                                                                                                                                                        
-       grid-template-columns: 1fr 1fr 1fr;                                                                                                                                                   
-       gap: 14px;                                                                                                                                                                            
-       margin-bottom: 20px;                                                                                                                                                                  
-     }                                                                                                                                                                                       
-     @media (max-width: 780px) { .grid-3 { grid-template-columns: 1fr 1fr; } }                                                                                                               
-     @media (max-width: 480px) { .grid-3 { grid-tempr; } }                                                                                                                   
-                                                                                                                                                                                             
-     /* ── CARD ── */                                                                                                                                                                        
-     .card {                                                                                                                                                                                 
-       background: var(--card);                                                                                                                                                              
-       border: 1px solid var(--border);                                                                                                                                                      
-       border-radius: 6px;                                                                                                                                                                   
-       padding: 18px 20px;                                                                                                                                                                   
-       position: relative;                                                                                                                                                                   
-       overflow: hidden;                                                                                                                                                                     
-     }                                                                                                                                                                                       
-     .card::before {                                                                                                                                                                         
-       content: '';                                                                                                                                                                          
-       position: absolute;                                                                                                                                                                   
-       left: 0; top: 0; bottom: 0;                                                                                                                                                           
-       width: 3px;                                                                                                                                                                           
-       background: var(--accent);                                                                                                                                                            
-     }                                                                                                                                                                                       
-     .card.bull::before { background: var(--green); }                                                                                                                                        
-     .card.bear::before { background: var(--red); }                                                                                                                                          
-     .card.neutral::before { background: var(--blue); }                                                                                                                                      
-     .card.purple::before { background: var(--purple); }                                                                                                                                     
-                                                                                                                                                                                             
-     .card-title {                                                                                                                                                                           
-       font-family: var(--mono);                                                                                                                                                             
-       font-size: 11px;                                                                                                                                                                      
-       letter-spacing: 0.12em;                                                                                                                                                               
-       color: var(--muted);                                                                                                                                                                  
-       text-transform: uppercase;                                                                                                                                                            
-       margin-bottom: 10px;                                                                                                                                                                  
-       display: flex;                                                                                                                                                                        
-       align-items: center;                                                                                                                                                                  
-       gap: 8px;                                                                                                                                                                             
-     }                                                                                                                                                                                       
-     .card-title .badge {                                                                                                                                                                    
-       background: rgba(240,165,0,0.12);                                                                                                                                                     
-       color: var(--accent);                                                                                                                                                                 
-       border: 1px solid rgba(240,165,0,0.25);                                                                                                                                               
-       font-size: 9px;                                                                                                                                                                       
-       padding: 1px 6px;                                                                                                                                                                     
-       border-radius: 3px;                                                                                                                                                                   
-     }                                                                                                                                                                                       
-     .card-title .badge.bull { background: rgba(46,232,128,0.1); color: var(--green); border-color: rgba(46,232,128,0.25); }                                                                 
-     .card-title .badge.bear { background: rgba(232,64,64,0.1); color: var(--red); border-color: rgba(232,64,64,0.25); }                                                                     
-                                                                                                                                                                                             
-     .card h3 {                                                                                                                                                                              
-       font-size: 15px;                                                                                                                                                                      
-       font-weight: 700;                                                                                                                                                                     
-       margin-bottom: 8px;                                                                                                                                                                   
-       letter-spacing: -0.01em;                                                                                                                                                              
-     }                                                                                                                                                                                       
-                                                                                                                                                                                     
-     .card p { color: var(--textdim); font-size: 13px; line-height: 1.55; }                                                                                                                  
-                                                                                                                                                                                             
-     /* ── CHECKLIST ── */                                                                                                                                                                   
-     .checklist {                                                                                                                                                                            
-       list-style: none;                                                                                                                                                                     
-       margin-top: 10px;                                                                                                                                                                     
-     }                                                                                                                                                                                       
-     .checklist li {                                                                                                                                                                         
-       display: flex;                                                                                                                                                                        
-       align-items: flex-start;                                                                                                                                                              
-       gap: 8px;                                                                                                                                                                             
-       padding: 4px 0;                                                                                                                                                                       
-       font-size: 13px;                                                                                                                                                                      
-       color: var(--textdim);                                                                                                                                                                
-       border-bottom: 1px solid rgba(255,255,255,0.04);                                                                                                                                      
-     }                                                                                                                                                                                       
-     .checklist li:last-child { border-bottom: none; }                                                                                                                                       
-     .checklist li::before {                                                                                                                                                                 
-       content: '□';                                                                                                                                                                         
-       font-family: var(--mono);                                                                                                                                                             
-       color: var(--border);                                                                                                                                                                 
-       font-size: 13px;                                                                                                                                                                      
-       flex-shrink: 0;                                                                                                                                                                       
-       margin-top: 1px;                                                                                                                                                                      
-     }                                                                                                                                                                                       
-     .checklist li.required::before {                                                                                                                                                        
-       content: '◈';                                                                                                                                                                         
-       color: var(--accent);                                                                                                                                                                 
-     }                                                                                                                                                                                       
-     .checklist li.bull-item::before { content: '▲'; color: var(--green); font-size: 9px; margin-top: 5px; }                                                                                 
-     .checklist li.bear-item::before { content: '▼'; color: var(--red); font-size: 9px; margin-top: 5px; }                                                                                   
-                                                                                                                                                                                             
-     /* ── FLOW STEPS ── */                                                                                                                                                                  
-     .steps {                                                                                                                                                                                
-       display: flex;                                                                                                                                                                        
-       flex-direction: column;                                                                                                                                                               
-       gap: 0;                                                                                                                                                                               
-     }                                                                                                                                                                                       
-     .step {                                                                                                                                                                                 
-       display: grid;                                                                                                                                                                        
-       grid-template-columns: 36px 1fr;                                                                                                                                                      
-       gap: 0;                                                                                                                                                                               
-       position: relative;                                                                     
-<truncated 439124 bytes>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMC + ICT Institutional Trading Playbook v4.0</title>
+<style>
+  :root {
+    --bg:       #0a0c10;
+    --surface:  #0f1218;
+    --card:     #141820;
+    --border:   #1e2530;
+    --accent:   #f0a500;
+    --accent2:  #2ee8b0;
+    --red:      #e84040;
+    --green:    #2ee880;
+    --blue:     #4090ff;
+    --purple:   #9060ff;
+    --muted:    #6b7280;
+    --text:     #d1d9e6;
+    --textdim:  #8892a0;
+    --mono:     'JetBrains Mono', 'Fira Code', monospace;
+    --sans:     'Inter', system-ui, sans-serif;
+  }
 
-NOTE: The output was truncated because it was too long. Use a more targeted query or a smaller range to get the information you need.
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,12,16,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    height: 48px;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .nav-btn {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav-btn:hover { color: var(--text); border-color: var(--border); }
+  .nav-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(240,165,0,0.08); }
+
+  /* ── LAYOUT ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 32px;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    color: var(--textdim);
+    font-size: 13px;
+    max-width: 600px;
+  }
+
+  /* ── PHASE PIPELINE ── */
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .phase {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .phase-label {
+    background: var(--card);
+    border: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 6px 10px;
+    color: var(--textdim);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .phase-arrow {
+    color: var(--accent);
+    font-size: 12px;
+    padding: 0 4px;
+  }
+  .phase-label.lit { color: var(--accent); border-color: var(--accent); background: rgba(240,165,0,0.07); }
+
+  /* ── GRID ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 680px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 780px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+  .card.bull::before { background: var(--green); }
+  .card.bear::before { background: var(--red); }
+  .card.neutral::before { background: var(--blue); }
+  .card.purple::before { background: var(--purple); }
+
+  .card-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .badge {
+    background: rgba(240,165,0,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(240,165,0,0.25);
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+  .card-title .badge.bull { background: rgba(46,232,128,0.1); color: var(--green); border-color: rgba(46,232,128,0.25); }
+  .card-title .badge.bear { background: rgba(232,64,64,0.1); color: var(--red); border-color: rgba(232,64,64,0.25); }
+
+  .card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .card p { color: var(--textdim); font-size: 13px; line-height: 1.55; }
+
+  /* ── CHECKLIST ── */
+  .checklist {
+    list-style: none;
+    margin-top: 10px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 13px;
+    color: var(--textdim);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: '□';
+    font-family: var(--mono);
+    color: var(--border);
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .checklist li.required::before {
+    content: '◈';
+    color: var(--accent);
+  }
+  .checklist li.bull-item::before { content: '▲'; color: var(--green); font-size: 9px; margin-top: 5px; }
+  .checklist li.bear-item::before { content: '▼'; color: var(--red); font-size: 9px; margin-top: 5px; }
+
+  /* ── FLOW STEPS ── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 0;
+    position: relative;
+  }
+  .step-num {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .step-num-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .step-num-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border);
+    min-height: 20px;
+  }
+  .step-body {
+    padding: 0 0 20px 14px;
+  }
+  .step-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    padding-top: 4px;
+  }
+  .step-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .step-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: rgba(46,232,176,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(46,232,176,0.2);
+  }
+  .step-tag.warn { background: rgba(240,165,0,0.1); color: var(--accent); border-color: rgba(240,165,0,0.2); }
+  .step-tag.danger { background: rgba(232,64,64,0.1); color: var(--red); border-color: rgba(232,64,64,0.2); }
+  .step-desc { color: var(--textdim); font-size: 12.5px; line-height: 1.5; }
+
+  /* ── TP TABLE ── */
+  .tp-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 70px 1fr;
+    gap: 8px 16px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tp-row:last-child { border-bottom: none; }
+  .tp-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .tp-target { font-size: 12.5px; }
+  .tp-pct {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    background: rgba(46,232,128,0.1);
+    color: var(--green);
+    border: 1px solid rgba(46,232,128,0.2);
+    border-radius: 4px;
+    padding: 3px 0;
+  }
+  .tp-action { font-size: 12px; color: var(--textdim); }
+
+  /* ── GOLDEN RULES ── */
+  .rule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .rule-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: var(--textdim);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .rule-icon {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ── CONCEPT CARDS ── */
+  .concept-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    margin-right: 4px;
+    margin-bottom: 4px;
+    display: inline-block;
+  }
+  .concept-tag.ict { border-color: rgba(144,96,255,0.4); color: var(--purple); background: rgba(144,96,255,0.07); }
+  .concept-tag.smc { border-color: rgba(240,165,0,0.4); color: var(--accent); background: rgba(240,165,0,0.07); }
+  .concept-tag.wyckoff { border-color: rgba(64,144,255,0.4); color: var(--blue); background: rgba(64,144,255,0.07); }
+
+  /* ── SECTION HEADER ── */
+  .sec-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sec-header h2 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .sec-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .sec-icon.g { background: rgba(46,232,128,0.15); }
+  .sec-icon.r { background: rgba(232,64,64,0.15); }
+  .sec-icon.b { background: rgba(64,144,255,0.15); }
+  .sec-icon.p { background: rgba(144,96,255,0.15); }
+  .sec-icon.y { background: rgba(240,165,0,0.15); }
+  .sec-sub { color: var(--muted); font-size: 13px; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    background: rgba(240,165,0,0.06);
+    border: 1px solid rgba(240,165,0,0.2);
+    border-left: 3px solid var(--accent);
+    border-radius: 5px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .callout strong { color: var(--accent); }
+  .callout.danger {
+    background: rgba(232,64,64,0.06);
+    border-color: rgba(232,64,64,0.2);
+    border-left-color: var(--red);
+  }
+  .callout.danger strong { color: var(--red); }
+  .callout.info {
+    background: rgba(64,144,255,0.06);
+    border-color: rgba(64,144,255,0.2);
+    border-left-color: var(--blue);
+  }
+  .callout.info strong { color: var(--blue); }
+
+  /* ── PLAYBOOK SELECTOR ── */
+  .playbook-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .ptab {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 7px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.06em;
+  }
+  .ptab:hover { border-color: var(--accent); color: var(--accent); }
+  .ptab.active { background: rgba(240,165,0,0.1); border-color: var(--accent); color: var(--accent); }
+  .ptab.red.active { background: rgba(232,64,64,0.1); border-color: var(--red); color: var(--red); }
+  .ptab.blue.active { background: rgba(64,144,255,0.1); border-color: var(--blue); color: var(--blue); }
+  .ptab.purple.active { background: rgba(144,96,255,0.1); border-color: var(--purple); color: var(--purple); }
+
+  .pbook { display: none; }
+  .pbook.visible { display: block; }
+
+  /* ── FLOW MINI ── */
+  .mini-flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    margin: 12px 0;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .mf-node {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+    color: var(--textdim);
+    white-space: nowrap;
+  }
+  .mf-node.key { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.07); }
+  .mf-node.entry { border-color: var(--green); color: var(--green); background: rgba(46,232,128,0.07); font-weight: 700; }
+  .mf-node.entry-r { border-color: var(--red); color: var(--red); background: rgba(232,64,64,0.07); font-weight: 700; }
+  .mf-arr { color: var(--muted); font-size: 14px; }
+
+  /* ── PREMIUM/DISCOUNT ── */
+  .pd-bar {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 14px 0;
+  }
+  .pd-premium {
+    background: rgba(232,64,64,0.12);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--red);
+    font-family: var(--mono);
+    display: flex;
+    justify-content: space-between;
+  }
+  .pd-eq {
+    background: rgba(240,165,0,0.08);
+    padding: 8px 14px;
+    font-size: 11px;
+    color: var(--accent);
+    font-family: var(--mono);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px dashed rgba(240,165,0,0.3);
+    border-bottom: 1px dashed rgba(240,165,0,0.3);
+    align-items: center;
+  }
+  .pd-discount {
+    background: rgba(46,232,128,0.1);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--green);
+    font-family: var(--mono);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── MATRIX ── */
+  .matrix {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 14px 0;
+  }
+  .mat-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .mat-row:last-child { border-bottom: none; }
+  .mat-row.header {
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .mat-cell {
+    padding: 9px 12px;
+    border-right: 1px solid var(--border);
+    color: var(--textdim);
+  }
+  .mat-cell:last-child { border-right: none; }
+  .mat-cell.label { color: var(--text); font-weight: 600; font-size: 12px; }
+
+  /* ── PROBABILITY TABLE ── */
+  .prob-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 16px 0;
+    font-size: 12.5px;
+  }
+  .prob-table th {
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .prob-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--textdim);
+    vertical-align: middle;
+  }
+  .prob-table tr:last-child td { border-bottom: none; }
+  .prob-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .prob-table td:first-child { color: var(--text); font-weight: 600; }
+  .prob-table td.num { font-family: var(--mono); font-size: 12px; }
+
+  .star-bar {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+  }
+  .star-pip {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--border);
+  }
+  .star-pip.on { background: var(--accent); }
+  .star-pip.hi { background: var(--green); }
+  .star-pip.med { background: var(--accent); }
+  .star-pip.low { background: var(--red); }
+
+  .complexity-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid;
+    display: inline-block;
+  }
+  .cx-low { color: var(--green); border-color: rgba(46,232,128,0.3); background: rgba(46,232,128,0.08); }
+  .cx-med { color: var(--accent); border-color: rgba(240,165,0,0.3); background: rgba(240,165,0,0.08); }
+  .cx-hi  { color: var(--red);   border-color: rgba(232,64,64,0.3);  background: rgba(232,64,64,0.08); }
+  .cx-vhi { color: var(--purple); border-color: rgba(144,96,255,0.3); background: rgba(144,96,255,0.08); }
+
+  /* ── META PLAYBOOK ── */
+  .meta-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 520px;
+    margin: 20px auto;
+  }
+  .meta-step {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  .meta-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48px;
+    flex-shrink: 0;
+  }
+  .meta-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: rgba(240,165,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .meta-line {
+    width: 2px;
+    flex: 1;
+    background: linear-gradient(to bottom, var(--accent), var(--border));
+    min-height: 20px;
+    margin: 0 auto;
+  }
+  .meta-body {
+    flex: 1;
+    padding: 4px 0 24px 16px;
+  }
+  .meta-body h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .meta-body p {
+    font-size: 12.5px;
+    color: var(--textdim);
+    line-height: 1.5;
+  }
+
+  /* ── PB8 TAB PANEL ── */
+  .pb8-panel { display: none; }
+  .pb8-panel.visible { display: block; }
+
+  .flow-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .flow-col .fn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 4px;
+    color: var(--textdim);
+    text-align: center;
+    transition: all 0.1s;
+  }
+  .flow-col .fn.k { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.07); }
+  .flow-col .fn.g { border-color: var(--green); color: var(--green); background: rgba(46,232,128,0.07); font-weight: 700; }
+  .flow-col .fn.r { border-color: var(--red); color: var(--red); background: rgba(232,64,64,0.07); font-weight: 700; }
+  .flow-col .fa { text-align: center; color: var(--muted); font-size: 14px; line-height: 1.2; }
+
+
+  .footer-note {
+    margin-top: 40px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* ── MTF FLOWCHART ── */
+  .mtf-flowchart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .mtf-step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px 20px;
+    border-radius: 6px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    border-left: 3px solid var(--accent);
+  }
+  .mtf-step.htf { border-left-color: var(--blue); }
+  .mtf-step.itf { border-left-color: var(--purple); }
+  .mtf-step.ltf { border-left-color: var(--green); }
+
+  .mtf-arrow {
+    color: var(--accent);
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(240,165,0,0.3);
+  }
+  .tf-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: inline-block;
+  }
+  .tf-badge.htf { background: rgba(64,144,255,0.08); color: var(--blue); border: 1px solid rgba(64,144,255,0.2); }
+  .tf-badge.itf { background: rgba(144,96,255,0.08); color: var(--purple); border: 1px solid rgba(144,96,255,0.2); }
+  .tf-badge.ltf { background: rgba(46,232,128,0.08); color: var(--green); border: 1px solid rgba(46,232,128,0.2); }
+</style>
+<script src="backtest_results.js" defer></script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SMC · PLAYBOOK</div>
+  <button class="nav-btn active" onclick="showSection('overview', this)">Overview</button>
+  <button class="nav-btn" onclick="showSection('playbooks', this)">8 Playbooks</button>
+  <button class="nav-btn" onclick="showSection('long', this)">Long Setups</button>
+  <button class="nav-btn" onclick="showSection('short', this)">Short Setups</button>
+  <button class="nav-btn" onclick="showSection('advanced', this)">Advanced ICT</button>
+  <button class="nav-btn" onclick="showSection('pd', this)">Premium/Discount</button>
+  <button class="nav-btn" onclick="showSection('rules', this)">Golden Rules</button>
+  <button class="nav-btn" onclick="showSection('mtf-playbook', this)">MTF Playbook</button>
+  <button class="nav-btn" onclick="showSection('backtest', this)">Backtest Simulator</button>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════ OVERVIEW ═══════════════════════════════════ -->
+<div id="overview" class="section visible">
+  <div class="hero">
+    <div class="hero-eyebrow">Smart Money Concepts + ICT · v4.0 — 15 Playbooks</div>
+    <h1>Institutional <span>Trading Playbook</span></h1>
+    <p class="hero-sub">15 complete playbooks covering trendline liquidity, S/R flips, BOS pullbacks, CHoCH reversals, OB retests, sweep+OB, FVG-breaker entries, AMD session plays, and Multi-Timeframe Confluence. From beginner setups to full A+ confluence.</p>
+  </div>
+
+  <div class="sec-header">
+    <h2><span class="sec-icon y">⚡</span> Market Phase Pipeline</h2>
+    <p class="sec-sub">Every high-probability SMC trade flows through these phases in sequence</p>
+  </div>
+
+  <div class="pipeline">
+    <div class="phase"><div class="phase-label lit">TREND</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label">TL Formation</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label">S/R</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label lit">Liquidity Builds</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label lit">Stop Hunt</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label lit">BOS / CHoCH</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label">OB Created</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label lit">Retrace to OB</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label lit">ENTRY</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label">Expansion</div><div class="phase-arrow">→</div></div>
+    <div class="phase"><div class="phase-label">TP1/2/3</div></div>
+  </div>
+
+  <div style="margin-top: 32px;">
+    <div class="sec-header">
+      <h2><span class="sec-icon b">📋</span> Playbook Index — 8 Base + 6 ICT</h2>
+      <p class="sec-sub">Ranked by complexity. Most traders master 1–3 and run them repeatedly.</p>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; padding-left: 4px;">─── BASE PLAYBOOKS (Price Action Foundation) ───</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">PB-1 <span class="badge" style="background:rgba(64,144,255,0.1);color:var(--blue);border-color:rgba(64,144,255,0.25);">CLASSIC</span></div>
+          <h3>Trendline 3rd Touch</h3>
+          <p>The oldest model. Bull: 3rd touch of ascending TL → bullish continuation. Bear: 3rd touch of descending TL → sell. No structure or OB required. Entry on rejection candle.</p>
+          <div style="margin-top: 8px; font-family:var(--mono); font-size:10px; color:var(--muted);">WIN: Medium · RR: 1:2–1:3 · COMPLEXITY: <span class="complexity-badge cx-low">Low</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">PB-2 <span class="badge" style="background:rgba(64,144,255,0.1);color:var(--blue);border-color:rgba(64,144,255,0.25);">CLASSIC</span></div>
+          <h3>Support → Resistance Flip</h3>
+          <p>Broken resistance becomes support on retest (and vice versa). BOS through level → wait for retest → enter continuation. Common in equities and indices.</p>
+          <div style="margin-top: 8px; font-family:var(--mono); font-size:10px; color:var(--muted);">WIN: Medium · RR: 1:2–1:4 · COMPLEXITY: <span class="complexity-badge cx-low">Low</span></div>
+        </div>
+        <div class="card bull">
+          <div class="card-title">PB-3 <span class="badge bull">STRUCTURE</span></div>
+          <h3>BOS Pullback Continuation</h3>
+          <p>After a confirmed BOS (HH or LL broken), wait for the pullback and enter continuation. No OB needed — pure market structure. High win rate in trending markets.</p>
+          <div style="margin-top: 8px; font-family:var(--mono); font-size:10px; color:var(--muted);">WIN: High · RR: 1:2–1:4 · COMPLEXITY: <span class="complexity-badge cx-med">Medium</span></div>
+        </div>
+        <div class="card bear">
+          <div class="card-title">PB-4 <span class="badge bear">REVERSAL</span></div>
+          <h3>CHoCH Reversal</h3>
+          <p>Earliest reversal signal. In a downtrend: break of a Lower High = Bullish CHoCH → buy. In an uptrend: break of a Higher Low = Bearish CHoCH → sell. Higher risk, highest RR potential.</p>
+          <div style="margin-top: 8px; font-family:var(--mono); font-size:10px; color:var(--muted);">WIN: Medium · RR: 1:3–1:6 · COMPLEXITY: <span class="complexity-badge cx-med">Medium</span></div>
+        </div>
+        <div class="card bull">
+          <div class="card-title">PB-5 <span class="badge bull">SMC</span></div>
+          <h3>Order Block Retest</h3>
+          <p>Displacement → BOS → identify last opposing candle (OB) → wait for price to retrace into OB → enter. OB is only valid if it directly caused the BOS. Otherwise it's just a candle.</p>
+          <div style="margin-top: 8px; font-family:var(--mono); font-size:10px; color:var(--muted);">WIN: High · RR: 1:3–1:5 · COMPLEXITY: <span class="complexity-badge cx-med">Medium</span></div>
+        </div>
+        <div class="card" style="border-left-color:var(--purple)">
+          <div class="card-title">PB-6 <span class="badge" style="background:rgba(144,96,255,0.1);color:var(--purple);border-color:rgba(144,96,255,0.25);">SMC+ICT</span></div>
+          <h3>Liquidity Sweep Reversal</h3>
+          <p>SSL/BSL taken → strong reclaim → CHoCH confirms → enter. The most popular SMC model. Works at swing lows (longs) and swing highs (shorts). No OB required — CHoCH is the entry trigger.</p>
+          <div style="margin-top: 8px; font-family:var(--mono); font-size:10px; color:var(--muted);">WIN: High · RR: 1:3–1:6 · COMPLEXITY: <span class="complexity-badge cx-med">Medium</span></div>
+        </div>
+        <div class="card bull">
+          <div class="card-title">PB-7 <span class="badge bull">HIGH PROB</span></div>
+          <h3>Sweep + OB (Core A Setup)</h3>
+          <p>Liquidity sweep + BOS + OB retest combined. The setup most profitable ICT/SMC traders actually execute. Sweep provides the impulse, OB provides the precision entry.</p>
+          <div style="margin-top: 8px; font-family:var(--mono); font-size:10px; color:var(--muted);">WIN: Very High · RR: 1:4–1:8 · COMPLEXITY: <span class="complexity-badge cx-hi">High</span></div>
+        </div>
+        <div class="card" style="border-left-color:var(--accent)">
+          <div class="card-title">PB-8 <span class="badge">A+ SETUP</span></div>
+          <h3>Full Confluence A+</h3>
+          <p>Every filter stacked: HTF trend + trendline 3rd touch + S/R + sweep + CHoCH + BOS + OB retest. Fewer opportunities but 1:5–1:10 RR. The holy grail setup.</p>
+          <div style="margin-top: 8px; font-family:var(--mono); font-size:10px; color:var(--muted);">WIN: Rare · RR: 1:5–1:10 · COMPLEXITY: <span class="complexity-badge cx-vhi">Very High</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; padding-left: 4px;">─── ICT MODELS (Advanced) ───</div>
+      <div class="grid-3">
+        <div class="card neutral">
+          <div class="card-title">PB-C <span class="badge" style="background:rgba(64,144,255,0.1);color:var(--blue);border-color:rgba(64,144,255,0.25);">ICT</span></div>
+          <h3>FVG + Breaker Block</h3>
+          <p>Failed OB → Breaker. FVG nested inside. Dual institutional pressure at one zone.</p>
+        </div>
+        <div class="card purple">
+          <div class="card-title">PB-D <span class="badge" style="background:rgba(144,96,255,0.1);color:var(--purple);border-color:rgba(144,96,255,0.25);">ICT</span></div>
+          <h3>AMD Session Play</h3>
+          <p>Asia range → London Judas sweep → NY distribution. The Power of 3.</p>
+        </div>
+        <div class="card" style="border-left-color:var(--accent2)">
+          <div class="card-title">PB-E <span class="badge" style="background:rgba(46,232,176,0.1);color:var(--accent2);border-color:rgba(46,232,176,0.25);">ICT SCALP</span></div>
+          <h3>Silver Bullet</h3>
+          <p>Time-specific FVG entry within 60-min kill windows. AMD bias required first.</p>
+        </div>
+        <div class="card" style="border-left-color:#f0f0a0">
+          <div class="card-title">PB-F <span class="badge" style="background:rgba(240,240,160,0.08);color:#f0f0a0;border-color:rgba(240,240,160,0.25);">RARE</span></div>
+          <h3>The Unicorn 🦄</h3>
+          <p>HTF OB + LTF Breaker + FVG inside. Triple confluence. ~2×/week. Take every one.</p>
+        </div>
+        <div class="card neutral">
+          <div class="card-title">PB-G <span class="badge" style="background:rgba(64,144,255,0.1);color:var(--blue);border-color:rgba(64,144,255,0.25);">ICT</span></div>
+          <h3>OTE Fibonacci Entry</h3>
+          <p>OB or FVG at 62–79% retrace. 70.5% sweet spot. Tighter SL, higher win rate.</p>
+        </div>
+        <div class="card" style="border-left-color:var(--accent2)">
+          <div class="card-title">PB-H <span class="badge" style="background:rgba(46,232,176,0.1);color:var(--accent2);border-color:rgba(46,232,176,0.25);">CONCEPT</span></div>
+          <h3>IRL → ERL</h3>
+          <p>Internal range liquidity taken first, then expansion to external range liquidity target.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Meta Principle:</strong> Find where retail traders are trapped → wait for smart money to reveal direction → enter on the retest → hide SL beyond the liquidity that should not be revisited → scale out at opposing liquidity. Every playbook above is a variation of this single framework.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ 8 PLAYBOOKS ═══════════════════════════════════ -->
+<div id="playbooks" class="section">
+  <div class="sec-header">
+    <h2><span class="sec-icon y">◧</span> The 8 Base Playbooks</h2>
+    <p class="sec-sub">Complete execution flows for each setup — long and short variants, with entry, SL, and TP logic</p>
+  </div>
+
+  <div class="playbook-tabs" id="pb8tabs">
+    <button class="ptab active" onclick="showPB8('pb8-1', this)">1 · TL 3rd Touch</button>
+    <button class="ptab" onclick="showPB8('pb8-2', this)">2 · S/R Flip</button>
+    <button class="ptab" onclick="showPB8('pb8-3', this)">3 · BOS Pullback</button>
+    <button class="ptab" onclick="showPB8('pb8-4', this)">4 · CHoCH Reversal</button>
+    <button class="ptab" onclick="showPB8('pb8-5', this)">5 · OB Retest</button>
+    <button class="ptab" onclick="showPB8('pb8-6', this)">6 · Sweep Reversal</button>
+    <button class="ptab" onclick="showPB8('pb8-7', this)">7 · Sweep + OB</button>
+    <button class="ptab" onclick="showPB8('pb8-8', this)">8 · Full A+</button>
+  </div>
+
+  <!-- PB-1 -->
+  <div id="pb8-1" class="pb8-panel visible">
+    <div class="callout info">
+      <strong>PB-1 · Trendline 3rd Touch Continuation:</strong> The oldest price-action model. Markets respect trendlines because clusters of traders use them. The 3rd touch is the entry — not the 1st or 2nd. Origin: Classical price action, no ICT or SMC concepts required.
+    </div>
+    <div class="grid-2">
+      <div class="card bull">
+        <div class="card-title">LONG VARIANT <span class="badge bull">BUY</span></div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">HH → HL → HH (uptrend)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Ascending trendline (connect HLs)</div>
+          <div class="fa">↓</div>
+          <div class="fn">1st touch → 2nd touch</div>
+          <div class="fa">↓</div>
+          <div class="fn k">3rd touch arrives</div>
+          <div class="fa">↓</div>
+          <div class="fn">Bullish rejection candle</div>
+          <div class="fa">↓</div>
+          <div class="fn g">BUY</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Uptrend confirmed (HL-HH sequence)</li>
+          <li class="required">Minimum 2 prior TL touches</li>
+          <li class="required">3rd touch + bullish rejection candle</li>
+          <li>TL aligns with a horizontal support (extra confluence)</li>
+          <li>SL: below the 3rd touch candle low</li>
+        </ul>
+      </div>
+      <div class="card bear">
+        <div class="card-title">SHORT VARIANT <span class="badge bear">SELL</span></div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">LL → LH → LL (downtrend)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Descending trendline (connect LHs)</div>
+          <div class="fa">↓</div>
+          <div class="fn">1st touch → 2nd touch</div>
+          <div class="fa">↓</div>
+          <div class="fn k">3rd touch arrives</div>
+          <div class="fa">↓</div>
+          <div class="fn">Bearish rejection candle</div>
+          <div class="fa">↓</div>
+          <div class="fn r">SELL</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Downtrend confirmed (LH-LL sequence)</li>
+          <li class="required">2 prior TL touches</li>
+          <li class="required">3rd touch + bearish rejection candle</li>
+          <li>TL aligns with horizontal resistance</li>
+          <li>SL: above the 3rd touch candle high</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 0;">
+      <div class="card-title">PROFIT TARGETS</div>
+      <div class="tp-row">
+        <div class="tp-label">TP1</div>
+        <div class="tp-target">1R target (risk amount replicated as reward)</div>
+        <div class="tp-pct">30%</div>
+        <div class="tp-action">Move SL → BE</div>
+      </div>
+      <div class="tp-row">
+        <div class="tp-label">TP2</div>
+        <div class="tp-target">Previous swing high/low</div>
+        <div class="tp-pct">40%</div>
+        <div class="tp-action">Trail SL</div>
+      </div>
+      <div class="tp-row">
+        <div class="tp-label">TP3</div>
+        <div class="tp-target">External liquidity pool (HTF level)</div>
+        <div class="tp-pct">30%</div>
+        <div class="tp-action">Close final</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PB-2 -->
+  <div id="pb8-2" class="pb8-panel">
+    <div class="callout info">
+      <strong>PB-2 · Support → Resistance Flip:</strong> When a resistance level is broken with conviction, it becomes support on the retest (and vice versa). This is the structural memory of institutional order flow at that price. Common in equities, indices, and trending crypto.
+    </div>
+    <div class="grid-2">
+      <div class="card bull">
+        <div class="card-title">LONG — RESISTANCE BECOMES SUPPORT</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">Resistance level tested multiple times</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish BOS — close above resistance</div>
+          <div class="fa">↓</div>
+          <div class="fn">Price runs above</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Retest of former resistance (now support)</div>
+          <div class="fa">↓</div>
+          <div class="fn">Bullish rejection from new support</div>
+          <div class="fa">↓</div>
+          <div class="fn g">BUY</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Resistance tested 2+ times before break</li>
+          <li class="required">Clean BOS (not just a wick — close above)</li>
+          <li class="required">Retest holds as support</li>
+          <li>FVG or OB at the retest zone (extra confluence)</li>
+          <li>SL: below the flip zone</li>
+        </ul>
+      </div>
+      <div class="card bear">
+        <div class="card-title">SHORT — SUPPORT BECOMES RESISTANCE</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">Support level tested multiple times</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish BOS — close below support</div>
+          <div class="fa">↓</div>
+          <div class="fn">Price drops</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Retest of former support (now resistance)</div>
+          <div class="fa">↓</div>
+          <div class="fn">Bearish rejection from new resistance</div>
+          <div class="fa">↓</div>
+          <div class="fn r">SELL</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Support tested 2+ times before break</li>
+          <li class="required">Clean close below support (not just wick)</li>
+          <li class="required">Retest holds as resistance</li>
+          <li>Look for OB or FVG at the flip zone</li>
+          <li>SL: above the flip zone</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>SMC Upgrade:</strong> Use an Order Block at the flip zone instead of the raw price level. The last candle before the BOS displacement is the OB — and that's also where the flip zone sits. This gives a tighter stop and higher confluence.
+    </div>
+  </div>
+
+  <!-- PB-3 -->
+  <div id="pb8-3" class="pb8-panel">
+    <div class="callout info">
+      <strong>PB-3 · BOS Pullback Continuation:</strong> After a confirmed Break of Structure, institutions rarely reverse immediately. Price retraces, collects liquidity, and continues in the BOS direction. No Order Block required — this is pure structure play. High win rate in trend.
+    </div>
+    <div class="grid-2">
+      <div class="card bull">
+        <div class="card-title">LONG — BULLISH BOS PULLBACK</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">HL → HH (existing structure)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish BOS — close above prev HH</div>
+          <div class="fa">↓</div>
+          <div class="fn">Retracement begins</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Pullback to prev BOS level or 50% retrace</div>
+          <div class="fa">↓</div>
+          <div class="fn">HL forms — structure holds</div>
+          <div class="fa">↓</div>
+          <div class="fn g">BUY at new HL</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Bullish BOS confirmed (full candle close)</li>
+          <li class="required">Pullback does NOT break below the BOS origin</li>
+          <li class="required">New HL forms on LTF (structure intact)</li>
+          <li>OB or FVG at pullback zone strengthens entry</li>
+          <li>SL: below the new HL</li>
+        </ul>
+      </div>
+      <div class="card bear">
+        <div class="card-title">SHORT — BEARISH BOS PULLBACK</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">LH → LL (existing structure)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish BOS — close below prev LL</div>
+          <div class="fa">↓</div>
+          <div class="fn">Retracement begins</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Pullback to prev BOS level or 50% retrace</div>
+          <div class="fa">↓</div>
+          <div class="fn">LH forms — structure holds bearish</div>
+          <div class="fa">↓</div>
+          <div class="fn r">SELL at new LH</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Bearish BOS confirmed (full candle close)</li>
+          <li class="required">Pullback does NOT breach above BOS origin</li>
+          <li class="required">New LH forms on LTF</li>
+          <li>Bearish OB or FVG at pullback zone</li>
+          <li>SL: above the new LH</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Key distinction from PB-5:</strong> PB-3 does not require an Order Block. Entry is at the structural level (BOS origin or 50% of the impulsive move). PB-5 waits specifically for an OB retest. PB-3 will get you in earlier but with a slightly wider stop.
+    </div>
+  </div>
+
+  <!-- PB-4 -->
+  <div id="pb8-4" class="pb8-panel">
+    <div class="callout info">
+      <strong>PB-4 · CHoCH Reversal:</strong> The Change of Character is the earliest signal that the trend is shifting — earlier than BOS. Higher risk because you're catching the turn before it's confirmed. Highest RR potential because you're early. Best used when HTF bias is also reversing.
+    </div>
+    <div class="grid-2">
+      <div class="card bull">
+        <div class="card-title">LONG — BULLISH CHoCH</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">Bearish trend: LH → LL sequence</div>
+          <div class="fa">↓</div>
+          <div class="fn">New LL printed</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Price aggressively breaks previous LH</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish CHoCH confirmed</div>
+          <div class="fa">↓</div>
+          <div class="fn">Retrace or OB forms</div>
+          <div class="fa">↓</div>
+          <div class="fn g">BUY — first structural shift entry</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Prior bearish trend (LH-LL chain)</li>
+          <li class="required">LH broken on the close — not just a wick</li>
+          <li class="required">CHoCH candle is aggressive (displacement)</li>
+          <li>HTF also showing signs of bullish reversal</li>
+          <li>SL: below the LL that preceded CHoCH</li>
+          <li>Risk: 30% smaller size than OB setups (higher failure rate)</li>
+        </ul>
+      </div>
+      <div class="card bear">
+        <div class="card-title">SHORT — BEARISH CHoCH</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">Bullish trend: HL → HH sequence</div>
+          <div class="fa">↓</div>
+          <div class="fn">New HH printed</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Price aggressively breaks previous HL</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish CHoCH confirmed</div>
+          <div class="fa">↓</div>
+          <div class="fn">Retrace or OB forms</div>
+          <div class="fa">↓</div>
+          <div class="fn r">SELL — first structural shift entry</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Prior bullish trend (HL-HH chain)</li>
+          <li class="required">HL broken on the close (not just wick)</li>
+          <li class="required">CHoCH candle is aggressive</li>
+          <li>HTF showing distribution or reversal signs</li>
+          <li>SL: above the HH that preceded CHoCH</li>
+          <li>Risk: early — use smaller size vs BOS setups</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout danger">
+      <strong>Risk Note:</strong> CHoCH alone is not BOS. Price can CHoCH and then reverse again — returning to the original trend. This is the "trap" that catches early reversal traders. Always use reduced position size on CHoCH-only entries unless HTF also aligns.
+    </div>
+  </div>
+
+  <!-- PB-5 -->
+  <div id="pb8-5" class="pb8-panel">
+    <div class="callout info">
+      <strong>PB-5 · Order Block Retest:</strong> The institutional entry zone. After displacement causes a BOS, the last opposing candle (OB) before that displacement is where institutions placed their initial orders. Price returns to fill remaining orders — your entry.
+    </div>
+    <div class="grid-2">
+      <div class="card bull">
+        <div class="card-title">LONG — BULLISH OB RETEST</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">Bullish displacement candle(s)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish BOS — prior HH broken</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Last bearish candle before displacement = Bullish OB</div>
+          <div class="fa">↓</div>
+          <div class="fn">Price retraces</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Price enters OB zone (50–100%)</div>
+          <div class="fa">↓</div>
+          <div class="fn">LTF bullish confirmation</div>
+          <div class="fa">↓</div>
+          <div class="fn g">BUY</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Displacement created a clear BOS</li>
+          <li class="required">OB is the last bearish candle BEFORE displacement</li>
+          <li class="required">OB caused the BOS (no orphan OBs)</li>
+          <li class="required">Price enters 50–100% of OB body</li>
+          <li>FVG above OB = extra confluence</li>
+          <li>SL: below the OB low (never inside)</li>
+        </ul>
+      </div>
+      <div class="card bear">
+        <div class="card-title">SHORT — BEARISH OB RETEST</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">Bearish displacement candle(s)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish BOS — prior LL broken</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Last bullish candle before displacement = Bearish OB</div>
+          <div class="fa">↓</div>
+          <div class="fn">Price retraces upward</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Price enters OB zone (50–100%)</div>
+          <div class="fa">↓</div>
+          <div class="fn">LTF bearish confirmation</div>
+          <div class="fa">↓</div>
+          <div class="fn r">SELL</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Bearish displacement → BOS</li>
+          <li class="required">Last bullish candle before displacement = OB</li>
+          <li class="required">OB is the cause of BOS — not just any candle</li>
+          <li class="required">Price retraces into OB (50–100%)</li>
+          <li>OB in Premium zone (above 50% of range)</li>
+          <li>SL: above OB high</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout danger">
+      <strong>Critical Rule:</strong> An OB is only valid if it directly caused the BOS. If you can remove the OB candle and the BOS still happened, it's not a real OB — it's just a candle. The causal link between OB and BOS is what makes it institutional.
+    </div>
+  </div>
+
+  <!-- PB-6 -->
+  <div id="pb8-6" class="pb8-panel">
+    <div class="callout info">
+      <strong>PB-6 · Liquidity Sweep Reversal:</strong> The most popular SMC model. Stops are hunted, then price aggressively reverses. No OB required — the CHoCH after the sweep is the entry trigger. Works at swing lows (longs) and swing highs (shorts). Pairs naturally with PB-5 when an OB is also present.
+    </div>
+    <div class="grid-2">
+      <div class="card bull">
+        <div class="card-title">LONG — SELL-SIDE SWEEP REVERSAL</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">Support or swing low forms</div>
+          <div class="fa">↓</div>
+          <div class="fn">Stop-loss cluster builds below</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Price sweeps below — SSL taken</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Aggressive reclaim above the low</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish CHoCH — LH broken</div>
+          <div class="fa">↓</div>
+          <div class="fn g">BUY at CHoCH close or retrace</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Clear swing low with stops clustered below</li>
+          <li class="required">SSL swept (wick or full candle below)</li>
+          <li class="required">Price aggressively reclaims the level</li>
+          <li class="required">Bullish CHoCH confirmed</li>
+          <li>Enter on CHoCH candle close or wait for retrace to OB</li>
+          <li>SL: below the sweep low</li>
+        </ul>
+      </div>
+      <div class="card bear">
+        <div class="card-title">SHORT — BUY-SIDE SWEEP REVERSAL</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn">Resistance or swing high forms</div>
+          <div class="fa">↓</div>
+          <div class="fn">Buy-stop cluster builds above</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Price sweeps above — BSL taken</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Aggressive rejection back below</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish CHoCH — HL broken</div>
+          <div class="fa">↓</div>
+          <div class="fn r">SELL at CHoCH close or OB retest</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">Clear swing high with buy-stops above</li>
+          <li class="required">BSL swept (wick or candle above level)</li>
+          <li class="required">Aggressive rejection back below</li>
+          <li class="required">Bearish CHoCH confirmed</li>
+          <li>Enter on CHoCH close or wait for OB retest</li>
+          <li>SL: above the sweep high</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>PB-6 vs PB-5:</strong> PB-6 gets you in earlier (at CHoCH) but with a wider stop to the sweep extreme. PB-5 gets you in later (OB retest) with a tighter stop. PB-7 combines both for the highest-probability entry. Choose based on your RR requirements.
+    </div>
+  </div>
+
+  <!-- PB-7 -->
+  <div id="pb8-7" class="pb8-panel">
+    <div class="callout info">
+      <strong>PB-7 · Liquidity Sweep + OB (The Core A Setup):</strong> The setup most profitable ICT/SMC traders actually execute. The sweep provides directional confirmation, the BOS confirms structure, and the OB provides precision entry. Combining all three filters dramatically reduces false entries.
+    </div>
+    <div class="grid-2">
+      <div class="card bull">
+        <div class="card-title">LONG — SWEEP + BOS + OB</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn k">Sell-side liquidity swept</div>
+          <div class="fa">↓</div>
+          <div class="fn">Strong bullish rejection</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish CHoCH</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish BOS confirmed</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish OB identified (last bearish before BOS)</div>
+          <div class="fa">↓</div>
+          <div class="fn">Price retraces to OB</div>
+          <div class="fa">↓</div>
+          <div class="fn">LTF confirmation</div>
+          <div class="fa">↓</div>
+          <div class="fn g">BUY</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">SSL swept with conviction</li>
+          <li class="required">Bullish CHoCH after sweep</li>
+          <li class="required">Bullish BOS (structure fully shifted)</li>
+          <li class="required">OB identified and retest occurs</li>
+          <li>OB in Discount zone (below 50%)</li>
+          <li>FVG inside OB = tighter stop</li>
+          <li>SL: below sweep low or OB low</li>
+        </ul>
+      </div>
+      <div class="card bear">
+        <div class="card-title">SHORT — SWEEP + BOS + OB</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn k">Buy-side liquidity swept</div>
+          <div class="fa">↓</div>
+          <div class="fn">Strong bearish rejection</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish CHoCH</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish BOS confirmed</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish OB identified (last bullish before BOS)</div>
+          <div class="fa">↓</div>
+          <div class="fn">Price retraces to OB</div>
+          <div class="fa">↓</div>
+          <div class="fn">LTF bearish confirmation</div>
+          <div class="fa">↓</div>
+          <div class="fn r">SELL</div>
+        </div>
+        <ul class="checklist">
+          <li class="required">BSL swept with conviction</li>
+          <li class="required">Bearish CHoCH after sweep</li>
+          <li class="required">Bearish BOS confirmed</li>
+          <li class="required">Bearish OB retest occurs</li>
+          <li>OB in Premium zone (above 50%)</li>
+          <li>FVG inside OB for tighter stop</li>
+          <li>SL: above sweep high or OB high</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 0; border-left-color:var(--green)">
+      <div class="card-title">WHY PB-7 IS THE HIGHEST PROBABILITY BASE SETUP</div>
+      <div class="grid-3" style="margin-top: 10px; margin-bottom: 0;">
+        <div style="font-size: 12.5px; color:var(--textdim); padding: 8px 0;">
+          <strong style="color:var(--text); display:block; margin-bottom:4px;">Sweep confirms intent</strong>
+          The liquidity raid tells you smart money was active at this level. Retail stops were taken — the fuel for the next move.
+        </div>
+        <div style="font-size: 12.5px; color:var(--textdim); padding: 8px 0; border-left: 1px solid var(--border); padding-left: 12px;">
+          <strong style="color:var(--text); display:block; margin-bottom:4px;">BOS confirms direction</strong>
+          Structure shifted. The trend has changed on this timeframe. You are no longer fading the trend.
+        </div>
+        <div style="font-size: 12.5px; color:var(--textdim); padding: 8px 0; border-left: 1px solid var(--border); padding-left: 12px;">
+          <strong style="color:var(--text); display:block; margin-bottom:4px;">OB provides precision</strong>
+          The exact candle where institutions entered. Tight stop. Clear invalidation. Measurable RR.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PB-8 -->
+  <div id="pb8-8" class="pb8-panel">
+    <div class="callout info">
+      <strong>PB-8 · Full Confluence A+ Setup:</strong> Every filter stacked simultaneously. This is the rarest setup but offers 1:5–1:10 RR. This is the setup you wait for, size up on, and execute with maximum discipline. All prior playbooks collapse into this one at peak conditions.
+    </div>
+    <div class="grid-2">
+      <div class="card bull">
+        <div class="card-title">LONG — FULL A+ STACK</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn k">HTF Bullish (Daily/Weekly trend)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Ascending trendline — 3rd touch</div>
+          <div class="fa">↓</div>
+          <div class="fn k">3rd touch aligns with support zone</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Sell-side liquidity swept (SSL hunt)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Strong Low formed</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish CHoCH</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish BOS</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bullish OB at Discount (OTE 62–79%)</div>
+          <div class="fa">↓</div>
+          <div class="fn">OB retest + LTF confirmation</div>
+          <div class="fa">↓</div>
+          <div class="fn g">BUY — Maximum size</div>
+        </div>
+      </div>
+      <div class="card bear">
+        <div class="card-title">SHORT — FULL A+ STACK</div>
+        <div class="flow-col" style="margin-bottom: 14px;">
+          <div class="fn k">HTF Bearish (Daily/Weekly trend)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Descending trendline — 3rd touch</div>
+          <div class="fa">↓</div>
+          <div class="fn k">3rd touch aligns with resistance zone</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Buy-side liquidity swept (BSL hunt)</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Strong High formed</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish CHoCH</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish BOS</div>
+          <div class="fa">↓</div>
+          <div class="fn k">Bearish OB at Premium (OTE 62–79%)</div>
+          <div class="fa">↓</div>
+          <div class="fn">OB retest + LTF confirmation</div>
+          <div class="fa">↓</div>
+          <div class="fn r">SELL — Maximum size</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-header" style="margin-top: 24px; border-color: var(--border);">
+      <h2 style="font-size: 16px;">A+ Checklist — All 12 filters</h2>
+      <p class="sec-sub">If even one is missing, it drops to a B setup. Reduce size accordingly.</p>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-item"><span class="rule-icon">01</span>HTF trend confirmed (Daily/Weekly bias)</div>
+      <div class="rule-item"><span class="rule-icon">02</span>Trendline 3rd touch reached</div>
+      <div class="rule-item"><span class="rule-icon">03</span>Horizontal S/R at the same level</div>
+      <div class="rule-item"><span class="rule-icon">04</span>Liquidity built (2+ S/R tests, EQH/EQL)</div>
+      <div class="rule-item"><span class="rule-icon">05</span>Liquidity swept (SSL or BSL taken)</div>
+      <div class="rule-item"><span class="rule-icon">06</span>Strong High or Low from sweep</div>
+      <div class="rule-item"><span class="rule-icon">07</span>CHoCH confirmed</div>
+      <div class="rule-item"><span class="rule-icon">08</span>BOS confirmed</div>
+      <div class="rule-item"><span class="rule-icon">09</span>OB caused the BOS</div>
+      <div class="rule-item"><span class="rule-icon">10</span>OB in correct Premium/Discount zone</div>
+      <div class="rule-item"><span class="rule-icon">11</span>OB in OTE zone (62–79% fib)</div>
+      <div class="rule-item"><span class="rule-icon">12</span>LTF confirmation at OB + R:R ≥ 1:5</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ LONG ═══════════════════════════════════ -->
+<div id="long" class="section">
+  <div class="sec-header">
+    <h2><span class="sec-icon g">▲</span> Long Setups</h2>
+    <p class="sec-sub">Bullish institutional playbooks — Playbook A (core) + upgraded entry confirmation</p>
+  </div>
+
+  <div class="mini-flow">
+    <div class="mf-node">Bull Trend</div><div class="mf-arr">→</div>
+    <div class="mf-node">3rd TL Touch</div><div class="mf-arr">→</div>
+    <div class="mf-node key">SSL Hunt</div><div class="mf-arr">→</div>
+    <div class="mf-node key">Strong Low</div><div class="mf-arr">→</div>
+    <div class="mf-node">CHoCH</div><div class="mf-arr">→</div>
+    <div class="mf-node">BOS</div><div class="mf-arr">→</div>
+    <div class="mf-node key">Bullish OB</div><div class="mf-arr">→</div>
+    <div class="mf-node">Retrace</div><div class="mf-arr">→</div>
+    <div class="mf-node entry">LONG</div>
+  </div>
+
+  <div class="steps" style="margin-top: 24px;">
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">01</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Bullish Trend Identification</div>
+          <div class="step-tag">REQUIRED</div>
+        </div>
+        <div class="step-desc">Confirm HTF bias is bullish: Higher Highs + Higher Lows on the analysis timeframe. If no HL→HH→HL→HH sequence, no trade.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Higher highs exist on HTF</li>
+          <li class="required">Higher lows exist on HTF</li>
+          <li>Daily / Weekly bias confirmed bullish</li>
+          <li>Price is in the Discount zone (below 50% of dealing range)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">02</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Trendline Formation — 3rd Touch</div>
+          <div class="step-tag">TIMING</div>
+        </div>
+        <div class="step-desc">Draw ascending trendline connecting HL1 → HL2. The 3rd touch is the entry opportunity zone. Only valid after minimum 2 confirmed touches.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">At least 2 prior touches</li>
+          <li class="required">3rd touch has arrived</li>
+          <li>TL coincides with a horizontal support</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">03</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Support Stacks + Liquidity Builds</div>
+          <div class="step-tag warn">ACCUMULATION</div>
+        </div>
+        <div class="step-desc">Support is tested 2–3 times. Each bounce adds buy-side confirmation but also accumulates sell-side stop orders below the lows. Smart money needs that liquidity to fill large buy positions.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">2+ bounces from the same support level</li>
+          <li>Equal lows forming (EQL) — liquidity magnet</li>
+          <li>Retail running stops just below</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">04</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Sell-Side Liquidity Sweep (SL Hunt)</div>
+          <div class="step-tag danger">TRIGGER</div>
+        </div>
+        <div class="step-desc">Price breaks below support, triggers retail stop-losses, then violently reclaims above. This is the displacement candle that creates the Strong Low. The sweep must be swift — a wick or 1–2 candles, not a sustained break.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Price wicks below support / EQL</li>
+          <li class="required">Price reclaims above support within 1–3 candles</li>
+          <li>High volume on the sweep candle</li>
+          <li>No continuation below after reclaim</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">05</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Strong Low + Bullish CHoCH</div>
+          <div class="step-tag">STRUCTURE</div>
+        </div>
+        <div class="step-desc">The sweep low becomes the Strong Low (Protected Low). Price must then break a previous Lower High to confirm a bullish Change of Character. This is the first signal that the LTF trend is reversing.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Aggressive bullish candle from the sweep low</li>
+          <li class="required">Previous LH broken (Bullish CHoCH)</li>
+          <li>No retest of the sweep low after CHoCH</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">06</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Bullish BOS + Order Block Formation</div>
+          <div class="step-tag">CONFIRMATION</div>
+        </div>
+        <div class="step-desc">After CHoCH, the next move closes above a swing high = Bullish BOS. The last bearish candle before this displacement becomes the Bullish Order Block. This is the exact zone institutions are looking to fill remaining longs on retrace.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Bullish BOS confirmed (close above prev HH)</li>
+          <li class="required">Last bearish candle before displacement identified as OB</li>
+          <li>OB caused the BOS (no BOS without the OB candle)</li>
+          <li>Check for FVG inside or above the OB (extra confluence)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">07</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Return to OB + LTF Confirmation → ENTRY</div>
+          <div class="step-tag danger">EXECUTION</div>
+        </div>
+        <div class="step-desc">Price retraces into the Bullish OB (50–100% of the OB body). Drop to LTF (5m/15m) for entry confirmation. Enter on: bullish engulfing, rejection wick, or LTF CHoCH.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Price inside OB zone (50–100% mitigation)</li>
+          <li class="required">At least one LTF confirmation candle</li>
+          <li>OB at Premium/Discount boundary (ideally at Discount)</li>
+          <li>OTE zone 62–79% fib of last swing — extra confluence</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 24px;" class="grid-2">
+    <div class="card bull">
+      <div class="card-title">STOP LOSS PLACEMENT</div>
+      <ul class="checklist">
+        <li class="bull-item">Below the SSL sweep low</li>
+        <li class="bull-item">Below the Strong Low</li>
+        <li class="bull-item">Below the Bullish OB low</li>
+        <li class="required">Use whichever is lowest</li>
+        <li class="required">NEVER place SL inside the OB</li>
+      </ul>
+    </div>
+    <div class="card bull">
+      <div class="card-title">PROFIT TARGETS</div>
+      <div class="tp-row">
+        <div class="tp-label">TP1</div>
+        <div class="tp-target">Internal liquidity / prev Internal HH</div>
+        <div class="tp-pct">30%</div>
+        <div class="tp-action">Move SL → BE</div>
+      </div>
+      <div class="tp-row">
+        <div class="tp-label">TP2</div>
+        <div class="tp-target">External liquidity / Major Swing HH</div>
+        <div class="tp-pct">40%</div>
+        <div class="tp-action">Trail remainder</div>
+      </div>
+      <div class="tp-row">
+        <div class="tp-label">TP3</div>
+        <div class="tp-target">HTF target — Daily/Weekly Highs</div>
+        <div class="tp-pct">30%</div>
+        <div class="tp-action">Close final</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ SHORT ═══════════════════════════════════ -->
+<div id="short" class="section">
+  <div class="sec-header">
+    <h2><span class="sec-icon r">▼</span> Short Setups</h2>
+    <p class="sec-sub">Bearish institutional playbooks — Playbook B (core) + upgraded entry confirmation</p>
+  </div>
+
+  <div class="mini-flow">
+    <div class="mf-node">Bear Trend</div><div class="mf-arr">→</div>
+    <div class="mf-node">3rd TL Touch</div><div class="mf-arr">→</div>
+    <div class="mf-node key">BSL Sweep</div><div class="mf-arr">→</div>
+    <div class="mf-node key">Strong High</div><div class="mf-arr">→</div>
+    <div class="mf-node">CHoCH</div><div class="mf-arr">→</div>
+    <div class="mf-node">BOS</div><div class="mf-arr">→</div>
+    <div class="mf-node key">Bearish OB</div><div class="mf-arr">→</div>
+    <div class="mf-node">Retrace</div><div class="mf-arr">→</div>
+    <div class="mf-node entry-r">SHORT</div>
+  </div>
+
+  <div class="steps" style="margin-top: 24px;">
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">01</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Bearish Trend Identification</div>
+          <div class="step-tag">REQUIRED</div>
+        </div>
+        <div class="step-desc">HTF bias must be bearish: LH → LL → LH → LL sequence confirmed. Price must be in the Premium zone (above 50% of dealing range).</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Lower highs + Lower lows on HTF</li>
+          <li class="required">Daily / Weekly bias bearish</li>
+          <li>Price is in Premium zone (above equilibrium)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">02</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Descending Trendline — 3rd Touch</div>
+          <div class="step-tag">TIMING</div>
+        </div>
+        <div class="step-desc">Connect LH1 → LH2 to form descending TL. The 3rd touch is the short entry opportunity zone. TL must align with a horizontal resistance level for maximum confluence.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">2 prior LH touches confirmed</li>
+          <li class="required">3rd touch has arrived</li>
+          <li>TL coincides with horizontal resistance</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">03</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Resistance Holds + Buy-Side Liquidity Builds</div>
+          <div class="step-tag warn">DISTRIBUTION</div>
+        </div>
+        <div class="step-desc">Multiple rejections at resistance create buy-stop clusters above the highs — Equal Highs (EQH). Retail traders place stops above these levels, which is exactly what smart money needs to distribute short positions.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">2+ rejections at resistance</li>
+          <li>Equal highs forming (EQH)</li>
+          <li>Retail breakout traders entering on the sweep</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">04</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Buy-Side Liquidity Sweep (Stop Hunt)</div>
+          <div class="step-tag danger">TRIGGER</div>
+        </div>
+        <div class="step-desc">Price spikes above resistance / EQH, triggers buy-stop orders and breakout entries, then rejects violently back below. This is the manipulation move. Retail is now trapped long. Smart money is filled short.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Price wicks above resistance / EQH</li>
+          <li class="required">Sharp rejection candle back below</li>
+          <li>Large wick on sweep candle (rejection visible)</li>
+          <li>Volume spike on the sweep</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">05</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Strong High + Bearish CHoCH</div>
+          <div class="step-tag">STRUCTURE</div>
+        </div>
+        <div class="step-desc">The sweep high becomes the Strong High (Protected High). The following aggressive bearish displacement must break a previous Higher Low to confirm a Bearish Change of Character — first structural signal of reversal.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Aggressive bearish candle from sweep high</li>
+          <li class="required">Previous HL broken (Bearish CHoCH)</li>
+          <li>No retrace to sweep high after CHoCH</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">06</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Bearish BOS + Order Block Formation</div>
+          <div class="step-tag">CONFIRMATION</div>
+        </div>
+        <div class="step-desc">Close below a swing low confirms Bearish BOS. The last bullish candle before the displacement candle becomes the Bearish Order Block. Check for FVG nested inside or below the OB for added precision.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Bearish BOS confirmed (close below prev LL)</li>
+          <li class="required">Last bullish candle before displacement = Bearish OB</li>
+          <li>FVG created during the displacement move</li>
+          <li>OB caused the BOS</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">
+        <div class="step-num-circle">07</div>
+        <div class="step-num-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-head">
+          <div class="step-title">Return to Bearish OB → ENTRY</div>
+          <div class="step-tag danger">EXECUTION</div>
+        </div>
+        <div class="step-desc">Price retraces into Bearish OB (50–100% of OB body). Enter on LTF confirmation: bearish engulfing, rejection wick, or LTF CHoCH. OB must be in Premium zone for full setup validity.</div>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Price inside Bearish OB (50–100% mitigation)</li>
+          <li class="required">LTF bearish confirmation candle</li>
+          <li>OB at Premium zone of dealing range</li>
+          <li>OTE 62–79% fib — OB aligns with retrace</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 24px;" class="grid-2">
+    <div class="card bear">
+      <div class="card-title">STOP LOSS PLACEMENT</div>
+      <ul class="checklist">
+        <li class="bear-item">Above the BSL sweep high</li>
+        <li class="bear-item">Above the Strong High</li>
+        <li class="bear-item">Above the Bearish OB high</li>
+        <li class="required">Use highest of the three</li>
+        <li class="required">NEVER place SL inside the OB</li>
+      </ul>
+    </div>
+    <div class="card bear">
+      <div class="card-title">PROFIT TARGETS</div>
+      <div class="tp-row">
+        <div class="tp-label">TP1</div>
+        <div class="tp-target">Internal liquidity / prev Internal LL</div>
+        <div class="tp-pct" style="background:rgba(232,64,64,0.1);color:var(--red);border-color:rgba(232,64,64,0.2);">30%</div>
+        <div class="tp-action">Move SL → BE</div>
+      </div>
+      <div class="tp-row">
+        <div class="tp-label">TP2</div>
+        <div class="tp-target">External liquidity / Major Swing LL</div>
+        <div class="tp-pct" style="background:rgba(232,64,64,0.1);color:var(--red);border-color:rgba(232,64,64,0.2);">40%</div>
+        <div class="tp-action">Trail remainder</div>
+      </div>
+      <div class="tp-row">
+        <div class="tp-label">TP3</div>
+        <div class="tp-target">HTF target — Daily/Weekly Lows</div>
+        <div class="tp-pct" style="background:rgba(232,64,64,0.1);color:var(--red);border-color:rgba(232,64,64,0.2);">30%</div>
+        <div class="tp-action">Close final</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ ADVANCED ═══════════════════════════════════ -->
+<div id="advanced" class="section">
+  <div class="sec-header">
+    <h2><span class="sec-icon p">◆</span> Advanced Playbooks</h2>
+    <p class="sec-sub">Playbooks C–F: FVG Breaker, AMD Session, Silver Bullet, and The Unicorn</p>
+  </div>
+
+  <div class="playbook-tabs">
+    <button class="ptab active" onclick="showPlaybook('pbC')">C · FVG + Breaker</button>
+    <button class="ptab" onclick="showPlaybook('pbD')">D · AMD Session</button>
+    <button class="ptab" onclick="showPlaybook('pbE')">E · Silver Bullet</button>
+    <button class="ptab" onclick="showPlaybook('pbF')">F · Unicorn 🦄</button>
+  </div>
+
+  <!-- PLAYBOOK C -->
+  <div id="pbC" class="pbook visible">
+    <div class="callout info">
+      <strong>Playbook C — FVG + Breaker Block:</strong> When a former Order Block is broken with a full candle close through it, it flips into a Breaker Block. If a Fair Value Gap is nested inside the Breaker, the zone becomes extremely high-confluence for re-entry in the new direction.
+    </div>
+
+    <div class="mini-flow" style="margin: 16px 0;">
+      <div class="mf-node">OB exists</div><div class="mf-arr">→</div>
+      <div class="mf-node key">OB fails / broken</div><div class="mf-arr">→</div>
+      <div class="mf-node">New HH or LL past structure</div><div class="mf-arr">→</div>
+      <div class="mf-node key">Breaker formed</div><div class="mf-arr">→</div>
+      <div class="mf-node">FVG inside Breaker</div><div class="mf-arr">→</div>
+      <div class="mf-node key">Retrace to FVG mid</div><div class="mf-arr">→</div>
+      <div class="mf-node entry">ENTRY</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card neutral">
+        <div class="card-title">BREAKER BLOCK RULES</div>
+        <ul class="checklist">
+          <li class="required">Original OB confirmed, then fully broken</li>
+          <li class="required">Liquidity swept on the break (new HH or LL)</li>
+          <li class="required">Price must retrace BACK into the old OB zone</li>
+          <li>LTF CHoCH or FVG inside the zone for entry trigger</li>
+          <li>SL: beyond the Breaker's outer edge</li>
+        </ul>
+      </div>
+      <div class="card neutral">
+        <div class="card-title">FVG INSIDE BREAKER — EXECUTION</div>
+        <ul class="checklist">
+          <li class="required">Identify 3-candle FVG within the Breaker zone</li>
+          <li class="required">Enter at FVG consequent encroachment (50% of FVG)</li>
+          <li>Dual pressure: Breaker demand + FVG fill magnet</li>
+          <li>Target: next draw on liquidity (opposite side)</li>
+          <li>R:R minimum 1:3 — tighter SL from FVG</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: 16px;">
+      <strong>Why it works:</strong> The Breaker carries institutional demand/supply from the original OB zone. The FVG marks where price moved too fast and left unfilled orders. When price retraces, it faces two simultaneous pressures — creating faster, cleaner reactions than either concept alone.
+    </div>
+  </div>
+
+  <!-- PLAYBOOK D -->
+  <div id="pbD" class="pbook">
+    <div class="callout info">
+      <strong>Playbook D — AMD (Accumulation · Manipulation · Distribution):</strong> The ICT Power of 3 model. Markets cycle through three intraday phases. The Judas Swing is the manipulation — a false move that sweeps liquidity before the true directional expansion.
+    </div>
+
+    <div class="mini-flow" style="margin: 16px 0;">
+      <div class="mf-node">Asia Range</div><div class="mf-arr">→</div>
+      <div class="mf-node key">London Sweep (Judas)</div><div class="mf-arr">→</div>
+      <div class="mf-node">Displacement</div><div class="mf-arr">→</div>
+      <div class="mf-node key">FVG or OB formed</div><div class="mf-arr">→</div>
+      <div class="mf-node">NY Retrace</div><div class="mf-arr">→</div>
+      <div class="mf-node entry">ENTRY</div><div class="mf-arr">→</div>
+      <div class="mf-node">NY Distribution</div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">ACCUMULATION</div>
+        <h3>Asia Range</h3>
+        <p style="font-size: 12px; margin-top: 8px; color: var(--textdim);">Tight consolidation. No trade. Mark the Asia High and Asia Low — these become the liquidity targets for London.</p>
+        <ul class="checklist" style="margin-top: 10px;">
+          <li>Mark Asia H and Asia L</li>
+          <li>Note the midpoint</li>
+          <li>No entries during this phase</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left-color: var(--red);">
+        <div class="card-title">MANIPULATION</div>
+        <h3>London Judas Swing</h3>
+        <p style="font-size: 12px; margin-top: 8px; color: var(--textdim);">London sweeps one side of the Asia range (stop hunt), then reverses. The false move traps retail breakout traders. Displacement follows.</p>
+        <ul class="checklist" style="margin-top: 10px;">
+          <li class="required">Asia High or Low swept</li>
+          <li class="required">Sharp reversal (displacement)</li>
+          <li>FVG created in displacement</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left-color: var(--green);">
+        <div class="card-title">DISTRIBUTION</div>
+        <h3>NY Expansion</h3>
+        <p style="font-size: 12px; margin-top: 8px; color: var(--textdim);">True directional move. Enter on the NY retrace into the London FVG or OB. Target: opposite extreme of the Asia range and beyond.</p>
+        <ul class="checklist" style="margin-top: 10px;">
+          <li class="required">Entry at London FVG retest</li>
+          <li>TP1: Asia High or Low (opposite)</li>
+          <li>TP2: Prior day high/low</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Crypto Adaptation:</strong> Crypto has no official sessions, but the AMD model still applies using approximate time windows: Asian session (~00:00–08:00 UTC) = accumulation range; London (~08:00–12:00 UTC) = manipulation sweep; New York (~13:00–18:00 UTC) = distribution expansion. Bias from weekly/daily HTF still applies.
+    </div>
+  </div>
+
+  <!-- PLAYBOOK E -->
+  <div id="pbE" class="pbook">
+    <div class="callout info">
+      <strong>Playbook E — Silver Bullet (ICT):</strong> A time-specific scalp setup that uses a 1-hour kill window to enter displacement FVGs. The setup demands prior AMD directional bias. Outside the window = no trade.
+    </div>
+
+    <div class="mini-flow" style="margin: 16px 0;">
+      <div class="mf-node key">AMD Bias Established</div><div class="mf-arr">→</div>
+      <div class="mf-node">Enter Kill Window</div><div class="mf-arr">→</div>
+      <div class="mf-node key">Displacement Candle</div><div class="mf-arr">→</div>
+      <div class="mf-node">FVG created</div><div class="mf-arr">→</div>
+      <div class="mf-node">Retrace into FVG</div><div class="mf-arr">→</div>
+      <div class="mf-node entry">ENTRY</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card" style="border-left-color:var(--accent2)">
+        <div class="card-title">KILL WINDOWS (UTC)</div>
+        <ul class="checklist">
+          <li class="required">London Open: 07:00–08:00 UTC</li>
+          <li class="required">NY Open: 14:00–15:00 UTC</li>
+          <li>NY Mid-Session: 15:00–16:00 UTC</li>
+          <li>NO TRADE outside these windows</li>
+          <li>Displacement must occur WITHIN the window</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left-color:var(--accent2)">
+        <div class="card-title">EXECUTION RULES</div>
+        <ul class="checklist">
+          <li class="required">AMD direction must be clear before window opens</li>
+          <li class="required">Aggressive displacement within 60-min window</li>
+          <li class="required">FVG formed (gap between candle 1 and candle 3)</li>
+          <li>Enter at FVG consequent encroachment (50% midpoint)</li>
+          <li>SL beyond far edge of FVG</li>
+          <li>Target: next liquidity pool / opposite HTF level</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Why it works:</strong> Institutional desks execute large orders at the London and NY opens. These executions create directional displacement and leave imbalances (FVGs) that price is magnetized back toward. The tight time constraint eliminates noise — the setup is only valid when institutional timing aligns.
+    </div>
+  </div>
+
+  <!-- PLAYBOOK F -->
+  <div id="pbF" class="pbook">
+    <div class="callout" style="border-left-color:#f0f0a0; background: rgba(240,240,160,0.05); border-color: rgba(240,240,160,0.2);">
+      <strong style="color:#f0f0a0;">Playbook F — The Unicorn 🦄:</strong> Triple confluence: Breaker Block + FVG nested inside + HTF Order Block alignment. Appears approximately 2× per week. When it shows up: take it. The probability is extremely high.
+    </div>
+
+    <div class="mini-flow" style="margin: 16px 0;">
+      <div class="mf-node key">HTF OB identified</div><div class="mf-arr">→</div>
+      <div class="mf-node key">LTF OB fails → Breaker</div><div class="mf-arr">→</div>
+      <div class="mf-node key">FVG inside Breaker</div><div class="mf-arr">→</div>
+      <div class="mf-node">Breaker in HTF OB zone</div><div class="mf-arr">→</div>
+      <div class="mf-node">Retrace to FVG inside Breaker</div><div class="mf-arr">→</div>
+      <div class="mf-node entry" style="font-size:12px;">UNICORN ENTRY</div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">LAYER 1 — HTF OB</div>
+        <h3>Higher TF Order Block</h3>
+        <p style="font-size: 12px; margin-top: 6px; color: var(--textdim);">The anchor. A valid, untested HTF Order Block (Daily or 4H) that provides the macro draw on price. This determines the direction and target.</p>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">Valid HTF OB (untested)</li>
+          <li>Caused a previous BOS</li>
+          <li>Located in Premium (short) or Discount (long)</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left-color: var(--purple);">
+        <div class="card-title">LAYER 2 — BREAKER</div>
+        <h3>LTF Breaker Block</h3>
+        <p style="font-size: 12px; margin-top: 6px; color: var(--textdim);">A LTF OB that was broken, creating a Breaker. This Breaker must sit inside or align with the HTF OB zone. Two levels pointing to the same zone.</p>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">LTF OB fully broken with close</li>
+          <li class="required">Liquidity swept on the break</li>
+          <li>Breaker overlaps HTF OB zone</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left-color: var(--accent2);">
+        <div class="card-title">LAYER 3 — FVG</div>
+        <h3>Fair Value Gap</h3>
+        <p style="font-size: 12px; margin-top: 6px; color: var(--textdim);">A FVG that sits inside the Breaker zone. This is the precision entry. Price retracing into the FVG inside the Breaker that aligns with HTF OB = maximum confluence.</p>
+        <ul class="checklist" style="margin-top: 8px;">
+          <li class="required">FVG inside or overlapping the Breaker</li>
+          <li>Enter at FVG CE (50% midpoint)</li>
+          <li>SL: beyond Breaker outer edge</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout danger">
+      <strong>Warning:</strong> Do not force this setup. The Unicorn appears rarely. All three layers must align independently — if you are reverse-engineering the chart to make them fit, you are in hindsight bias. Walk away.
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ P/D ═══════════════════════════════════ -->
+<div id="pd" class="section">
+  <div class="sec-header">
+    <h2><span class="sec-icon b">⚖</span> Premium & Discount Framework</h2>
+    <p class="sec-sub">The OTE model — only buy in Discount, only sell in Premium. Never buy at equilibrium without confluence.</p>
+  </div>
+
+  <div class="pd-bar">
+    <div class="pd-premium">
+      <span>PREMIUM ZONE</span>
+      <span>100% (Swing High) → 51% → Sell only PD Arrays here</span>
+    </div>
+    <div class="pd-eq">
+      <span>═══════ EQUILIBRIUM — 50% ═══════</span>
+      <span>No edge without additional confluence</span>
+    </div>
+    <div class="pd-discount">
+      <span>DISCOUNT ZONE</span>
+      <span>49% → 0% (Swing Low) → Buy only PD Arrays here</span>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top: 16px;">
+    <div class="card bull">
+      <div class="card-title">OTE FIBONACCI — LONG</div>
+      <p style="font-size: 12.5px; margin-bottom: 10px; color: var(--textdim);">Draw Fib from Swing Low (100%) to Swing High (0%) after a confirmed Bullish BOS.</p>
+      <ul class="checklist">
+        <li class="required">62%–79% = OTE zone (Optimal Trade Entry)</li>
+        <li class="required">70.5% = ICT "sweet spot" if OB/FVG aligns</li>
+        <li>OB or FVG must exist within OTE zone</li>
+        <li>Entry: limit at 70.5% or OB midpoint</li>
+        <li>SL: below the Swing Low or OB low</li>
+      </ul>
+    </div>
+    <div class="card bear">
+      <div class="card-title">OTE FIBONACCI — SHORT</div>
+      <p style="font-size: 12.5px; margin-bottom: 10px; color: var(--textdim);">Draw Fib from Swing High (100%) to Swing Low (0%) after a confirmed Bearish BOS.</p>
+      <ul class="checklist">
+        <li class="required">62%–79% retrace = OTE zone for short</li>
+        <li class="required">70.5% = sweet spot if Bearish OB/FVG aligns</li>
+        <li>OB or FVG in OTE = highest confluence short</li>
+        <li>Entry: limit at 70.5% or OB midpoint</li>
+        <li>SL: above the Swing High or OB high</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec-header" style="margin-top: 32px;">
+    <h2 style="font-size: 18px;"><span class="sec-icon b">📊</span> PD Array Hierarchy</h2>
+    <p class="sec-sub">Not all zones are equal — rank by strength before entering</p>
+  </div>
+
+  <div class="matrix">
+    <div class="mat-row header">
+      <div class="mat-cell">PD Array</div>
+      <div class="mat-cell">Definition</div>
+      <div class="mat-cell">Use for</div>
+      <div class="mat-cell">Strength</div>
+    </div>
+    <div class="mat-row">
+      <div class="mat-cell label">Order Block</div>
+      <div class="mat-cell">Last opposing candle before displacement</div>
+      <div class="mat-cell">Primary entry</div>
+      <div class="mat-cell" style="color:var(--accent)">★★★★★</div>
+    </div>
+    <div class="mat-row">
+      <div class="mat-cell label">Breaker Block</div>
+      <div class="mat-cell">Failed OB that flipped direction</div>
+      <div class="mat-cell">Continuation entry</div>
+      <div class="mat-cell" style="color:var(--accent)">★★★★★</div>
+    </div>
+    <div class="mat-row">
+      <div class="mat-cell label">Fair Value Gap</div>
+      <div class="mat-cell">3-candle imbalance void</div>
+      <div class="mat-cell">Precision entry / TP zone</div>
+      <div class="mat-cell" style="color:var(--accent)">★★★★☆</div>
+    </div>
+    <div class="mat-row">
+      <div class="mat-cell label">Mitigation Block</div>
+      <div class="mat-cell">Zone where OB being filled on retrace</div>
+      <div class="mat-cell">Retest entry</div>
+      <div class="mat-cell" style="color:var(--textdim)">★★★☆☆</div>
+    </div>
+    <div class="mat-row">
+      <div class="mat-cell label">Rejection Block</div>
+      <div class="mat-cell">Wick-heavy candle zone</div>
+      <div class="mat-cell">Counter-trend caution</div>
+      <div class="mat-cell" style="color:var(--textdim)">★★☆☆☆</div>
+    </div>
+    <div class="mat-row">
+      <div class="mat-cell label">EQH / EQL</div>
+      <div class="mat-cell">Equal highs or lows (double top/bottom)</div>
+      <div class="mat-cell">Liquidity target</div>
+      <div class="mat-cell" style="color:var(--blue)">Target only</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ RULES ═══════════════════════════════════ -->
+<div id="rules" class="section">
+  <div class="sec-header">
+    <h2><span class="sec-icon y">◈</span> Golden Rules</h2>
+    <p class="sec-sub">Non-negotiable filters. If any core rule fails, NO TRADE.</p>
+  </div>
+
+  <div class="callout danger">
+    <strong>The Core Principle:</strong> You are not predicting. You are reading institutional footprints. Wait for liquidity to be taken. Wait for structure to shift. Wait for price to return to the zone. Then execute. Three patient conditions. One decisive entry.
+  </div>
+
+  <div style="margin-top: 24px;">
+    <div class="sec-header" style="border: none; padding: 0; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--text);">Required Checklist — ALL must be present</h2>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-item"><span class="rule-icon">01</span>HTF trend exists and is clear (HL-HH or LH-LL chain)</div>
+      <div class="rule-item"><span class="rule-icon">02</span>3rd trendline touch aligns with S/R level</div>
+      <div class="rule-item"><span class="rule-icon">03</span>Support/Resistance held 2+ times (liquidity built)</div>
+      <div class="rule-item"><span class="rule-icon">04</span>Liquidity sweep occurred (SSL or BSL taken)</div>
+      <div class="rule-item"><span class="rule-icon">05</span>Strong High or Strong Low formed from sweep</div>
+      <div class="rule-item"><span class="rule-icon">06</span>CHoCH confirmed on LTF after sweep</div>
+      <div class="rule-item"><span class="rule-icon">07</span>BOS confirmed — structural trend shift</div>
+      <div class="rule-item"><span class="rule-icon">08</span>Order Block caused the BOS (no orphan OB)</div>
+      <div class="rule-item"><span class="rule-icon">09</span>Price retested the OB (50–100% mitigation)</div>
+      <div class="rule-item"><span class="rule-icon">10</span>Entry is in Discount (long) or Premium (short)</div>
+      <div class="rule-item"><span class="rule-icon">11</span>LTF confirmation candle present at entry</div>
+      <div class="rule-item"><span class="rule-icon">12</span>Risk:Reward ≥ 1:3 measured before entry</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 28px;">
+    <div class="sec-header" style="border: none; padding: 0; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--text);">Invalidation Rules — If any trigger, exit or no-trade</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card bear">
+        <div class="card-title">LONG INVALIDATED IF</div>
+        <ul class="checklist">
+          <li class="bear-item">Price closes below the Strong Low</li>
+          <li class="bear-item">Price closes below the Bullish OB low</li>
+          <li class="bear-item">HTF prints a new Lower Low after entry</li>
+          <li class="bear-item">SSL sweep is immediately followed by new LL (no CHoCH)</li>
+          <li class="bear-item">OB is tested more than twice (losing freshness)</li>
+        </ul>
+      </div>
+      <div class="card bear" style="border-left-color: var(--red);">
+        <div class="card-title">SHORT INVALIDATED IF</div>
+        <ul class="checklist">
+          <li class="bear-item">Price closes above the Strong High</li>
+          <li class="bear-item">Price closes above the Bearish OB high</li>
+          <li class="bear-item">HTF prints a new Higher High after entry</li>
+          <li class="bear-item">BSL sweep is immediately followed by new HH (no CHoCH)</li>
+          <li class="bear-item">OB tested more than twice</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 28px;">
+    <div class="sec-header" style="border: none; padding: 0; margin-bottom: 16px;">
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--text);">Confluence Stack — More is better</h2>
+    </div>
+    <div class="matrix">
+      <div class="mat-row header">
+        <div class="mat-cell">Confluence Factor</div>
+        <div class="mat-cell">How to use it</div>
+        <div class="mat-cell">Impact on R:R</div>
+        <div class="mat-cell">Source</div>
+      </div>
+      <div class="mat-row">
+        <div class="mat-cell label">OB + FVG overlap</div>
+        <div class="mat-cell">Enter at FVG CE inside OB</div>
+        <div class="mat-cell" style="color:var(--green)">Tighter SL</div>
+        <div class="mat-cell"><span class="concept-tag ict">ICT</span></div>
+      </div>
+      <div class="mat-row">
+        <div class="mat-cell label">OTE Fibonacci</div>
+        <div class="mat-cell">OB/FVG at 62–79% retrace</div>
+        <div class="mat-cell" style="color:var(--green)">Higher win rate</div>
+        <div class="mat-cell"><span class="concept-tag ict">ICT</span></div>
+      </div>
+      <div class="mat-row">
+        <div class="mat-cell label">Session Kill Zone</div>
+        <div class="mat-cell">Entry during London/NY open</div>
+        <div class="mat-cell" style="color:var(--green)">Speed to TP1</div>
+        <div class="mat-cell"><span class="concept-tag ict">ICT</span></div>
+      </div>
+      <div class="mat-row">
+        <div class="mat-cell label">EQH/EQL as target</div>
+        <div class="mat-cell">TP1 at equal highs/lows pool</div>
+        <div class="mat-cell" style="color:var(--accent)">Clear target</div>
+        <div class="mat-cell"><span class="concept-tag smc">SMC</span></div>
+      </div>
+      <div class="mat-row">
+        <div class="mat-cell label">HTF S/R flip</div>
+        <div class="mat-cell">Old support = new OB resistance</div>
+        <div class="mat-cell" style="color:var(--green)">Strong zone</div>
+        <div class="mat-cell"><span class="concept-tag smc">SMC</span></div>
+      </div>
+      <div class="mat-row">
+        <div class="mat-cell label">Premium/Discount</div>
+        <div class="mat-cell">Only enter OB in correct half</div>
+        <div class="mat-cell" style="color:var(--green)">Filter bad zones</div>
+        <div class="mat-cell"><span class="concept-tag ict">ICT</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    This playbook combines SMC (trendline liquidity, OB, CHoCH/BOS) with ICT models (AMD, OTE, Silver Bullet, Unicorn, PD Arrays). The underlying thesis is identical: institutions move price to take liquidity, then execute large orders at imbalances, then distribute. Your edge comes from reading those footprints — not predicting the next candle. Discipline, patience, and a minimum 1:3 R:R will mathematically produce results over a large sample.
+</div>
+
+<!-- ═══════════════════════════════════ MULTI-TIMEFRAME PLAYBOOK ═══════════════════════════════════ -->
+<div id="mtf-playbook" class="section">
+  <div class="hero">
+    <div class="hero-eyebrow">Advanced Confluence · HTF Bias + ITF Sweep + LTF Entry</div>
+    <h1>Multi-Timeframe <span>Trading Playbook</span></h1>
+    <p class="hero-sub">The ultimate confluenced execution model. By combining structures across three distinct timeframes, we align our trades with institutional momentum while entering at high-precision low-timeframe zones.</p>
+  </div>
+
+  <div class="sec-header">
+    <h2><span class="sec-icon y">⚡</span> Multi-Timeframe Alignment Pipeline</h2>
+    <p class="sec-sub">Visualizing how HTF, ITF, and LTF states confluence to trigger a trade</p>
+  </div>
+
+  <div class="mtf-flowchart">
+    <div class="mtf-step htf">
+      <span class="tf-badge htf">HTF Bias (15M / 1H)</span>
+      <h3 style="margin-bottom:4px;">Trend Classification</h3>
+      <p style="font-size:12.5px;color:var(--textdim);">Enforces directional bias. We only look for LONGS if HTF is Bullish (HL-HH chain), or SHORTS if HTF is Bearish (LH-LL chain).</p>
+    </div>
+    <div class="mtf-arrow">↓</div>
+    <div class="mtf-step itf">
+      <span class="tf-badge itf">ITF Structure (5M / 15M)</span>
+      <h3 style="margin-bottom:4px;">Liquidity Sweeps</h3>
+      <p style="font-size:12.5px;color:var(--textdim);">Identifies retail trap zones. Wait for buy-side (BSL) or sell-side (SSL) liquidity sweeps and reclaims on this intermediate structure.</p>
+    </div>
+    <div class="mtf-arrow">↓</div>
+    <div class="mtf-step ltf">
+      <span class="tf-badge ltf">LTF Precision (5M / 1M)</span>
+      <h3 style="margin-bottom:4px;">CHoCH Reversal & Order Block Retest</h3>
+      <p style="font-size:12.5px;color:var(--textdim);">Precise entry. Look for a LTF structure break (CHoCH/BOS) forming an Order Block. Enter inside the OB range, protected by the swing low/high, but only in discount/premium.</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card bull">
+      <div class="card-title">CONFLUENCED LONG ENTRY RULES</div>
+      <ul class="checklist">
+        <li class="required"><strong>HTF (15M/1H) Trend:</strong> Confirmed Bullish trend (recent Higher Low and Higher High).</li>
+        <li class="required"><strong>ITF (5M/15M) Sweep:</strong> Sell-Side Liquidity (SSL) swept and candle closed back inside support.</li>
+        <li class="required"><strong>LTF (5M/1M) CHoCH:</strong> Reversal break of the last LTF swing high.</li>
+        <li class="required"><strong>LTF (5M/1M) OB Retest:</strong> Candle low penetrates the top of the LTF Bullish Order Block.</li>
+        <li class="required"><strong>Discount Zone:</strong> Entry price must be in discount territory (below dealing range midpoint).</li>
+        <li class="required"><strong>Sizing:</strong> Max 1.5% capital risk per trade. Stop Loss placed below the OB or Sweep low.</li>
+      </ul>
+    </div>
+    <div class="card bear">
+      <div class="card-title">CONFLUENCED SHORT ENTRY RULES</div>
+      <ul class="checklist">
+        <li class="required"><strong>HTF (15M/1H) Trend:</strong> Confirmed Bearish trend (recent Lower High and Lower Low).</li>
+        <li class="required"><strong>ITF (5M/15M) Sweep:</strong> Buy-Side Liquidity (BSL) swept and candle closed back below resistance.</li>
+        <li class="required"><strong>LTF (5M/1M) CHoCH:</strong> Reversal break of the last LTF swing low.</li>
+        <li class="required"><strong>LTF (5M/1M) OB Retest:</strong> Candle high penetrates the bottom of the LTF Bearish Order Block.</li>
+        <li class="required"><strong>Premium Zone:</strong> Entry price must be in premium territory (above dealing range midpoint).</li>
+        <li class="required"><strong>Sizing:</strong> Max 1.5% capital risk per trade. Stop Loss placed above the OB or Sweep high.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <div class="card-title">BENEFITS OF MTF CONFLUENCE</div>
+    <p style="margin-bottom: 12px;">By combining multiple timeframes, we mathematically optimize our reward-to-risk (R:R) ratio while filtering out false setups. In our backtests, this multi-timeframe strategy yields higher consistency because:</p>
+    <ul class="checklist">
+      <li class="bull-item"><strong>Directional Filter:</strong> Operating only in the direction of the HTF trend ensures we aren't trading against institutional momentum.</li>
+      <li class="bull-item"><strong>Precision Entries:</strong> Entering on LTF order blocks enables very tight stop losses, scaling our average R:R to 1:3 or higher.</li>
+      <li class="bull-item"><strong>Trap Avoidance:</strong> Waiting for the ITF sweep ensures that retail stop-losses have already been taken out before we get involved.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ BACKTEST SIMULATOR ═══════════════════════════════════ -->
+<div id="backtest" class="section">
+  <div class="hero">
+    <div class="hero-eyebrow">Deterministic Rules Engine · FSM Simulation</div>
+    <h1>SMC <span>Backtester Results</span></h1>
+    <p class="hero-sub">Visual analysis of the OOP trading rules engine execution. This panel displays live backtest stats, equity path, and rules verification metrics generated directly from <code>smc_backtester.rb</code>.</p>
+  </div>
+
+  <!-- Fallback div if data not loaded -->
+  <div id="backtest-fallback" class="callout warning">
+    <strong>Backtest data not found!</strong> Generate <code>backtest_results.js</code> from the repo root, then refresh this page:
+    <div style="margin-top: 8px; font-family: var(--mono); background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border);">
+      cd /home/nemesis/project/trading-workspace/smc-backtester<br>
+      exe/smc-backtest<br>
+      # or: exe/smc-mtf-backtest<br>
+      # then open smc-playbook.html via a local server (see README)
+    </div>
+    Once executed, refresh this page to view interactive charts, trade metrics, and rule validations.
+  </div>
+
+  <!-- Main backtest UI (hidden initially, shown if window.SMC_BACKTEST_RESULTS exists) -->
+  <div id="backtest-content" style="display:none;">
+    
+    <!-- METRICS GRID -->
+    <div class="grid-3" style="margin-bottom: 24px;">
+      <div class="card neutral">
+        <div class="card-title">ACCOUNT BALANCE</div>
+        <h3 id="stat-final-balance" style="font-size: 24px; color: var(--accent); margin: 6px 0;">$100,000.00</h3>
+        <p id="stat-net-profit" style="color: var(--green); font-family: var(--mono); font-size: 13px;">+$0.00 (0.00%) net profit</p>
+      </div>
+      
+      <div class="card bull">
+        <div class="card-title">WIN RATE</div>
+        <h3 id="stat-win-rate" style="font-size: 24px; color: var(--green); margin: 6px 0;">0.00%</h3>
+        <p id="stat-wins-losses" style="color: var(--textdim); font-size: 13px;">0 wins / 0 losses</p>
+      </div>
+
+      <div class="card neutral" style="border-left-color: var(--purple);">
+        <div class="card-title">PROFIT FACTOR</div>
+        <h3 id="stat-profit-factor" style="font-size: 24px; color: var(--purple); margin: 6px 0;">1.00</h3>
+        <p id="stat-total-trades" style="color: var(--textdim); font-size: 13px;">0 total closed trades</p>
+      </div>
+    </div>
+
+    <!-- EQUITY CURVE AND RULES MATRIX -->
+    <div class="grid-2" style="margin-bottom: 24px;">
+      <div class="card">
+        <div class="card-title">EQUITY CURVE</div>
+        <div style="height: 250px; position: relative;" id="equity-chart-container">
+          <!-- SVG injected here -->
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-title">RULE CHECK CONFIRMATIONS</div>
+        <div id="rules-radar-container">
+          <ul class="checklist" id="backtest-rules-checklist">
+            <li class="required bull-item">HTF Trend Aligned (Bullish/Bearish)</li>
+            <li class="required bull-item">Liquidity Pool Formed (Equal Highs/Lows)</li>
+            <li class="required bull-item">Liquidity Sweep Triggered (SSL/BSL Swept)</li>
+            <li class="required bull-item">Market Shift Confirmed (CHoCH / BOS Break)</li>
+            <li class="required bull-item">Order Block Formed & Identified</li>
+            <li class="required bull-item">Retrace mitigation entry inside OB</li>
+            <li class="required bull-item">Entry executed in Discount/Premium zone</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRADE LOG TABLE -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-title">EXECUTED TRADES LOG</div>
+      <div class="matrix" id="backtest-trades-matrix">
+        <!-- Rows dynamically injected -->
+      </div>
+    </div>
+
+    <!-- INTEGRATED CHART VIEW -->
+    <div class="card">
+      <div class="card-title">SIMULATION CHART FEED (OHLCV + OVERLAYS)</div>
+      <div style="overflow-x: auto;">
+        <div style="min-width: 1000px; height: 350px; position: relative;" id="candle-chart-container">
+          <!-- Interactive candlestick SVG injected here -->
+        </div>
+      </div>
+      <div style="margin-top: 16px; font-family: var(--mono); font-size: 11px; color: var(--textdim); display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
+        <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; background:var(--green); border-radius: 2px;"></span> Bullish Candle</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; background:var(--red); border-radius: 2px;"></span> Bearish Candle</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ffd700;"></span> Swings (High/Low)</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:8px; border:1px dashed var(--blue); background: rgba(64,144,255,0.05);"></span> Order Blocks</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="color:var(--green); font-weight: bold;">▲</span> Long Entry</span>
+        <span style="display:flex; align-items:center; gap:6px;"><span style="color:var(--red); font-weight: bold;">▼</span> Short Entry</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<script>
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+    const target = document.getElementById(id);
+    if (target) target.classList.add('visible');
+    
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    } else if (event && event.target) {
+      event.target.classList.add('active');
+    }
+
+    // Charts must render after the section is visible — hidden containers have zero width.
+    if (id === 'backtest' && window.SMC_BACKTEST_RESULTS) {
+      renderBacktest(window.SMC_BACKTEST_RESULTS);
+    }
+  }
+
+  function showPlaybook(id, btn) {
+    document.querySelectorAll('.pbook').forEach(p => p.classList.remove('visible'));
+    const target = document.getElementById(id);
+    if (target) target.classList.add('visible');
+    
+    document.querySelectorAll('#playbooks .ptab').forEach(t => t.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    } else if (event && event.target) {
+      event.target.classList.add('active');
+    }
+  }
+
+  function showPB8(id, btn) {
+    document.querySelectorAll('.pb8-panel').forEach(p => p.classList.remove('visible'));
+    const target = document.getElementById(id);
+    if (target) target.classList.add('visible');
+    
+    document.querySelectorAll('#pb8tabs .ptab').forEach(t => t.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    } else if (event && event.target) {
+      event.target.classList.add('active');
+    }
+  }
+
+  // ─── DYNAMIC BACKTEST ENGINE RENDERER ───
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.SMC_BACKTEST_RESULTS) {
+      renderBacktest(window.SMC_BACKTEST_RESULTS);
+    }
+  });
+
+  function renderBacktest(data) {
+    document.getElementById('backtest-fallback').style.display = 'none';
+    document.getElementById('backtest-content').style.display = 'block';
+
+    const summary = data.summary;
+    document.getElementById('stat-final-balance').textContent = '$' + Number(summary.final_capital).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    
+    const profitEl = document.getElementById('stat-net-profit');
+    const netProfitSign = summary.net_profit >= 0 ? '+' : '';
+    profitEl.textContent = `${netProfitSign}$${Number(summary.net_profit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${summary.net_profit_pct}%)`;
+    if (summary.net_profit < 0) {
+      profitEl.style.color = 'var(--red)';
+    } else {
+      profitEl.style.color = 'var(--green)';
+    }
+
+    document.getElementById('stat-win-rate').textContent = summary.win_rate + '%';
+    document.getElementById('stat-wins-losses').textContent = `${summary.wins} wins / ${summary.losses} losses`;
+    document.getElementById('stat-profit-factor').textContent = summary.profit_factor;
+    document.getElementById('stat-total-trades').textContent = `${summary.total_trades} total closed trades`;
+
+    renderEquityCurve(data.equity_curve);
+    renderTradesList(data.trades);
+    renderCandleChart(data.candles, data.swings, data.sweeps, data.bos_events, data.choch_events, data.order_blocks, data.trades);
+  }
+
+  function chartWidth(container, fallback) {
+    if (container.clientWidth > 0) return container.clientWidth;
+    const parentWidth = container.parentElement ? container.parentElement.clientWidth : 0;
+    return parentWidth > 0 ? parentWidth : fallback;
+  }
+
+  function renderEquityCurve(curve) {
+    if (!curve || curve.length === 0) return;
+    const container = document.getElementById('equity-chart-container');
+    const width = chartWidth(container, 500);
+    const height = 250;
+
+    const values = curve.map(c => c.equity);
+    const minVal = Math.min(...values) * 0.995;
+    const maxVal = Math.max(...values) * 1.005;
+    const range = maxVal - minVal;
+
+    let points = '';
+    let areaPoints = `0,${height} `;
+    
+    curve.forEach((c, idx) => {
+      const x = (idx / (curve.length - 1)) * width;
+      const y = height - ((c.equity - minVal) / range) * (height - 40) - 20;
+      points += `${x.toFixed(1)},${y.toFixed(1)} `;
+      areaPoints += `${x.toFixed(1)},${y.toFixed(1)} `;
+    });
+    areaPoints += `${width},${height}`;
+
+    container.innerHTML = `
+      <svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" style="overflow:visible;">
+        <defs>
+          <linearGradient id="eq-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--green)" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="var(--green)" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+        <!-- Horizontal grid line at 100k start capital -->
+        <line x1="0" y1="${height - ((100000 - minVal) / range) * (height - 40) - 20}" x2="${width}" y2="${height - ((100000 - minVal) / range) * (height - 40) - 20}" stroke="var(--border)" stroke-dasharray="3" />
+        <polygon points="${areaPoints}" fill="url(#eq-grad)" />
+        <path d="M 0 ${height - ((curve[0].equity - minVal) / range) * (height - 40) - 20} L ${points}" fill="none" stroke="var(--green)" stroke-width="2" />
+        <text x="10" y="20" fill="var(--textdim)" font-family="var(--mono)" font-size="10">$${Math.round(maxVal).toLocaleString()}</text>
+        <text x="10" y="${height - 10}" fill="var(--textdim)" font-family="var(--mono)" font-size="10">$${Math.round(minVal).toLocaleString()}</text>
+      </svg>
+    `;
+  }
+
+  function renderTradesList(trades) {
+    const matrix = document.getElementById('backtest-trades-matrix');
+    let html = `
+      <div class="mat-row header">
+        <div class="mat-cell" style="flex:0.5;">ID</div>
+        <div class="mat-cell" style="flex:0.8;">Type</div>
+        <div class="mat-cell">Entry Price</div>
+        <div class="mat-cell">Exit Price</div>
+        <div class="mat-cell">PnL</div>
+        <div class="mat-cell" style="flex:0.8;">Outcome</div>
+      </div>
+    `;
+
+    if (!trades || trades.length === 0) {
+      html += `
+        <div class="mat-row" style="justify-content:center; color:var(--muted);">
+          No trades executed during backtest.
+        </div>
+      `;
+    } else {
+      trades.forEach((t, idx) => {
+        const typeText = t.type.toUpperCase();
+        const typeBadge = t.type === 'long' ? 'bull' : 'bear';
+        const pnlColor = t.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+        const outcomeText = t.win ? 'WIN' : 'LOSS';
+        const outcomeBadge = t.win ? 'bull' : 'bear';
+
+        html += `
+          <div class="mat-row" style="cursor:pointer;" onclick="focusTrade(${t.entry_idx}, ${t.exit_idx})">
+            <div class="mat-cell" style="flex:0.5; font-family:var(--mono); color:var(--muted);">#${idx + 1}</div>
+            <div class="mat-cell" style="flex:0.8;"><span class="badge ${typeBadge}">${typeText}</span></div>
+            <div class="mat-cell" style="font-family:var(--mono);">$${t.entry_price.toFixed(2)} <span style="font-size:10px;color:var(--textdim)">[Bar ${t.entry_idx}]</span></div>
+            <div class="mat-cell" style="font-family:var(--mono);">$${t.exit_price.toFixed(2)} <span style="font-size:10px;color:var(--textdim)">[Bar ${t.exit_idx}]</span></div>
+            <div class="mat-cell" style="font-family:var(--mono); color:${pnlColor}; font-weight:700;">$${t.pnl >= 0 ? '+' : ''}${t.pnl.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+            <div class="mat-cell" style="flex:0.8;"><span class="badge ${outcomeBadge}">${outcomeText}</span></div>
+          </div>
+        `;
+      });
+    }
+
+    matrix.innerHTML = html;
+  }
+
+  let focusedCandleRange = null;
+
+  function focusTrade(entryIdx, exitIdx) {
+    focusedCandleRange = { start: Math.max(0, entryIdx - 15), end: Math.min(170, exitIdx + 15) };
+    if (window.SMC_BACKTEST_RESULTS) {
+      const d = window.SMC_BACKTEST_RESULTS;
+      renderCandleChart(d.candles, d.swings, d.sweeps, d.bos_events, d.choch_events, d.order_blocks, d.trades);
+    }
+  }
+
+  function renderCandleChart(candles, swings, sweeps, bos, choch, obs, trades) {
+    if (!candles || candles.length === 0) return;
+    
+    const container = document.getElementById('candle-chart-container');
+    const width = chartWidth(container, 1000);
+    const height = 350;
+
+    // Filter viewport if focused
+    let startIdx = 0;
+    let endIdx = candles.length - 1;
+    if (focusedCandleRange) {
+      startIdx = focusedCandleRange.start;
+      endIdx = focusedCandleRange.end;
+    }
+
+    const visibleCandles = candles.slice(startIdx, endIdx + 1);
+    const highs = visibleCandles.map(c => c.h);
+    const lows = visibleCandles.map(c => c.l);
+    
+    const maxPrice = Math.max(...highs) * 1.005;
+    const minPrice = Math.min(...lows) * 0.995;
+    const priceRange = maxPrice - minPrice;
+
+    const scaleY = (price) => height - 30 - ((price - minPrice) / priceRange) * (height - 60);
+    const scaleX = (idx) => {
+      const relIdx = idx - startIdx;
+      return 20 + (relIdx / (visibleCandles.length - 1)) * (width - 40);
+    };
+
+    const cWidth = Math.max(2, ((width - 40) / visibleCandles.length) * 0.7);
+
+    let svgElements = '';
+
+    // Draw grid lines
+    for (let p = Math.ceil(minPrice); p <= maxPrice; p += (priceRange / 5)) {
+      const y = scaleY(p);
+      svgElements += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="var(--border)" stroke-opacity="0.5" stroke-dasharray="3" />`;
+      svgElements += `<text x="5" y="${y - 4}" fill="var(--textdim)" font-family="var(--mono)" font-size="9">$${Math.round(p)}</text>`;
+    }
+
+    // Draw active Order Blocks
+    obs.forEach(ob => {
+      // check if inside viewport
+      if (ob.index >= startIdx && ob.index <= endIdx) {
+        const xStart = scaleX(ob.index);
+        let endOBIdx = ob.mitigated_at || ob.invalidated_at || endIdx;
+        const xEnd = scaleX(Math.min(endOBIdx, endIdx));
+        const yHigh = scaleY(ob.high);
+        const yLow = scaleY(ob.low);
+        const color = ob.type === 'bullish' ? 'var(--blue)' : 'var(--purple)';
+        const opacity = ob.mitigated ? 0.04 : 0.12;
+
+        svgElements += `
+          <rect x="${xStart}" y="${yHigh}" width="${xEnd - xStart + cWidth}" height="${yLow - yHigh}" 
+                fill="${color}" fill-opacity="${opacity}" stroke="${color}" stroke-dasharray="3" stroke-opacity="0.3" />
+        `;
+      }
+    });
+
+    // Draw candles
+    visibleCandles.forEach((c, idx) => {
+      const globalIdx = idx + startIdx;
+      const x = scaleX(globalIdx);
+      const yOpen = scaleY(c.o);
+      const yClose = scaleY(c.c);
+      const yHigh = scaleY(c.h);
+      const yLow = scaleY(c.l);
+
+      const color = c.c >= c.o ? 'var(--green)' : 'var(--red)';
+      const bodyTop = Math.min(yOpen, yClose);
+      const bodyHeight = Math.max(1.5, Math.abs(yOpen - yClose));
+
+      // Wick
+      svgElements += `<line x1="${x}" y1="${yHigh}" x2="${x}" y2="${yLow}" stroke="${color}" stroke-width="1.2" />`;
+      // Body
+      svgElements += `<rect x="${x - cWidth/2}" y="${bodyTop}" width="${cWidth}" height="${bodyHeight}" fill="${color}" stroke="${color}" stroke-width="0.5" />`;
+    });
+
+    // Draw swings
+    swings.forEach(s => {
+      if (s.index >= startIdx && s.index <= endIdx) {
+        const x = scaleX(s.index);
+        const y = scaleY(s.price);
+        const color = s.type === 'high' ? 'var(--accent)' : '#ffd700';
+        svgElements += `<circle cx="${x}" cy="${y}" r="3.5" fill="${color}" stroke="var(--bg)" stroke-width="1" />`;
+      }
+    });
+
+    // Draw sweeps
+    sweeps.forEach(s => {
+      if (s.index >= startIdx && s.index <= endIdx) {
+        const x = scaleX(s.index);
+        const y = scaleY(s.price);
+        const color = s.type === 'ssl_sweep' ? 'var(--green)' : 'var(--red)';
+        svgElements += `
+          <circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${color}" stroke-width="1.5" stroke-dasharray="2" />
+          <line x1="${x - 10}" y1="${y}" x2="${x + 10}" y2="${y}" stroke="${color}" stroke-width="1" />
+        `;
+      }
+    });
+
+    // Draw BOS and CHoCH labels
+    bos.forEach(b => {
+      if (b.index >= startIdx && b.index <= endIdx) {
+        const x = scaleX(b.index);
+        const y = scaleY(b.price);
+        svgElements += `
+          <line x1="${x - 15}" y1="${y}" x2="${x}" y2="${y}" stroke="var(--accent)" stroke-width="1" />
+          <text x="${x - 12}" y="${y - 4}" fill="var(--accent)" font-family="var(--mono)" font-size="8">BOS</text>
+        `;
+      }
+    });
+
+    choch.forEach(c => {
+      if (c.index >= startIdx && c.index <= endIdx) {
+        const x = scaleX(c.index);
+        const y = scaleY(c.price);
+        svgElements += `
+          <line x1="${x - 15}" y1="${y}" x2="${x}" y2="${y}" stroke="var(--accent)" stroke-width="1" />
+          <text x="${x - 15}" y="${y - 4}" fill="var(--accent)" font-family="var(--mono)" font-size="8">CHoCH</text>
+        `;
+      }
+    });
+
+    // Draw Trade entries/exits
+    trades.forEach(t => {
+      // Entry marker
+      if (t.entry_idx >= startIdx && t.entry_idx <= endIdx) {
+        const x = scaleX(t.entry_idx);
+        const y = scaleY(t.entry_price);
+        if (t.type === 'long') {
+          svgElements += `
+            <polygon points="${x},${y + 12} ${x - 5},${y + 22} ${x + 5},${y + 22}" fill="var(--green)" />
+            <text x="${x - 12}" y="${y + 32}" fill="var(--green)" font-family="var(--mono)" font-size="8" font-weight="bold">LONG</text>
+          `;
+        } else {
+          svgElements += `
+            <polygon points="${x},${y - 12} ${x - 5},${y - 22} ${x + 5},${y - 22}" fill="var(--red)" />
+            <text x="${x - 15}" y="${y - 26}" fill="var(--red)" font-family="var(--mono)" font-size="8" font-weight="bold">SHORT</text>
+          `;
+        }
+      }
+
+      // Exit marker
+      if (t.exit_idx >= startIdx && t.exit_idx <= endIdx) {
+        const x = scaleX(t.exit_idx);
+        const y = scaleY(t.exit_price);
+        const color = t.win ? 'var(--green)' : 'var(--red)';
+        svgElements += `
+          <line x1="${x}" y1="${y - 10}" x2="${x}" y2="${y + 10}" stroke="${color}" stroke-width="1.5" />
+          <line x1="${x - 10}" y1="${y}" x2="${x + 10}" y2="${y}" stroke="${color}" stroke-width="1.5" />
+          <text x="${x + 4}" y="${y - 4}" fill="${color}" font-family="var(--mono)" font-size="8" font-weight="bold">EXIT</text>
+        `;
+      }
+
+      // Draw trade range rectangle
+      if (t.entry_idx >= startIdx && t.exit_idx <= endIdx) {
+        const xStart = scaleX(t.entry_idx);
+        const xEnd = scaleX(t.exit_idx);
+        const yEntry = scaleY(t.entry_price);
+        const yExit = scaleY(t.exit_price);
+        const color = t.win ? 'var(--green)' : 'var(--red)';
+        svgElements += `
+          <rect x="${xStart}" y="${Math.min(yEntry, yExit)}" width="${xEnd - xStart}" height="${Math.abs(yEntry - yExit)}" 
+                fill="${color}" fill-opacity="0.03" stroke="${color}" stroke-opacity="0.15" stroke-width="1" />
+        `;
+      }
+    });
+
+    // Reset view button if viewport focused
+    let resetBtnHtml = '';
+    if (focusedCandleRange) {
+      resetBtnHtml = `
+        <button onclick="resetCandleChart()" style="position:absolute; right:10px; top:10px; background:var(--card); border:1px solid var(--border); color:var(--text); padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">
+          Reset Zoom
+        </button>
+      `;
+    }
+
+    container.innerHTML = `
+      <svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" style="overflow:visible; background:#0c0f16; border:1px solid var(--border); border-radius:4px;">
+        ${svgElements}
+      </svg>
+      ${resetBtnHtml}
+    `;
+  }
+
+  function resetCandleChart() {
+    focusedCandleRange = null;
+    if (window.SMC_BACKTEST_RESULTS) {
+      const d = window.SMC_BACKTEST_RESULTS;
+      renderCandleChart(d.candles, d.swings, d.sweeps, d.bos_events, d.choch_events, d.order_blocks, d.trades);
+    }
+  }
+</script>
+
+</body>
+</html>

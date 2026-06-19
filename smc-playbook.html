@@ -2359,9 +2359,12 @@
 
   <!-- Fallback div if data not loaded -->
   <div id="backtest-fallback" class="callout warning">
-    <strong>Backtest data not found!</strong> Please run the Ruby backtester script in your workspace to generate live simulation results:
+    <strong>Backtest data not found!</strong> Generate <code>backtest_results.js</code> from the repo root, then refresh this page:
     <div style="margin-top: 8px; font-family: var(--mono); background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border);">
-      ruby smc_backtester.rb
+      cd /home/nemesis/project/trading-workspace/smc-backtester<br>
+      exe/smc-backtest<br>
+      # or: exe/smc-mtf-backtest<br>
+      # then open smc-playbook.html via a local server (see README)
     </div>
     Once executed, refresh this page to view interactive charts, trade metrics, and rule validations.
   </div>
@@ -2458,6 +2461,11 @@
     } else if (event && event.target) {
       event.target.classList.add('active');
     }
+
+    // Charts must render after the section is visible — hidden containers have zero width.
+    if (id === 'backtest' && window.SMC_BACKTEST_RESULTS) {
+      renderBacktest(window.SMC_BACKTEST_RESULTS);
+    }
   }
 
   function showPlaybook(id, btn) {
@@ -2520,10 +2528,16 @@
     renderCandleChart(data.candles, data.swings, data.sweeps, data.bos_events, data.choch_events, data.order_blocks, data.trades);
   }
 
+  function chartWidth(container, fallback) {
+    if (container.clientWidth > 0) return container.clientWidth;
+    const parentWidth = container.parentElement ? container.parentElement.clientWidth : 0;
+    return parentWidth > 0 ? parentWidth : fallback;
+  }
+
   function renderEquityCurve(curve) {
     if (!curve || curve.length === 0) return;
     const container = document.getElementById('equity-chart-container');
-    const width = container.clientWidth || 500;
+    const width = chartWidth(container, 500);
     const height = 250;
 
     const values = curve.map(c => c.equity);
@@ -2617,7 +2631,7 @@
     if (!candles || candles.length === 0) return;
     
     const container = document.getElementById('candle-chart-container');
-    const width = container.clientWidth || 1000;
+    const width = chartWidth(container, 1000);
     const height = 350;
 
     // Filter viewport if focused
