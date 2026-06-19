@@ -1,5579 +1,1668 @@
-# SMC + Trendline Liquidity Playbook
+SMC + ICT Institutional Trading Playbook v4.0
 
-## Institutional Long & Short Trading Framework
 
-This playbook combines:
 
-* Trendline trading
-* Support & Resistance
-* Resistance ↔ Support flips
-* Smart Money stop hunts
-* Strong Highs / Strong Lows
-* Market Structure
-* BOS / CHoCH
-* Order Blocks
-* Return to Order Block entries
-* Multi-target profit taking
 
----
+SMC · PLAYBOOK
 
-## PART I – MARKET PHASES
+Overview
+8 Playbooks
+Long Setups
+Short Setups
+Advanced ICT
+Premium/Discount
+Golden Rules
+MTF Playbook
+Backtest Simulator
 
-The market usually moves through these phases:
 
-```
-Trend
-↓
 
-Trendline Formation
+Smart Money Concepts + ICT · v4.0 — 15 Playbooks
 
-↓
+# Institutional Trading Playbook
 
-Support / Resistance
+15 complete playbooks covering trendline liquidity, S/R flips, BOS pullbacks, CHoCH reversals, OB retests, sweep+OB, FVG-breaker entries, AMD session plays, and Multi-Timeframe Confluence. From beginner setups to full A+ confluence.
 
-↓
+## ⚡ Market Phase Pipeline
+
+Every high-probability SMC trade flows through these phases in sequence
+
+TREND
+
+→
+
+TL Formation
+
+→
+
+S/R
+
+→
 
 Liquidity Builds
 
-↓
+→
 
 Stop Hunt
 
-↓
+→
 
-Structure Break
+BOS / CHoCH
 
-↓
+→
 
-Order Block Creation
+OB Created
 
-↓
+→
 
-Retracement
+Retrace to OB
 
-↓
+→
 
-Entry
+ENTRY
 
-↓
+→
 
 Expansion
 
-↓
+→
 
-Profit Taking
-```
+TP1/2/3
 
----
+## 📋 Playbook Index — 8 Base + 6 ICT
 
-## PART II – LONG PLAYBOOK
+Ranked by complexity. Most traders master 1–3 and run them repeatedly.
 
-### LONG SETUP FLOW
+─── BASE PLAYBOOKS (Price Action Foundation) ───
 
-```
-Bullish Trend
-↓
+PB-1 CLASSIC
 
-Bullish Trendline
-↓
+### Trendline 3rd Touch
 
-3rd Touch of Trendline
-↓
+The oldest model. Bull: 3rd touch of ascending TL → bullish continuation. Bear: 3rd touch of descending TL → sell. No structure or OB required. Entry on rejection candle.
 
-Support Forms
-↓
+WIN: Medium · RR: 1:2–1:3 · COMPLEXITY: Low
 
-Support Holds Multiple Times
+PB-2 CLASSIC
 
-↓
+### Support → Resistance Flip
 
-Smart Money Sweeps Support (SL Hunt)
+Broken resistance becomes support on retest (and vice versa). BOS through level → wait for retest → enter continuation. Common in equities and indices.
 
-↓
+WIN: Medium · RR: 1:2–1:4 · COMPLEXITY: Low
 
-Strong Low Forms
+PB-3 STRUCTURE
 
-↓
+### BOS Pullback Continuation
 
-Bullish CHoCH / BOS
+After a confirmed BOS (HH or LL broken), wait for the pullback and enter continuation. No OB needed — pure market structure. High win rate in trending markets.
 
-↓
+WIN: High · RR: 1:2–1:4 · COMPLEXITY: Medium
 
-Bullish Order Block Forms
+PB-4 REVERSAL
 
-↓
+### CHoCH Reversal
 
-Price Returns to Bullish OB
+Earliest reversal signal. In a downtrend: break of a Lower High = Bullish CHoCH → buy. In an uptrend: break of a Higher Low = Bearish CHoCH → sell. Higher risk, highest RR potential.
 
-↓
+WIN: Medium · RR: 1:3–1:6 · COMPLEXITY: Medium
 
-LONG ENTRY
+PB-5 SMC
 
-↓
+### Order Block Retest
 
-Expansion Higher
-```
+Displacement → BOS → identify last opposing candle (OB) → wait for price to retrace into OB → enter. OB is only valid if it directly caused the BOS. Otherwise it's just a candle.
 
----
+WIN: High · RR: 1:3–1:5 · COMPLEXITY: Medium
 
-### STEP 1 – BULLISH TREND IDENTIFICATION
+PB-6 SMC+ICT
 
-Need:
+### Liquidity Sweep Reversal
 
-```
-HL → HH → HL → HH
-```
+SSL/BSL taken → strong reclaim → CHoCH confirms → enter. The most popular SMC model. Works at swing lows (longs) and swing highs (shorts). No OB required — CHoCH is the entry trigger.
 
-Checklist:
+WIN: High · RR: 1:3–1:6 · COMPLEXITY: Medium
 
-□ Higher highs exist
+PB-7 HIGH PROB
 
-□ Higher lows exist
+### Sweep + OB (Core A Setup)
 
-□ HTF bias bullish
+Liquidity sweep + BOS + OB retest combined. The setup most profitable ICT/SMC traders actually execute. Sweep provides the impulse, OB provides the precision entry.
 
-If not:
+WIN: Very High · RR: 1:4–1:8 · COMPLEXITY: High
 
-NO TRADE.
+PB-8 A+ SETUP
 
----
+### Full Confluence A+
 
-### STEP 2 – TRENDLINE FORMATION
+Every filter stacked: HTF trend + trendline 3rd touch + S/R + sweep + CHoCH + BOS + OB retest. Fewer opportunities but 1:5–1:10 RR. The holy grail setup.
 
-Draw trendline:
+WIN: Rare · RR: 1:5–1:10 · COMPLEXITY: Very High
 
-Connect:
+─── ICT MODELS (Advanced) ───
 
-```
-HL1
-↓
+PB-C ICT
 
-HL2
-```
+### FVG + Breaker Block
 
-Trendline valid only if:
+Failed OB → Breaker. FVG nested inside. Dual institutional pressure at one zone.
 
-Minimum 2 touches.
+PB-D ICT
 
-The 3rd touch is the opportunity.
+### AMD Session Play
 
-Example:
+Asia range → London Judas sweep → NY distribution. The Power of 3.
 
-```
-HH
+PB-E ICT SCALP
 
-       HH
+### Silver Bullet
 
-          HH
+Time-specific FVG entry within 60-min kill windows. AMD bias required first.
 
-           /
+PB-F RARE
 
-         HL3 ← BUY ZONE
+### The Unicorn 🦄
 
-        /
+HTF OB + LTF Breaker + FVG inside. Triple confluence. ~2×/week. Take every one.
 
-      HL2
+PB-G ICT
 
-     /
+### OTE Fibonacci Entry
 
-HL1
-```
+OB or FVG at 62–79% retrace. 70.5% sweet spot. Tighter SL, higher win rate.
 
-Checklist:
+PB-H CONCEPT
 
-□ 3rd touch reached.
+### IRL → ERL
 
----
+Internal range liquidity taken first, then expansion to external range liquidity target.
 
-### STEP 3 – SUPPORT CREATION
+**Meta Principle:** Find where retail traders are trapped → wait for smart money to reveal direction → enter on the retest → hide SL beyond the liquidity that should not be revisited → scale out at opposing liquidity. Every playbook above is a variation of this single framework.
 
-Trendline coincides with support.
+## ◧ The 8 Base Playbooks
 
-Support tested:
+Complete execution flows for each setup — long and short variants, with entry, SL, and TP logic
 
-2–3 times.
+1 · TL 3rd Touch
+2 · S/R Flip
+3 · BOS Pullback
+4 · CHoCH Reversal
+5 · OB Retest
+6 · Sweep Reversal
+7 · Sweep + OB
+8 · Full A+
 
-Example:
+**PB-1 · Trendline 3rd Touch Continuation:** The oldest price-action model. Markets respect trendlines because clusters of traders use them. The 3rd touch is the entry — not the 1st or 2nd. Origin: Classical price action, no ICT or SMC concepts required.
 
-```
-──────── Support
+LONG VARIANT BUY
 
-Bounce
-
-Bounce
-
-Bounce
-```
-
-Checklist:
-
-□ Strong support formed.
-
----
-
-### STEP 4 – SMART MONEY STOP HUNT
-
-Before moving higher:
-
-Smart money hunts stops.
-
-Price:
-
-```
-Breaks below support
+HH → HL → HH (uptrend)
 
 ↓
 
-Takes liquidity
+Ascending trendline (connect HLs)
 
 ↓
 
-Quickly reclaims support
-```
-
-This creates:
-
-Sell-side liquidity sweep.
-
-Example:
-
-```
-Support
-
-────────────
-
-      ↓
-
-SL Hunt
-
-↓↓↓↓↓
-
-↑ reclaim
-```
-
-Checklist:
-
-□ Stops below support swept.
-
----
-
-### STEP 5 – STRONG LOW FORMS
-
-Strong Low:
-
-A low that causes displacement.
-
-Definition:
-
-```
-Low
+1st touch → 2nd touch
 
 ↓
 
-Aggressive bullish candle
+3rd touch arrives
 
 ↓
 
-Break structure
-```
-
-Checklist:
-
-□ Strong low identified.
-
-Protected Low = Strong Low.
-
----
-
-### STEP 6 – BULLISH CHoCH / BOS
-
-Need:
-
-```
-LH
+Bullish rejection candle
 
 ↓
 
-LL
+BUY
+
+* Uptrend confirmed (HL-HH sequence)
+* Minimum 2 prior TL touches
+* 3rd touch + bullish rejection candle
+* TL aligns with a horizontal support (extra confluence)
+* SL: below the 3rd touch candle low
+
+SHORT VARIANT SELL
+
+LL → LH → LL (downtrend)
 
 ↓
 
-Break LH
+Descending trendline (connect LHs)
+
+↓
+
+1st touch → 2nd touch
+
+↓
+
+3rd touch arrives
+
+↓
+
+Bearish rejection candle
+
+↓
+
+SELL
+
+* Downtrend confirmed (LH-LL sequence)
+* 2 prior TL touches
+* 3rd touch + bearish rejection candle
+* TL aligns with horizontal resistance
+* SL: above the 3rd touch candle high
+
+PROFIT TARGETS
+
+TP1
+
+1R target (risk amount replicated as reward)
+
+30%
+
+Move SL → BE
+
+TP2
+
+Previous swing high/low
+
+40%
+
+Trail SL
+
+TP3
+
+External liquidity pool (HTF level)
+
+30%
+
+Close final
+
+**PB-2 · Support → Resistance Flip:** When a resistance level is broken with conviction, it becomes support on the retest (and vice versa). This is the structural memory of institutional order flow at that price. Common in equities, indices, and trending crypto.
+
+LONG — RESISTANCE BECOMES SUPPORT
+
+Resistance level tested multiple times
+
+↓
+
+Bullish BOS — close above resistance
+
+↓
+
+Price runs above
+
+↓
+
+Retest of former resistance (now support)
+
+↓
+
+Bullish rejection from new support
+
+↓
+
+BUY
+
+* Resistance tested 2+ times before break
+* Clean BOS (not just a wick — close above)
+* Retest holds as support
+* FVG or OB at the retest zone (extra confluence)
+* SL: below the flip zone
+
+SHORT — SUPPORT BECOMES RESISTANCE
+
+Support level tested multiple times
+
+↓
+
+Bearish BOS — close below support
+
+↓
+
+Price drops
+
+↓
+
+Retest of former support (now resistance)
+
+↓
+
+Bearish rejection from new resistance
+
+↓
+
+SELL
+
+* Support tested 2+ times before break
+* Clean close below support (not just wick)
+* Retest holds as resistance
+* Look for OB or FVG at the flip zone
+* SL: above the flip zone
+
+**SMC Upgrade:** Use an Order Block at the flip zone instead of the raw price level. The last candle before the BOS displacement is the OB — and that's also where the flip zone sits. This gives a tighter stop and higher confluence.
+
+**PB-3 · BOS Pullback Continuation:** After a confirmed Break of Structure, institutions rarely reverse immediately. Price retraces, collects liquidity, and continues in the BOS direction. No Order Block required — this is pure structure play. High win rate in trend.
+
+LONG — BULLISH BOS PULLBACK
+
+HL → HH (existing structure)
+
+↓
+
+Bullish BOS — close above prev HH
+
+↓
+
+Retracement begins
+
+↓
+
+Pullback to prev BOS level or 50% retrace
+
+↓
+
+HL forms — structure holds
+
+↓
+
+BUY at new HL
+
+* Bullish BOS confirmed (full candle close)
+* Pullback does NOT break below the BOS origin
+* New HL forms on LTF (structure intact)
+* OB or FVG at pullback zone strengthens entry
+* SL: below the new HL
+
+SHORT — BEARISH BOS PULLBACK
+
+LH → LL (existing structure)
+
+↓
+
+Bearish BOS — close below prev LL
+
+↓
+
+Retracement begins
+
+↓
+
+Pullback to prev BOS level or 50% retrace
+
+↓
+
+LH forms — structure holds bearish
+
+↓
+
+SELL at new LH
+
+* Bearish BOS confirmed (full candle close)
+* Pullback does NOT breach above BOS origin
+* New LH forms on LTF
+* Bearish OB or FVG at pullback zone
+* SL: above the new LH
+
+**Key distinction from PB-5:** PB-3 does not require an Order Block. Entry is at the structural level (BOS origin or 50% of the impulsive move). PB-5 waits specifically for an OB retest. PB-3 will get you in earlier but with a slightly wider stop.
+
+**PB-4 · CHoCH Reversal:** The Change of Character is the earliest signal that the trend is shifting — earlier than BOS. Higher risk because you're catching the turn before it's confirmed. Highest RR potential because you're early. Best used when HTF bias is also reversing.
+
+LONG — BULLISH CHoCH
+
+Bearish trend: LH → LL sequence
+
+↓
+
+New LL printed
+
+↓
+
+Price aggressively breaks previous LH
+
+↓
+
+Bullish CHoCH confirmed
+
+↓
+
+Retrace or OB forms
+
+↓
+
+BUY — first structural shift entry
+
+* Prior bearish trend (LH-LL chain)
+* LH broken on the close — not just a wick
+* CHoCH candle is aggressive (displacement)
+* HTF also showing signs of bullish reversal
+* SL: below the LL that preceded CHoCH
+* Risk: 30% smaller size than OB setups (higher failure rate)
+
+SHORT — BEARISH CHoCH
+
+Bullish trend: HL → HH sequence
+
+↓
+
+New HH printed
+
+↓
+
+Price aggressively breaks previous HL
+
+↓
+
+Bearish CHoCH confirmed
+
+↓
+
+Retrace or OB forms
+
+↓
+
+SELL — first structural shift entry
+
+* Prior bullish trend (HL-HH chain)
+* HL broken on the close (not just wick)
+* CHoCH candle is aggressive
+* HTF showing distribution or reversal signs
+* SL: above the HH that preceded CHoCH
+* Risk: early — use smaller size vs BOS setups
+
+**Risk Note:** CHoCH alone is not BOS. Price can CHoCH and then reverse again — returning to the original trend. This is the "trap" that catches early reversal traders. Always use reduced position size on CHoCH-only entries unless HTF also aligns.
+
+**PB-5 · Order Block Retest:** The institutional entry zone. After displacement causes a BOS, the last opposing candle (OB) before that displacement is where institutions placed their initial orders. Price returns to fill remaining orders — your entry.
+
+LONG — BULLISH OB RETEST
+
+Bullish displacement candle(s)
+
+↓
+
+Bullish BOS — prior HH broken
+
+↓
+
+Last bearish candle before displacement = Bullish OB
+
+↓
+
+Price retraces
+
+↓
+
+Price enters OB zone (50–100%)
+
+↓
+
+LTF bullish confirmation
+
+↓
+
+BUY
+
+* Displacement created a clear BOS
+* OB is the last bearish candle BEFORE displacement
+* OB caused the BOS (no orphan OBs)
+* Price enters 50–100% of OB body
+* FVG above OB = extra confluence
+* SL: below the OB low (never inside)
+
+SHORT — BEARISH OB RETEST
+
+Bearish displacement candle(s)
+
+↓
+
+Bearish BOS — prior LL broken
+
+↓
+
+Last bullish candle before displacement = Bearish OB
+
+↓
+
+Price retraces upward
+
+↓
+
+Price enters OB zone (50–100%)
+
+↓
+
+LTF bearish confirmation
+
+↓
+
+SELL
+
+* Bearish displacement → BOS
+* Last bullish candle before displacement = OB
+* OB is the cause of BOS — not just any candle
+* Price retraces into OB (50–100%)
+* OB in Premium zone (above 50% of range)
+* SL: above OB high
+
+**Critical Rule:** An OB is only valid if it directly caused the BOS. If you can remove the OB candle and the BOS still happened, it's not a real OB — it's just a candle. The causal link between OB and BOS is what makes it institutional.
+
+**PB-6 · Liquidity Sweep Reversal:** The most popular SMC model. Stops are hunted, then price aggressively reverses. No OB required — the CHoCH after the sweep is the entry trigger. Works at swing lows (longs) and swing highs (shorts). Pairs naturally with PB-5 when an OB is also present.
+
+LONG — SELL-SIDE SWEEP REVERSAL
+
+Support or swing low forms
+
+↓
+
+Stop-loss cluster builds below
+
+↓
+
+Price sweeps below — SSL taken
+
+↓
+
+Aggressive reclaim above the low
+
+↓
+
+Bullish CHoCH — LH broken
+
+↓
+
+BUY at CHoCH close or retrace
+
+* Clear swing low with stops clustered below
+* SSL swept (wick or full candle below)
+* Price aggressively reclaims the level
+* Bullish CHoCH confirmed
+* Enter on CHoCH candle close or wait for retrace to OB
+* SL: below the sweep low
+
+SHORT — BUY-SIDE SWEEP REVERSAL
+
+Resistance or swing high forms
+
+↓
+
+Buy-stop cluster builds above
+
+↓
+
+Price sweeps above — BSL taken
+
+↓
+
+Aggressive rejection back below
+
+↓
+
+Bearish CHoCH — HL broken
+
+↓
+
+SELL at CHoCH close or OB retest
+
+* Clear swing high with buy-stops above
+* BSL swept (wick or candle above level)
+* Aggressive rejection back below
+* Bearish CHoCH confirmed
+* Enter on CHoCH close or wait for OB retest
+* SL: above the sweep high
+
+**PB-6 vs PB-5:** PB-6 gets you in earlier (at CHoCH) but with a wider stop to the sweep extreme. PB-5 gets you in later (OB retest) with a tighter stop. PB-7 combines both for the highest-probability entry. Choose based on your RR requirements.
+
+**PB-7 · Liquidity Sweep + OB (The Core A Setup):** The setup most profitable ICT/SMC traders actually execute. The sweep provides directional confirmation, the BOS confirms structure, and the OB provides precision entry. Combining all three filters dramatically reduces false entries.
+
+LONG — SWEEP + BOS + OB
+
+Sell-side liquidity swept
+
+↓
+
+Strong bullish rejection
 
 ↓
 
 Bullish CHoCH
-```
 
-Then:
+↓
 
-```
-Close above HH
+Bullish BOS confirmed
+
+↓
+
+Bullish OB identified (last bearish before BOS)
+
+↓
+
+Price retraces to OB
+
+↓
+
+LTF confirmation
+
+↓
+
+BUY
+
+* SSL swept with conviction
+* Bullish CHoCH after sweep
+* Bullish BOS (structure fully shifted)
+* OB identified and retest occurs
+* OB in Discount zone (below 50%)
+* FVG inside OB = tighter stop
+* SL: below sweep low or OB low
+
+SHORT — SWEEP + BOS + OB
+
+Buy-side liquidity swept
+
+↓
+
+Strong bearish rejection
+
+↓
+
+Bearish CHoCH
+
+↓
+
+Bearish BOS confirmed
+
+↓
+
+Bearish OB identified (last bullish before BOS)
+
+↓
+
+Price retraces to OB
+
+↓
+
+LTF bearish confirmation
+
+↓
+
+SELL
+
+* BSL swept with conviction
+* Bearish CHoCH after sweep
+* Bearish BOS confirmed
+* Bearish OB retest occurs
+* OB in Premium zone (above 50%)
+* FVG inside OB for tighter stop
+* SL: above sweep high or OB high
+
+WHY PB-7 IS THE HIGHEST PROBABILITY BASE SETUP
+
+**Sweep confirms intent**
+The liquidity raid tells you smart money was active at this level. Retail stops were taken — the fuel for the next move.
+
+**BOS confirms direction**
+Structure shifted. The trend has changed on this timeframe. You are no longer fading the trend.
+
+**OB provides precision**
+The exact candle where institutions entered. Tight stop. Clear invalidation. Measurable RR.
+
+**PB-8 · Full Confluence A+ Setup:** Every filter stacked simultaneously. This is the rarest setup but offers 1:5–1:10 RR. This is the setup you wait for, size up on, and execute with maximum discipline. All prior playbooks collapse into this one at peak conditions.
+
+LONG — FULL A+ STACK
+
+HTF Bullish (Daily/Weekly trend)
+
+↓
+
+Ascending trendline — 3rd touch
+
+↓
+
+3rd touch aligns with support zone
+
+↓
+
+Sell-side liquidity swept (SSL hunt)
+
+↓
+
+Strong Low formed
+
+↓
+
+Bullish CHoCH
 
 ↓
 
 Bullish BOS
-```
-
-Checklist:
-
-□ CHoCH
-
-□ BOS
-
----
-
-### STEP 7 – BULLISH ORDER BLOCK
-
-Bullish OB:
-
-Last bearish candle before displacement.
-
-Example:
-
-```
-Red Candle
 
 ↓
 
-Explosive Move Up
+Bullish OB at Discount (OTE 62–79%)
 
 ↓
 
-BOS
-```
+OB retest + LTF confirmation
 
-The red candle becomes OB.
+↓
 
-Checklist:
+BUY — Maximum size
 
-□ OB caused BOS.
+SHORT — FULL A+ STACK
 
----
+HTF Bearish (Daily/Weekly trend)
 
-### STEP 8 – RETURN TO OB
+↓
 
-Price retraces.
+Descending trendline — 3rd touch
 
-Returns into:
+↓
 
-Bullish OB.
+3rd touch aligns with resistance zone
 
-Preferred:
+↓
 
-50–100% mitigation.
+Buy-side liquidity swept (BSL hunt)
 
-Checklist:
+↓
 
-□ OB retest.
+Strong High formed
 
----
+↓
 
-### STEP 9 – LONG ENTRY
+Bearish CHoCH
 
-Entry:
+↓
 
-Inside bullish OB.
+Bearish BOS
 
-Confirmation:
+↓
 
-□ Bullish engulfing
+Bearish OB at Premium (OTE 62–79%)
 
-OR
+↓
 
-□ Rejection wick
+OB retest + LTF confirmation
 
-OR
+↓
 
-□ Lower timeframe CHoCH.
+SELL — Maximum size
 
-Execute CALL/LONG.
+## A+ Checklist — All 12 filters
 
----
+If even one is missing, it drops to a B setup. Reduce size accordingly.
 
-### LONG STOP LOSS
+01HTF trend confirmed (Daily/Weekly bias)
 
-Place below:
+02Trendline 3rd touch reached
 
-1. Sweep low.
-2. Strong low.
-3. Bullish OB low.
+03Horizontal S/R at the same level
 
-Use whichever is lower.
+04Liquidity built (2+ S/R tests, EQH/EQL)
 
-Never place SL inside OB.
+05Liquidity swept (SSL or BSL taken)
 
----
+06Strong High or Low from sweep
 
-### LONG TARGETS
+07CHoCH confirmed
 
-TP1:
+08BOS confirmed
 
-Nearest liquidity.
+09OB caused the BOS
 
-Usually:
+10OB in correct Premium/Discount zone
 
-Previous internal HH.
+11OB in OTE zone (62–79% fib)
 
-Take:
+12LTF confirmation at OB + R:R ≥ 1:5
 
-30%.
+## ▲ Long Setups
 
-Move SL → BE.
-
----
-
-TP2:
-
-External liquidity.
-
-Previous major HH.
-
-Take:
-
-40%.
-
-Trail remainder.
-
----
-
-TP3:
-
-HTF target.
-
-Examples:
-
-Daily highs.
-
-Weekly highs.
-
-Take final:
-
-30%.
-
----
-
-### LONG FLOW SUMMARY
+Bullish institutional playbooks — Playbook A (core) + upgraded entry confirmation
 
 Bull Trend
 
-↓
+→
 
-Trendline
+3rd TL Touch
 
-↓
+→
 
-3rd Touch
+SSL Hunt
 
-↓
-
-Support
-
-↓
-
-SL Hunt
-
-↓
+→
 
 Strong Low
 
-↓
+→
 
 CHoCH
 
-↓
+→
 
 BOS
 
-↓
+→
 
 Bullish OB
 
-↓
+→
 
-OB Retest
+Retrace
 
-↓
+→
 
 LONG
 
-↓
+01
 
-TP1 TP2 TP3
+Bullish Trend Identification
 
----
+REQUIRED
 
-## PART III – SHORT PLAYBOOK
+Confirm HTF bias is bullish: Higher Highs + Higher Lows on the analysis timeframe. If no HL→HH→HL→HH sequence, no trade.
 
-### SHORT SETUP FLOW
+* Higher highs exist on HTF
+* Higher lows exist on HTF
+* Daily / Weekly bias confirmed bullish
+* Price is in the Discount zone (below 50% of dealing range)
 
-```
-Bearish Trend
-↓
+02
 
-Bearish Trendline
-↓
+Trendline Formation — 3rd Touch
 
-3rd Touch
-↓
+TIMING
 
-Resistance Forms
+Draw ascending trendline connecting HL1 → HL2. The 3rd touch is the entry opportunity zone. Only valid after minimum 2 confirmed touches.
 
-↓
+* At least 2 prior touches
+* 3rd touch has arrived
+* TL coincides with a horizontal support
 
-Resistance Holds
+03
 
-↓
+Support Stacks + Liquidity Builds
 
-Smart Money Sweeps Highs
+ACCUMULATION
 
-↓
+Support is tested 2–3 times. Each bounce adds buy-side confirmation but also accumulates sell-side stop orders below the lows. Smart money needs that liquidity to fill large buy positions.
 
-Strong High Forms
+* 2+ bounces from the same support level
+* Equal lows forming (EQL) — liquidity magnet
+* Retail running stops just below
 
-↓
+04
 
-Bearish CHoCH / BOS
+Sell-Side Liquidity Sweep (SL Hunt)
 
-↓
+TRIGGER
 
-Bearish Order Block Forms
+Price breaks below support, triggers retail stop-losses, then violently reclaims above. This is the displacement candle that creates the Strong Low. The sweep must be swift — a wick or 1–2 candles, not a sustained break.
 
-↓
+* Price wicks below support / EQL
+* Price reclaims above support within 1–3 candles
+* High volume on the sweep candle
+* No continuation below after reclaim
 
-Price Returns to Bearish OB
+05
 
-↓
+Strong Low + Bullish CHoCH
 
-SHORT ENTRY
+STRUCTURE
 
-↓
+The sweep low becomes the Strong Low (Protected Low). Price must then break a previous Lower High to confirm a bullish Change of Character. This is the first signal that the LTF trend is reversing.
 
-Expansion Lower
-```
+* Aggressive bullish candle from the sweep low
+* Previous LH broken (Bullish CHoCH)
+* No retest of the sweep low after CHoCH
 
----
+06
 
-### STEP 1 – BEARISH TREND
+Bullish BOS + Order Block Formation
 
-Need:
+CONFIRMATION
 
-```
-LH → LL → LH → LL
-```
+After CHoCH, the next move closes above a swing high = Bullish BOS. The last bearish candle before this displacement becomes the Bullish Order Block. This is the exact zone institutions are looking to fill remaining longs on retrace.
 
-Checklist:
+* Bullish BOS confirmed (close above prev HH)
+* Last bearish candle before displacement identified as OB
+* OB caused the BOS (no BOS without the OB candle)
+* Check for FVG inside or above the OB (extra confluence)
 
-□ Lower highs.
+07
 
-□ Lower lows.
+Return to OB + LTF Confirmation → ENTRY
 
----
+EXECUTION
 
-### STEP 2 – TRENDLINE
+Price retraces into the Bullish OB (50–100% of the OB body). Drop to LTF (5m/15m) for entry confirmation. Enter on: bullish engulfing, rejection wick, or LTF CHoCH.
 
-Connect:
+* Price inside OB zone (50–100% mitigation)
+* At least one LTF confirmation candle
+* OB at Premium/Discount boundary (ideally at Discount)
+* OTE zone 62–79% fib of last swing — extra confluence
 
-```
-LH1
+STOP LOSS PLACEMENT
 
-↓
+* Below the SSL sweep low
+* Below the Strong Low
+* Below the Bullish OB low
+* Use whichever is lowest
+* NEVER place SL inside the OB
 
-LH2
-```
+PROFIT TARGETS
 
-3rd touch becomes sell zone.
+TP1
 
-Example:
+Internal liquidity / prev Internal HH
 
-```
-LH1
+30%
 
- \
+Move SL → BE
 
-  LH2
+TP2
 
-   \
+External liquidity / Major Swing HH
 
-    LH3 ← SELL
+40%
 
-     \
+Trail remainder
 
-      LL
-```
+TP3
 
-Checklist:
+HTF target — Daily/Weekly Highs
 
-□ 3rd touch.
+30%
 
----
+Close final
 
-### STEP 3 – RESISTANCE
+## ▼ Short Setups
 
-Resistance tested.
-
-2–3 reactions.
-
-Checklist:
-
-□ Strong resistance.
-
----
-
-### STEP 4 – BUY-SIDE LIQUIDITY SWEEP
-
-Price:
-
-```
-Breaks resistance
-
-↓
-
-Triggers buy stops
-
-↓
-
-Rejects back below
-```
-
-Checklist:
-
-□ Buy-side liquidity taken.
-
----
-
-### STEP 5 – STRONG HIGH
-
-Strong High:
-
-Creates displacement down.
-
-Definition:
-
-```
-High
-
-↓
-
-Aggressive selloff
-
-↓
-
-Structure break
-```
-
-Protected High.
-
-Checklist:
-
-□ Strong High formed.
-
----
-
-### STEP 6 – BEARISH CHoCH / BOS
-
-Need:
-
-```
-HL
-
-↓
-
-HH
-
-↓
-
-Break HL
-
-↓
-
-Bearish CHoCH
-```
-
-Then:
-
-```
-Close below LL
-
-↓
-
-Bearish BOS
-```
-
-Checklist:
-
-□ CHoCH
-
-□ BOS
-
----
-
-### STEP 7 – BEARISH ORDER BLOCK
-
-Bearish OB:
-
-Last bullish candle before selloff.
-
-Example:
-
-```
-Green Candle
-
-↓
-
-Explosive Move Down
-
-↓
-
-BOS
-```
-
-Checklist:
-
-□ OB caused BOS.
-
----
-
-### STEP 8 – RETURN TO OB
-
-Price retraces.
-
-Returns into bearish OB.
-
-Checklist:
-
-□ OB mitigation.
-
----
-
-### STEP 9 – SHORT ENTRY
-
-Entry inside OB.
-
-Confirmation:
-
-□ Bearish engulfing
-
-OR
-
-□ Rejection wick
-
-OR
-
-□ Lower timeframe CHoCH.
-
-Execute PUT/SHORT.
-
----
-
-### SHORT STOP LOSS
-
-Place above:
-
-1. Sweep high.
-2. Strong High.
-3. Bearish OB high.
-
-Use highest level.
-
-Never place SL inside OB.
-
----
-
-### SHORT TARGETS
-
-TP1:
-
-Nearest sell-side liquidity.
-
-Take:
-
-30%.
-
-Move SL → BE.
-
----
-
-TP2:
-
-Previous LL.
-
-Take:
-
-40%.
-
-Trail remainder.
-
----
-
-TP3:
-
-HTF external liquidity.
-
-Examples:
-
-Daily lows.
-
-Weekly lows.
-
-Take:
-
-30%.
-
----
-
-### SHORT FLOW SUMMARY
+Bearish institutional playbooks — Playbook B (core) + upgraded entry confirmation
 
 Bear Trend
 
-↓
+→
 
-Trendline
+3rd TL Touch
 
-↓
+→
 
-3rd Touch
+BSL Sweep
 
-↓
-
-Resistance
-
-↓
-
-SL Hunt
-
-↓
+→
 
 Strong High
 
-↓
+→
 
 CHoCH
 
-↓
+→
 
 BOS
 
-↓
+→
 
 Bearish OB
 
-↓
+→
 
-OB Retest
+Retrace
 
-↓
+→
 
 SHORT
 
-↓
+01
 
-TP1 TP2 TP3
+Bearish Trend Identification
 
----
+REQUIRED
 
-## GOLDEN RULES
+HTF bias must be bearish: LH → LL → LH → LL sequence confirmed. Price must be in the Premium zone (above 50% of dealing range).
 
-Take the trade only if:
+* Lower highs + Lower lows on HTF
+* Daily / Weekly bias bearish
+* Price is in Premium zone (above equilibrium)
 
-□ Trend exists.
+02
 
-□ 3rd touch aligns.
+Descending Trendline — 3rd Touch
 
-□ Support/Resistance exists.
+TIMING
 
-□ Liquidity sweep occurs.
+Connect LH1 → LH2 to form descending TL. The 3rd touch is the short entry opportunity zone. TL must align with a horizontal resistance level for maximum confluence.
 
-□ Strong High/Low forms.
+* 2 prior LH touches confirmed
+* 3rd touch has arrived
+* TL coincides with horizontal resistance
 
-□ CHoCH confirms.
+03
 
-□ BOS confirms.
+Resistance Holds + Buy-Side Liquidity Builds
 
-□ OB causes BOS.
+DISTRIBUTION
 
-□ OB retest happens.
+Multiple rejections at resistance create buy-stop clusters above the highs — Equal Highs (EQH). Retail traders place stops above these levels, which is exactly what smart money needs to distribute short positions.
 
-□ Risk:Reward ≥ 1:3.
+* 2+ rejections at resistance
+* Equal highs forming (EQH)
+* Retail breakout traders entering on the sweep
 
-If any major piece is missing:
+04
 
-NO TRADE.
+Buy-Side Liquidity Sweep (Stop Hunt)
 
-The best SMC trades are not the first touch of support/resistance—they are the retest after smart money has taken liquidity and revealed its true direction.
+TRIGGER
 
-I dug through recent SMC, price action, trendline, and liquidity resources, and something interesting emerged:
+Price spikes above resistance / EQH, triggers buy-stop orders and breakout entries, then rejects violently back below. This is the manipulation move. Retail is now trapped long. Smart money is filled short.
 
-> **Nobody teaches a single complete playbook.**
->
-> Each source teaches one piece of the puzzle.
+* Price wicks above resistance / EQH
+* Sharp rejection candle back below
+* Large wick on sweep candle (rejection visible)
+* Volume spike on the sweep
 
-After combining them, you can derive about **8 major playbooks** that cover almost all institutional-style discretionary trading.
+05
 
----
+Strong High + Bearish CHoCH
 
-# The Institutional Trading Playbook Library
+STRUCTURE
 
-Think of them as Lego blocks.
+The sweep high becomes the Strong High (Protected High). The following aggressive bearish displacement must break a previous Higher Low to confirm a Bearish Change of Character — first structural signal of reversal.
 
-Most profitable traders repeatedly execute only 1–3 of these.
+* Aggressive bearish candle from sweep high
+* Previous HL broken (Bearish CHoCH)
+* No retrace to sweep high after CHoCH
 
----
+06
 
-# 1. Trendline 3rd Touch Continuation Playbook
+Bearish BOS + Order Block Formation
 
-Origin:
+CONFIRMATION
 
-* Classic price action
-* Trendline traders
-* Support/resistance traders
+Close below a swing low confirms Bearish BOS. The last bullish candle before the displacement candle becomes the Bearish Order Block. Check for FVG nested inside or below the OB for added precision.
 
-Setup:
+* Bearish BOS confirmed (close below prev LL)
+* Last bullish candle before displacement = Bearish OB
+* FVG created during the displacement move
+* OB caused the BOS
 
-```text
-Trend
+07
 
-↓
+Return to Bearish OB → ENTRY
 
-Trendline
+EXECUTION
 
-↓
+Price retraces into Bearish OB (50–100% of OB body). Enter on LTF confirmation: bearish engulfing, rejection wick, or LTF CHoCH. OB must be in Premium zone for full setup validity.
 
-1st touch
+* Price inside Bearish OB (50–100% mitigation)
+* LTF bearish confirmation candle
+* OB at Premium zone of dealing range
+* OTE 62–79% fib — OB aligns with retrace
 
-↓
+STOP LOSS PLACEMENT
 
-2nd touch
+* Above the BSL sweep high
+* Above the Strong High
+* Above the Bearish OB high
+* Use highest of the three
+* NEVER place SL inside the OB
 
-↓
+PROFIT TARGETS
 
-3rd touch
+TP1
 
-↓
+Internal liquidity / prev Internal LL
 
-Continuation
-```
+30%
 
-Long:
+Move SL → BE
 
-```text
-HH → HL
+TP2
 
-↓
+External liquidity / Major Swing LL
 
-Trendline through HLs
+40%
 
-↓
+Trail remainder
 
-3rd touch
+TP3
 
-↓
+HTF target — Daily/Weekly Lows
 
-Bullish candle
+30%
 
-↓
+Close final
 
-Buy
-```
+## ◆ Advanced Playbooks
 
-Short:
+Playbooks C–F: FVG Breaker, AMD Session, Silver Bullet, and The Unicorn
 
-```text
-LL → LH
+C · FVG + Breaker
+D · AMD Session
+E · Silver Bullet
+F · Unicorn 🦄
 
-↓
+**Playbook C — FVG + Breaker Block:** When a former Order Block is broken with a full candle close through it, it flips into a Breaker Block. If a Fair Value Gap is nested inside the Breaker, the zone becomes extremely high-confluence for re-entry in the new direction.
 
-Trendline through LHs
+OB exists
 
-↓
+→
 
-3rd touch
+OB fails / broken
 
-↓
+→
 
-Bearish rejection
+New HH or LL past structure
 
-↓
+→
 
-Sell
-```
+Breaker formed
 
-TP:
+→
 
-* TP1 = 1R
-* TP2 = Previous swing
-* TP3 = External liquidity
+FVG inside Breaker
 
-This is one of the oldest price-action models. ([tradeciety.com][1])
+→
 
----
+Retrace to FVG mid
 
-# 2. Support → Resistance Flip Playbook
+→
 
-Origin:
+ENTRY
 
-* Classical technical analysis
+BREAKER BLOCK RULES
 
-Setup:
+* Original OB confirmed, then fully broken
+* Liquidity swept on the break (new HH or LL)
+* Price must retrace BACK into the old OB zone
+* LTF CHoCH or FVG inside the zone for entry trigger
+* SL: beyond the Breaker's outer edge
 
-```text
-Resistance
+FVG INSIDE BREAKER — EXECUTION
 
-↓
+* Identify 3-candle FVG within the Breaker zone
+* Enter at FVG consequent encroachment (50% of FVG)
+* Dual pressure: Breaker demand + FVG fill magnet
+* Target: next draw on liquidity (opposite side)
+* R:R minimum 1:3 — tighter SL from FVG
 
-Break
+**Why it works:** The Breaker carries institutional demand/supply from the original OB zone. The FVG marks where price moved too fast and left unfilled orders. When price retraces, it faces two simultaneous pressures — creating faster, cleaner reactions than either concept alone.
 
-↓
+**Playbook D — AMD (Accumulation · Manipulation · Distribution):** The ICT Power of 3 model. Markets cycle through three intraday phases. The Judas Swing is the manipulation — a false move that sweeps liquidity before the true directional expansion.
 
-Retest
+Asia Range
 
-↓
+→
 
-Support
+London Sweep (Judas)
 
-↓
-
-Continuation
-```
-
-Long:
-
-```text
-Resistance
-
-↓
-
-BOS
-
-↓
-
-Retest
-
-↓
-
-Buy
-```
-
-Short:
-
-```text
-Support
-
-↓
-
-Break
-
-↓
-
-Retest
-
-↓
-
-Resistance
-
-↓
-
-Sell
-```
-
-Very common in equities and indices. ([Investopedia][2])
-
----
-
-# 3. Liquidity Sweep Reversal Playbook
-
-Origin:
-
-* ICT / SMC
-
-The most popular SMC model.
-
-Long:
-
-```text
-Sell-side liquidity
-
-↓
-
-Stops hunted
-
-↓
-
-Reclaim
-
-↓
-
-Bullish CHoCH
-
-↓
-
-Buy
-```
-
-Short:
-
-```text
-Buy-side liquidity
-
-↓
-
-Stops hunted
-
-↓
-
-Reject
-
-↓
-
-Bearish CHoCH
-
-↓
-
-Sell
-```
-
-This model appears repeatedly in modern SMC literature. ([Trading Strategy Guides][3])
-
----
-
-# 4. BOS Pullback Continuation Playbook
-
-Origin:
-
-* Market structure traders
-
-Long:
-
-```text
-HL
-
-↓
-
-HH
-
-↓
-
-Bullish BOS
-
-↓
-
-Retracement
-
-↓
-
-Buy
-```
-
-Short:
-
-```text
-LH
-
-↓
-
-LL
-
-↓
-
-Bearish BOS
-
-↓
-
-Pullback
-
-↓
-
-Sell
-```
-
-No OB needed.
-
-Pure structure.
-
----
-
-# 5. CHoCH Reversal Playbook
-
-Origin:
-
-* ICT
-
-Long:
-
-```text
-Bearish trend
-
-↓
-
-LL
-
-↓
-
-Break LH
-
-↓
-
-Bullish CHoCH
-
-↓
-
-Buy
-```
-
-Short:
-
-```text
-Bullish trend
-
-↓
-
-HH
-
-↓
-
-Break HL
-
-↓
-
-Bearish CHoCH
-
-↓
-
-Sell
-```
-
-Earliest reversal signal.
-
-Higher risk.
-
----
-
-# 6. Order Block Retest Playbook
-
-Origin:
-
-* SMC
-
-Long:
-
-```text
-Bullish displacement
-
-↓
-
-Bullish BOS
-
-↓
-
-Bullish OB identified
-
-↓
-
-Return to OB
-
-↓
-
-Buy
-```
-
-Short:
-
-```text
-Bearish displacement
-
-↓
-
-Bearish BOS
-
-↓
-
-Bearish OB
-
-↓
-
-Retest
-
-↓
-
-Sell
-```
-
-Important:
-
-> OB is valid only if it caused BOS/CHoCH.
-
-Otherwise it's just a candle. ([TradingView][4])
-
----
-
-# 7. Liquidity Sweep + OB Playbook
-
-Probably the highest-probability SMC setup.
-
-Long:
-
-```text
-Sell-side sweep
-
-↓
-
-Strong rejection
-
-↓
-
-Bullish BOS
-
-↓
-
-Bullish OB
-
-↓
-
-OB retest
-
-↓
-
-Buy
-```
-
-Short:
-
-```text
-Buy-side sweep
-
-↓
-
-Bearish rejection
-
-↓
-
-Bearish BOS
-
-↓
-
-Bearish OB
-
-↓
-
-Retest
-
-↓
-
-Sell
-```
-
-This is what most profitable ICT traders actually execute.
-
----
-
-# 8. Full Confluence "A+" Playbook
-
-Derived from combining all sources.
-
-Long:
-
-```text
-HTF Bullish
-
-↓
-
-Trendline support
-
-↓
-
-3rd touch
-
-↓
-
-Support zone
-
-↓
-
-Sell-side sweep
-
-↓
-
-Strong low
-
-↓
-
-Bullish CHoCH
-
-↓
-
-Bullish BOS
-
-↓
-
-Bullish OB
-
-↓
-
-OB retest
-
-↓
-
-Buy
-```
-
-Short:
-
-```text
-HTF Bearish
-
-↓
-
-Trendline resistance
-
-↓
-
-3rd touch
-
-↓
-
-Resistance zone
-
-↓
-
-Buy-side sweep
-
-↓
-
-Strong high
-
-↓
-
-Bearish CHoCH
-
-↓
-
-Bearish BOS
-
-↓
-
-Bearish OB
-
-↓
-
-OB retest
-
-↓
-
-Sell
-```
-
-This is essentially your custom framework.
-
----
-
-# Ranking by Probability
-
-| Playbook                 |     Win Rate | RR Potential | Complexity |
-| ------------------------ | -----------: | -----------: | ---------: |
-| Trendline 3rd Touch      |       Medium |      1:2–1:3 |        Low |
-| S/R Flip                 |       Medium |      1:2–1:4 |        Low |
-| BOS Pullback             |         High |      1:2–1:4 |     Medium |
-| CHoCH Reversal           |       Medium |      1:3–1:6 |     Medium |
-| Order Block Retest       |         High |      1:3–1:5 |     Medium |
-| Liquidity Sweep Reversal |         High |      1:3–1:6 |     Medium |
-| Sweep + OB               |    Very High |      1:4–1:8 |       High |
-| Full A+ Confluence       | Fewer trades |     1:5–1:10 |  Very High |
-
----
-
-# What Experienced Traders Eventually Realize
-
-After studying ICT, Wyckoff, SMC, trendlines, support/resistance, and price action:
-
-```text
-Liquidity
-
-↓
-
-Structure
-
-↓
+→
 
 Displacement
 
+→
+
+FVG or OB formed
+
+→
+
+NY Retrace
+
+→
+
+ENTRY
+
+→
+
+NY Distribution
+
+ACCUMULATION
+
+### Asia Range
+
+Tight consolidation. No trade. Mark the Asia High and Asia Low — these become the liquidity targets for London.
+
+* Mark Asia H and Asia L
+* Note the midpoint
+* No entries during this phase
+
+MANIPULATION
+
+### London Judas Swing
+
+London sweeps one side of the Asia range (stop hunt), then reverses. The false move traps retail breakout traders. Displacement follows.
+
+* Asia High or Low swept
+* Sharp reversal (displacement)
+* FVG created in displacement
+
+DISTRIBUTION
+
+### NY Expansion
+
+True directional move. Enter on the NY retrace into the London FVG or OB. Target: opposite extreme of the Asia range and beyond.
+
+* Entry at London FVG retest
+* TP1: Asia High or Low (opposite)
+* TP2: Prior day high/low
+
+**Crypto Adaptation:** Crypto has no official sessions, but the AMD model still applies using approximate time windows: Asian session (~00:00–08:00 UTC) = accumulation range; London (~08:00–12:00 UTC) = manipulation sweep; New York (~13:00–18:00 UTC) = distribution expansion. Bias from weekly/daily HTF still applies.
+
+**Playbook E — Silver Bullet (ICT):** A time-specific scalp setup that uses a 1-hour kill window to enter displacement FVGs. The setup demands prior AMD directional bias. Outside the window = no trade.
+
+AMD Bias Established
+
+→
+
+Enter Kill Window
+
+→
+
+Displacement Candle
+
+→
+
+FVG created
+
+→
+
+Retrace into FVG
+
+→
+
+ENTRY
+
+KILL WINDOWS (UTC)
+
+* London Open: 07:00–08:00 UTC
+* NY Open: 14:00–15:00 UTC
+* NY Mid-Session: 15:00–16:00 UTC
+* NO TRADE outside these windows
+* Displacement must occur WITHIN the window
+
+EXECUTION RULES
+
+* AMD direction must be clear before window opens
+* Aggressive displacement within 60-min window
+* FVG formed (gap between candle 1 and candle 3)
+* Enter at FVG consequent encroachment (50% midpoint)
+* SL beyond far edge of FVG
+* Target: next liquidity pool / opposite HTF level
+
+**Why it works:** Institutional desks execute large orders at the London and NY opens. These executions create directional displacement and leave imbalances (FVGs) that price is magnetized back toward. The tight time constraint eliminates noise — the setup is only valid when institutional timing aligns.
+
+**Playbook F — The Unicorn 🦄:** Triple confluence: Breaker Block + FVG nested inside + HTF Order Block alignment. Appears approximately 2× per week. When it shows up: take it. The probability is extremely high.
+
+HTF OB identified
+
+→
+
+LTF OB fails → Breaker
+
+→
+
+FVG inside Breaker
+
+→
+
+Breaker in HTF OB zone
+
+→
+
+Retrace to FVG inside Breaker
+
+→
+
+UNICORN ENTRY
+
+LAYER 1 — HTF OB
+
+### Higher TF Order Block
+
+The anchor. A valid, untested HTF Order Block (Daily or 4H) that provides the macro draw on price. This determines the direction and target.
+
+* Valid HTF OB (untested)
+* Caused a previous BOS
+* Located in Premium (short) or Discount (long)
+
+LAYER 2 — BREAKER
+
+### LTF Breaker Block
+
+A LTF OB that was broken, creating a Breaker. This Breaker must sit inside or align with the HTF OB zone. Two levels pointing to the same zone.
+
+* LTF OB fully broken with close
+* Liquidity swept on the break
+* Breaker overlaps HTF OB zone
+
+LAYER 3 — FVG
+
+### Fair Value Gap
+
+A FVG that sits inside the Breaker zone. This is the precision entry. Price retracing into the FVG inside the Breaker that aligns with HTF OB = maximum confluence.
+
+* FVG inside or overlapping the Breaker
+* Enter at FVG CE (50% midpoint)
+* SL: beyond Breaker outer edge
+
+**Warning:** Do not force this setup. The Unicorn appears rarely. All three layers must align independently — if you are reverse-engineering the chart to make them fit, you are in hindsight bias. Walk away.
+
+## ⚖ Premium & Discount Framework
+
+The OTE model — only buy in Discount, only sell in Premium. Never buy at equilibrium without confluence.
+
+PREMIUM ZONE
+100% (Swing High) → 51% → Sell only PD Arrays here
+
+═══════ EQUILIBRIUM — 50% ═══════
+No edge without additional confluence
+
+DISCOUNT ZONE
+49% → 0% (Swing Low) → Buy only PD Arrays here
+
+OTE FIBONACCI — LONG
+
+Draw Fib from Swing Low (100%) to Swing High (0%) after a confirmed Bullish BOS.
+
+* 62%–79% = OTE zone (Optimal Trade Entry)
+* 70.5% = ICT "sweet spot" if OB/FVG aligns
+* OB or FVG must exist within OTE zone
+* Entry: limit at 70.5% or OB midpoint
+* SL: below the Swing Low or OB low
+
+OTE FIBONACCI — SHORT
+
+Draw Fib from Swing High (100%) to Swing Low (0%) after a confirmed Bearish BOS.
+
+* 62%–79% retrace = OTE zone for short
+* 70.5% = sweet spot if Bearish OB/FVG aligns
+* OB or FVG in OTE = highest confluence short
+* Entry: limit at 70.5% or OB midpoint
+* SL: above the Swing High or OB high
+
+## 📊 PD Array Hierarchy
+
+Not all zones are equal — rank by strength before entering
+
+PD Array
+
+Definition
+
+Use for
+
+Strength
+
+Order Block
+
+Last opposing candle before displacement
+
+Primary entry
+
+★★★★★
+
+Breaker Block
+
+Failed OB that flipped direction
+
+Continuation entry
+
+★★★★★
+
+Fair Value Gap
+
+3-candle imbalance void
+
+Precision entry / TP zone
+
+★★★★☆
+
+Mitigation Block
+
+Zone where OB being filled on retrace
+
+Retest entry
+
+★★★☆☆
+
+Rejection Block
+
+Wick-heavy candle zone
+
+Counter-trend caution
+
+★★☆☆☆
+
+EQH / EQL
+
+Equal highs or lows (double top/bottom)
+
+Liquidity target
+
+Target only
+
+## ◈ Golden Rules
+
+Non-negotiable filters. If any core rule fails, NO TRADE.
+
+**The Core Principle:** You are not predicting. You are reading institutional footprints. Wait for liquidity to be taken. Wait for structure to shift. Wait for price to return to the zone. Then execute. Three patient conditions. One decisive entry.
+
+## Required Checklist — ALL must be present
+
+01HTF trend exists and is clear (HL-HH or LH-LL chain)
+
+023rd trendline touch aligns with S/R level
+
+03Support/Resistance held 2+ times (liquidity built)
+
+04Liquidity sweep occurred (SSL or BSL taken)
+
+05Strong High or Strong Low formed from sweep
+
+06CHoCH confirmed on LTF after sweep
+
+07BOS confirmed — structural trend shift
+
+08Order Block caused the BOS (no orphan OB)
+
+09Price retested the OB (50–100% mitigation)
+
+10Entry is in Discount (long) or Premium (short)
+
+11LTF confirmation candle present at entry
+
+12Risk:Reward ≥ 1:3 measured before entry
+
+## Invalidation Rules — If any trigger, exit or no-trade
+
+LONG INVALIDATED IF
+
+* Price closes below the Strong Low
+* Price closes below the Bullish OB low
+* HTF prints a new Lower Low after entry
+* SSL sweep is immediately followed by new LL (no CHoCH)
+* OB is tested more than twice (losing freshness)
+
+SHORT INVALIDATED IF
+
+* Price closes above the Strong High
+* Price closes above the Bearish OB high
+* HTF prints a new Higher High after entry
+* BSL sweep is immediately followed by new HH (no CHoCH)
+* OB tested more than twice
+
+## Confluence Stack — More is better
+
+Confluence Factor
+
+How to use it
+
+Impact on R:R
+
+Source
+
+OB + FVG overlap
+
+Enter at FVG CE inside OB
+
+Tighter SL
+
+ICT
+
+OTE Fibonacci
+
+OB/FVG at 62–79% retrace
+
+Higher win rate
+
+ICT
+
+Session Kill Zone
+
+Entry during London/NY open
+
+Speed to TP1
+
+ICT
+
+EQH/EQL as target
+
+TP1 at equal highs/lows pool
+
+Clear target
+
+SMC
+
+HTF S/R flip
+
+Old support = new OB resistance
+
+Strong zone
+
+SMC
+
+Premium/Discount
+
+Only enter OB in correct half
+
+Filter bad zones
+
+ICT
+
+This playbook combines SMC (trendline liquidity, OB, CHoCH/BOS) with ICT models (AMD, OTE, Silver Bullet, Unicorn, PD Arrays). The underlying thesis is identical: institutions move price to take liquidity, then execute large orders at imbalances, then distribute. Your edge comes from reading those footprints — not predicting the next candle. Discipline, patience, and a minimum 1:3 R:R will mathematically produce results over a large sample.
+
+Advanced Confluence · HTF Bias + ITF Sweep + LTF Entry
+
+# Multi-Timeframe Trading Playbook
+
+The ultimate confluenced execution model. By combining structures across three distinct timeframes, we align our trades with institutional momentum while entering at high-precision low-timeframe zones.
+
+## ⚡ Multi-Timeframe Alignment Pipeline
+
+Visualizing how HTF, ITF, and LTF states confluence to trigger a trade
+
+HTF Bias (15M / 1H)
+
+### Trend Classification
+
+Enforces directional bias. We only look for LONGS if HTF is Bullish (HL-HH chain), or SHORTS if HTF is Bearish (LH-LL chain).
+
 ↓
 
-Retest
-
-↓
-
-Expansion
-```
-
-Everything reduces to this.
-
-Trendlines simply show where traders cluster.
-
-Support/resistance shows where traders cluster.
-
-Liquidity sweeps show where stops cluster.
-
-Order blocks show where institutions likely entered.
-
-BOS/CHoCH reveal who gained control.
-
-Retests provide efficient entries.
-
-Expansion is where profits are made.
-
----
-
-## The "Meta Playbook"
-
-If I had to reduce everything on the internet into one rule:
-
-```text
-Find where retail traders are trapped.
-
-↓
-
-Wait for smart money to reveal direction.
-
-↓
-
-Enter on the retest.
-
-↓
-
-Hide your stop beyond the liquidity that should not be revisited.
-
-↓
-
-Scale out at opposing liquidity.
-```
-
-That single framework can derive almost every SMC, ICT, Wyckoff, trendline, and advanced price-action setup discussed in the sources above. ([Daily Price Action][5])
-
-[1]: https://tradeciety.com/3-trendline-strategies?utm_source=chatgpt.com "3 Trendline Strategies -"
-[2]: https://www.investopedia.com/trading/support-and-resistance-basics/?utm_source=chatgpt.com "Support and Resistance Basics"
-[3]: https://tradingstrategyguides.com/the-ultimate-guide-to-smc-entry-models-trading-like-the-smart-money/?utm_source=chatgpt.com "The Ultimate Guide To SMC Entry Models"
-[4]: https://in.tradingview.com/chart/ASIANPAINT/6n1tyk4j-Order-Blocks-Smart-Money-Concepts-SMC/?utm_source=chatgpt.com "Order Blocks & Smart Money Concepts (SMC)"
-[5]: https://dailypriceaction.com/blog/smc-market-structure/?utm_source=chatgpt.com "SMC Market Structure: BoS And CHoCH Made Simple"
-
-Yes.
-
-In fact, **everything we discussed is implementable programmatically from OHLCV data alone.**
-
-The real question is:
-
-> Which parts are objective enough to code reliably?
-
-The answer is surprisingly encouraging.
-
----
-
-# 1. Recommended Multi-Timeframe Framework
-
-## A. Swing Trading (Stocks/Crypto)
-
-| Purpose   |  HTF |  ITF | Entry TF |
-| --------- | ---: | ---: | -------: |
-| Bias      |   4H |   1H |      15m |
-| Structure |   1H |  15m |       5m |
-| Execution |  15m |   5m |       1m |
-
----
-
-## B. Intraday Options (NIFTY/BANKNIFTY/SPX)
-
-This is probably what you're interested in.
-
-| Purpose            | Timeframe |
-| ------------------ | --------: |
-| HTF Bias           |        1H |
-| Internal Structure |       15m |
-| Execution          |        5m |
-| Precision Entry    |        1m |
-
----
-
-## C. Scalping
-
-| Purpose      | Timeframe |
-| ------------ | --------: |
-| Bias         |       15m |
-| Structure    |        5m |
-| Entry        |        1m |
-| Confirmation | 15–30 sec |
-
----
-
-# 2. Which Components Are Programmable?
-
-Suppose you have:
-
-```typescript
-type Candle = {
-    o:number,
-    h:number,
-    l:number,
-    c:number,
-    v:number,
-    t:number
-}
-```
-
-or
-
-```typescript
-Candle[]
-```
-
-Then:
-
----
-
-## Easily Programmable (95–100%)
-
-### HH / HL / LH / LL
-
-Using pivots.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-100%
-```
-
----
-
-### BOS
-
-Close above HH.
-
-Close below LL.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-100%
-```
-
----
-
-### CHoCH
-
-Break HL.
-
-Break LH.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-100%
-```
-
----
-
-### Support / Resistance
-
-Cluster pivots.
-
-Repeated reactions.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-95%
-```
-
----
-
-### Trendlines
-
-Connect pivots.
-
-Measure touches.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-90%
-```
-
----
-
-### 3rd Touch Detection
-
-Count touches.
-
-Validate trendline.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-95%
-```
-
----
+ITF Structure (5M / 15M)
 
 ### Liquidity Sweeps
 
-Equal highs/lows.
+Identifies retail trap zones. Wait for buy-side (BSL) or sell-side (SSL) liquidity sweeps and reclaims on this intermediate structure.
 
-Wick penetration.
-
-Reclaim.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-90%
-```
-
----
-
-### Strong High / Strong Low
-
-Swing causing displacement.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-95%
-```
-
----
-
-### Order Blocks
-
-Last opposite candle before BOS.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-95%
-```
-
----
-
-### OB Retests
-
-Zone mitigation.
-
-Price returns.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-100%
-```
-
----
-
-### TP/SL Levels
-
-Swing-based.
-
-Liquidity-based.
-
-ATR-based.
-
-```text
-YES
-```
-
-Confidence:
-
-```text
-100%
-```
-
----
-
-# Harder Components
-
-These require assumptions.
-
----
-
-## Fair Value Gaps
-
-Usually:
-
-```text
-Low[i] > High[i-2]
-```
-
-or vice versa.
-
-Easy.
-
-```text
-YES
-```
-
-Confidence:
-
-90%
-
----
-
-## Wyckoff Phases
-
-Accumulation.
-
-Distribution.
-
-Spring.
-
-UTAD.
-
-These are subjective.
-
-```text
-PARTIALLY
-```
-
-Confidence:
-
-60%
-
----
-
-## Institutional Intent
-
-Nobody can code this.
-
-You infer it from:
-
-```text
-Liquidity
-+
-Displacement
-+
-Structure
-```
-
-Confidence:
-
-Unknown.
-
----
-
-# 3. State Machine Architecture
-
-This is how professionals build it.
-
-## Layer 1
-
-Raw candles.
-
-```text
-OHLCV
-```
-
-↓
-
----
-
-## Layer 2
-
-Swings.
-
-```text
-Pivot Highs
-Pivot Lows
-```
-
-↓
-
----
-
-## Layer 3
-
-Structure.
-
-```text
-HH
-HL
-LH
-LL
-```
-
-↓
-
----
-
-## Layer 4
-
-Trend.
-
-```text
-Bullish
-Bearish
-Range
-```
-
-↓
-
----
-
-## Layer 5
-
-Events.
-
-```text
-BOS
-CHoCH
-Sweep
-Trendline Touch
-S/R Flip
-```
-
-↓
-
----
-
-## Layer 6
-
-Zones.
-
-```text
-Order Blocks
-FVG
-Support
-Resistance
-```
-
-↓
-
----
-
-## Layer 7
-
-Entry Engine.
-
-```text
-LONG
-SHORT
-NO TRADE
-```
-
-↓
-
----
-
-## Layer 8
-
-Execution.
-
-```text
-SL
-TP1
-TP2
-TP3
-Trail
-```
-
----
-
-# 4. Example Long Setup Engine
-
-Suppose you're on 5m.
-
-The algorithm becomes:
-
-```text
-IF
-
-1H Trend = Bullish
-
-AND
-
-15m Structure = HH HL
-
-AND
-
-5m Sell-side Sweep
-
-AND
-
-5m Bullish CHoCH
-
-AND
-
-Bullish BOS
-
-AND
-
-Bullish OB formed
-
-AND
-
-Price revisits OB
-
-THEN
-
-LONG
-```
-
-SL:
-
-```text
-Below Sweep Low
-```
-
-TP:
-
-```text
-TP1 = Internal Liquidity
-
-TP2 = Previous HH
-
-TP3 = 1H External Liquidity
-```
-
----
-
-# 5. Computational Complexity
-
-If implemented correctly:
-
-For N candles:
-
-Swings:
-
-```text
-O(N)
-```
-
-Trendlines:
-
-```text
-O(N log N)
-```
-
-Structure:
-
-```text
-O(N)
-```
-
-OB:
-
-```text
-O(N)
-```
-
-Sweeps:
-
-```text
-O(N)
-```
-
-Overall:
-
-```text
-≈ O(N log N)
-```
-
-Even:
-
-```text
-100,000 candles
-```
-
-can be processed in milliseconds in Python.
-
----
-
-# 6. Pine vs Python
-
-## Pine
-
-Advantages:
-
-* Real-time.
-* Alerts.
-* TradingView charts.
-
-Limitations:
-
-* Limited memory.
-* Limited objects.
-* Harder trendline optimization.
-* No ML.
-
-Best for:
-
-```text
-Realtime execution.
-```
-
----
-
-## Python
-
-Advantages:
-
-* Unlimited history.
-* Better trendline algorithms.
-* Backtesting.
-* Monte Carlo.
-* Walk-forward optimization.
-* Options chain integration.
-
-Best for:
-
-```text
-Research and strategy development.
-```
-
----
-
-# 7. What Cannot Be Fully Automated?
-
-These remain discretionary:
-
-* "This OB looks cleaner."
-* "This sweep feels stronger."
-* "I don't like today's price action."
-* Macro/news context.
-* Session intuition.
-
-Everything else can be formalized.
-
----
-
-# Final Answer
-
-If you have historical and live OHLCV data:
-
-```text
-HH/HL/LH/LL            ✓
-BOS                    ✓
-CHoCH                  ✓
-Support/Resistance     ✓
-Trendlines             ✓
-3rd Touch              ✓
-Liquidity Sweeps       ✓
-Strong Highs/Lows      ✓
-Order Blocks           ✓
-OB Retests             ✓
-FVG                    ✓
-TP/SL                  ✓
-Multi-Timeframe Bias   ✓
-Entry Engine           ✓
-Backtesting            ✓
-Live Alerts            ✓
-```
-
-So the complete SMC + Price Action + Trendline framework you've built is approximately **90–95% automatable**. The remaining 5–10% is the trader's discretion layer, which many successful discretionary traders use to filter out otherwise valid setups.
-
-Yes. This is exactly how I would build it.
-
-And I would **not** tightly couple the backtester with CoinDCX.
-
-Instead:
-
-> CoinDCX becomes a data/execution adapter.
-
-The core engine remains exchange-agnostic.
-
-This lets you:
-
-* Backtest on historical CoinDCX candles
-* Paper trade
-* Live trade on CoinDCX
-* Later plug Binance, Zerodha, Alpaca, IBKR, etc.
-
----
-
-# Architecture
-
-```text
-smc-backtester/
-├── Gemfile
-├── README.md
-├── config/
-│   ├── settings.yml
-│   └── coindcx.rb
-│
-├── bin/
-│   ├── backtest
-│   ├── optimize
-│   ├── replay
-│   ├── paper_trade
-│   └── live_trade
-│
-├── data/
-│   ├── raw/
-│   ├── normalized/
-│   ├── cache/
-│   └── exports/
-│
-├── app/
-│
-│   ├── core/
-│   │   ├── candle.rb
-│   │   ├── market_series.rb
-│   │   ├── event_bus.rb
-│   │   ├── state_machine.rb
-│   │   └── context.rb
-│
-│   ├── market_structure/
-│   │   ├── pivot_detector.rb
-│   │   ├── swing_detector.rb
-│   │   ├── structure_classifier.rb
-│   │   ├── bos_detector.rb
-│   │   ├── choch_detector.rb
-│   │   └── trend_detector.rb
-│
-│   ├── liquidity/
-│   │   ├── equal_highs.rb
-│   │   ├── equal_lows.rb
-│   │   ├── sweep_detector.rb
-│   │   ├── strong_high_detector.rb
-│   │   └── strong_low_detector.rb
-│
-│   ├── trendlines/
-│   │   ├── trendline.rb
-│   │   ├── trendline_builder.rb
-│   │   ├── touch_counter.rb
-│   │   └── third_touch_detector.rb
-│
-│   ├── support_resistance/
-│   │   ├── sr_level.rb
-│   │   ├── sr_detector.rb
-│   │   ├── flip_detector.rb
-│   │   └── cluster_detector.rb
-│
-│   ├── order_blocks/
-│   │   ├── order_block.rb
-│   │   ├── bullish_ob_detector.rb
-│   │   ├── bearish_ob_detector.rb
-│   │   ├── mitigation_detector.rb
-│   │   └── ob_retest_detector.rb
-│
-│   ├── fvg/
-│   │   ├── fair_value_gap.rb
-│   │   ├── bullish_fvg_detector.rb
-│   │   └── bearish_fvg_detector.rb
-│
-│   ├── strategies/
-│   │
-│   │   ├── base_strategy.rb
-│   │   │
-│   │   ├── trendline/
-│   │   │   └── third_touch_strategy.rb
-│   │   │
-│   │   ├── sr/
-│   │   │   └── sr_flip_strategy.rb
-│   │   │
-│   │   ├── liquidity/
-│   │   │   └── sweep_reversal_strategy.rb
-│   │   │
-│   │   ├── structure/
-│   │   │   ├── bos_pullback_strategy.rb
-│   │   │   └── choch_reversal_strategy.rb
-│   │   │
-│   │   ├── order_blocks/
-│   │   │   ├── ob_retest_strategy.rb
-│   │   │   └── sweep_ob_strategy.rb
-│   │   │
-│   │   └── confluence/
-│   │       └── a_plus_strategy.rb
-│
-│   ├── execution/
-│   │   ├── signal.rb
-│   │   ├── signal_generator.rb
-│   │   ├── position.rb
-│   │   ├── portfolio.rb
-│   │   ├── order.rb
-│   │   ├── fill_engine.rb
-│   │   ├── sl_engine.rb
-│   │   ├── tp_engine.rb
-│   │   ├── trailing_stop.rb
-│   │   └── risk_manager.rb
-│
-│   ├── backtesting/
-│   │   ├── engine.rb
-│   │   ├── replay_engine.rb
-│   │   ├── walk_forward.rb
-│   │   ├── optimizer.rb
-│   │   ├── monte_carlo.rb
-│   │   └── metrics.rb
-│
-│   ├── reports/
-│   │   ├── equity_curve.rb
-│   │   ├── drawdown.rb
-│   │   ├── trade_statistics.rb
-│   │   ├── expectancy.rb
-│   │   └── html_report.rb
-│
-│   ├── adapters/
-│   │
-│   │   ├── coindcx/
-│   │   │   ├── candle_loader.rb
-│   │   │   ├── websocket_feed.rb
-│   │   │   ├── paper_executor.rb
-│   │   │   └── live_executor.rb
-│   │   │
-│   │   ├── csv/
-│   │   │   └── csv_loader.rb
-│   │   │
-│   │   └── parquet/
-│   │       └── parquet_loader.rb
-│
-│   └── utils/
-│       ├── timeframes.rb
-│       ├── logger.rb
-│       ├── cache.rb
-│       └── serialization.rb
-│
-├── spec/
-│   ├── fixtures/
-│   ├── market_structure/
-│   ├── liquidity/
-│   ├── order_blocks/
-│   ├── strategies/
-│   ├── execution/
-│   └── integration/
-│
-└── docs/
-    ├── playbooks.md
-    ├── architecture.md
-    ├── strategies.md
-    └── coindcx.md
-```
-
----
-
-# Core Domain Model
-
-Everything revolves around these entities:
-
-```ruby
-Candle
-Swing
-Trend
-LiquidityEvent
-OrderBlock
-Signal
-Position
-Trade
-Portfolio
-```
-
----
-
-# Strategy Interface
-
-Every playbook implements:
-
-```ruby
-class BaseStrategy
-  def on_bar(context)
-    raise NotImplementedError
-  end
-end
-```
-
-Example:
-
-```ruby
-class SweepOBStrategy < BaseStrategy
-  def on_bar(ctx)
-    return unless ctx.htf_bullish?
-    return unless ctx.sell_side_swept?
-    return unless ctx.bullish_bos?
-    return unless ctx.bullish_ob_retested?
-
-    Signal.long(
-      entry: ctx.close,
-      stop: ctx.sweep_low,
-      tp1: ctx.internal_liquidity,
-      tp2: ctx.external_liquidity,
-      tp3: ctx.daily_high
-    )
-  end
-end
-```
-
----
-
-# Multi-Timeframe Engine
-
-Internally:
-
-```ruby
-1H
-↓
-15M
-↓
-5M
-↓
-1M
-```
-
-Each bar updates:
-
-```ruby
-Context.new(
-  tf_1h: ...,
-  tf_15m: ...,
-  tf_5m: ...,
-  tf_1m: ...
-)
-```
-
-Strategies consume the context.
-
----
-
-# CoinDCX Integration
-
-Historical:
-
-```ruby
-client.public.market_data.list_candles(
-  pair: "B-BTC_USDT",
-  interval: "5m",
-  start_time: ...,
-  end_time: ...
-)
-```
-
-Convert:
-
-```ruby
-CoinDCX::Models::Candle
-↓
-Core::Candle
-```
-
-Live:
-
-```ruby
-WS Candle
-↓
-Context Update
-↓
-Strategy
-↓
-Signal
-↓
-Executor
-```
-
----
-
-# Execution Modes
-
-## Historical
-
-```bash
-bin/backtest
-```
-
-Output:
-
-```text
-Sharpe
-Profit Factor
-Expectancy
-Max DD
-TP hit %
-Win rate
-R multiples
-```
-
----
-
-## Replay
-
-```bash
-bin/replay
-```
-
-Plays candles sequentially.
-
-Simulates TradingView.
-
----
-
-## Paper
-
-```bash
-bin/paper_trade
-```
-
-Uses:
-
-```text
-CoinDCX WS
-↓
-Signal
-↓
-Paper Portfolio
-```
-
-No real orders.
-
----
-
-## Live
-
-```bash
-bin/live_trade
-```
-
-Uses:
-
-```text
-Signal
-↓
-Risk checks
-↓
-CoinDCX client_order_id
-↓
-CoinDCX Orders API
-```
-
----
-
-# Supported Playbooks
-
-Out of the box:
-
-```text
-✓ Trendline 3rd Touch
-
-✓ S/R Flip
-
-✓ BOS Pullback
-
-✓ CHoCH Reversal
-
-✓ Liquidity Sweep
-
-✓ Order Block Retest
-
-✓ Sweep + OB
-
-✓ A+ Confluence
-
-✓ FVG Retest
-
-✓ Strong High/Low
-```
-
----
-
-# Risk Module
-
-Supports:
-
-```text
-Fixed Risk %
-
-ATR SL
-
-Structure SL
-
-Liquidity SL
-
-Breakeven
-
-Partial exits
-
-TP1 TP2 TP3
-
-Trailing Stops
-
-Daily Loss Limits
-
-Max Open Trades
-```
-
----
-
-# Analytics
-
-Reports include:
-
-```text
-Equity Curve
-
-Monthly Returns
-
-Trade Distribution
-
-Drawdown Curve
-
-Profit Factor
-
-Expectancy
-
-Monte Carlo
-
-Walk Forward Results
-
-Heatmaps
-
-Best Timeframe Analysis
-
-Best Playbook Ranking
-```
-
----
-
-# Why This Design?
-
-Because this is how institutional-grade systems are built:
-
-```text
-Exchange Layer
-      ↓
-Data Layer
-      ↓
-Market Structure Layer
-      ↓
-Liquidity Layer
-      ↓
-Strategy Layer
-      ↓
-Execution Layer
-      ↓
-Risk Layer
-      ↓
-Analytics Layer
-```
-
-The beauty is that **CoinDCX becomes just another adapter**, while the SMC engine remains reusable, testable, and extensible. You can backtest years of OHLCV data, replay trades candle-by-candle, paper trade via WebSockets, and eventually deploy the exact same strategies live using the `coindcx-client` gem without rewriting the core logic.
-
-Yes — **overall, this is one of the most complete SMC/ICT playbooks I've seen**, and I would rate it around **8.5–9/10 as a trading framework**.
-
-I reviewed the uploaded HTML playbook. It combines:
-
-* Classical price action
-* Trendlines
-* Support/Resistance
-* BOS
-* CHoCH
-* Liquidity sweeps
-* Order Blocks
-* Premium/Discount
-* FVG concepts
-* ICT models like AMD and Silver Bullet
-
-The structure is coherent and internally consistent.
-
-However, there are a few important corrections.
-
----
-
-# What is Correct ✅
-
-## PB1 – Trendline 3rd Touch
-
-Correct.
-
-This is classical price action.
-
-The 3rd touch setup has existed for decades.
-
-Good as a standalone setup.
-
----
-
-## PB2 – S/R Flip
-
-Correct.
-
-Support → Resistance and Resistance → Support flips are among the most robust concepts.
-
-Your requirement of:
-
-> close beyond level + retest
-
-is excellent.
-
----
-
-## PB3 – BOS Pullback
-
-Correct.
-
-Very programmable.
-
-Probably one of the easiest systems to backtest objectively.
-
----
-
-## PB5 – Order Block Retest
-
-Mostly correct.
-
-The most important statement is:
-
-> "OB is only valid if it caused BOS."
-
-This dramatically reduces fake OBs.
-
-Good rule.
-
----
-
-## PB6 – Liquidity Sweep Reversal
-
-Correct.
-
-This is essentially:
-
-```text
-Liquidity Grab
-↓
-Reclaim
-↓
-CHoCH
-↓
-Entry
-```
-
-Very common among profitable ICT traders.
-
----
-
-## PB7 – Sweep + OB
-
-This is probably the strongest setup.
-
-I agree with:
-
-```text
-Sweep
-↓
-CHoCH
-↓
-BOS
-↓
-OB Retest
-↓
-Entry
-```
-
-This is the setup I would automate first.
-
----
-
-# What Needs Correction ⚠️
-
-## 1. "PB8 Full Confluence = Holy Grail"
-
-This is slightly misleading.
-
-The playbook says:
-
-> Full A+ Confluence
->
-> Win: Rare
->
-> RR: 1:5–1:10
-
-The problem:
-
-More filters ≠ higher expectancy.
-
-Sometimes:
-
-```text
-Too many filters
-↓
-Almost no trades
-↓
-Overfitting
-```
-
-Backtests often show:
-
-PB7 outperforming PB8.
-
-I would rephrase:
-
-> PB8 is a discretionary sniper setup, not necessarily the most profitable.
-
----
-
-## 2. CHoCH is not universally defined
-
-This is the biggest issue in SMC.
-
-Your playbook uses:
-
-Bullish:
-
-```text
-LL
-↓
-Break LH
-↓
-Bullish CHoCH
-```
-
-Bearish:
-
-```text
-HH
-↓
-Break HL
-↓
-Bearish CHoCH
-```
-
-This is valid.
-
-But many ICT traders define CHoCH differently.
-
-Therefore:
-
-### You must standardize
-
-For coding:
-
-I recommend:
-
-```text
-Bullish CHoCH:
-Break most recent confirmed LH.
-
-Bearish CHoCH:
-Break most recent confirmed HL.
-```
-
-No ambiguity.
-
----
-
-## 3. Order Blocks Are More Subjective Than Presented
-
-The document says:
-
-> Last bearish candle before displacement.
-
-Reality:
-
-People disagree about:
-
-* Wick vs body
-* Last down-close candle
-* Last consolidation candle
-* Multi-candle OB
-
-For backtesting:
-
-Define:
-
-```text
-Bullish OB:
-Last bearish candle whose displacement caused BOS.
-
-Bearish OB:
-Last bullish candle whose displacement caused BOS.
-```
-
-Exactly.
-
----
-
-## 4. "Smart Money"
-
-This phrase is used too loosely.
-
-The playbook repeatedly says:
-
-> Institutions did this.
-
-Nobody can prove that.
-
-More accurate wording:
-
-```text
-Liquidity behavior suggests
-large participants may have
-been active.
-```
-
-This matters scientifically.
-
----
-
-# What I'd Add ⭐
-
-The playbook is missing **one critical filter**.
-
-## Session Filter
-
-Most ICT traders only trade:
-
-### London
-
-### New York
-
-### NY Open
-
-Avoid:
-
-```text
-Asian chop
-Lunch
-Holiday sessions
-Low volume periods
-```
-
-This alone often improves expectancy.
-
----
-
-# What I'd Remove ❌
-
-## Unicorn Setup
-
-It looks attractive.
-
-But:
-
-```text
-HTF OB
-+
-Breaker
-+
-FVG
-```
-
-becomes extremely subjective.
-
-Difficult to backtest.
-
-Low sample size.
-
-I'd classify it as:
-
-> discretionary only.
-
----
-
-# Best Playbooks for Automation
-
-If I were building your Ruby engine, I'd rank them:
-
-| Playbook                | Automation Score |
-| ----------------------- | ---------------: |
-| PB3 BOS Pullback        |            10/10 |
-| PB2 S/R Flip            |            10/10 |
-| PB6 Sweep Reversal      |           9.5/10 |
-| PB7 Sweep + OB          |           9.5/10 |
-| PB5 OB Retest           |             9/10 |
-| PB1 Trendline 3rd Touch |           8.5/10 |
-| PB4 CHoCH               |             8/10 |
-| PB8 Full A+             |             6/10 |
-| Silver Bullet           |             6/10 |
-| AMD                     |             5/10 |
-| Unicorn                 |             3/10 |
-
----
-
-# Overall Verdict
-
-I would rate your uploaded playbook:
-
-### Educational Quality
-
-**9.5 / 10**
-
-### Internal Consistency
-
-**8.5 / 10**
-
-### Ease of Automation
-
-**8 / 10**
-
-### Backtestability
-
-**8.5 / 10**
-
-### Institutional Accuracy
-
-**7 / 10**
-
-because concepts like "smart money" and some ICT models cannot be objectively proven.
-
----
-
-## Final Verdict
-
-> **Yes, this is a correct and very strong SMC/ICT playbook.**
-
-But I would treat **PB7 (Sweep → CHoCH → BOS → OB Retest)** as the core strategy, use **PB3 and PB2 as simpler alternatives**, and consider **PB8 and the advanced ICT models as discretionary overlays rather than the foundation of the system.**
-
-If I were building the Ruby backtester you described, I would implement PB2, PB3, PB5, PB6, and PB7 first, validate them statistically across multiple markets and timeframes, and only then add the more discretionary ICT layers.
-
-Yes.
-
-And this is the breakthrough.
-
-Most SMC traders think:
-
-> "This is discretionary."
-
-But if you force yourself to answer:
-
-> "Exactly what condition must be true before I proceed?"
-
-then almost everything becomes a **state machine with deterministic rules**.
-
-In fact, your entire playbook can be converted into a rule engine.
-
----
-
-# Rule Hierarchy
-
-The system becomes:
-
-```text
-Market Data
-↓
-
-Swings
-↓
-
-Structure
-↓
-
-Trend
-↓
-
-Events
-↓
-
-Zones
-↓
-
-Entry Conditions
-↓
-
-Risk Rules
-↓
-
-Trade Management
-```
-
----
-
-# Level 1: Raw Data
-
-Input:
-
-```ruby
-Candle = {
-  open,
-  high,
-  low,
-  close,
-  volume,
-  timestamp
-}
-```
-
-Nothing discretionary.
-
----
-
-# Level 2: Swing Rules
-
-Using pivot length N.
-
-## Swing High
-
-A candle is a swing high if:
-
-```text
-High[i] > High[i−1..i−N]
-AND
-High[i] > High[i+1..i+N]
-```
-
-Example:
-
-```text
-N=2
-
-5 7 9 6 4
-
-9 = Swing High
-```
-
----
-
-## Swing Low
-
-```text
-Low[i] < Low[i−1..i−N]
-AND
-Low[i] < Low[i+1..i+N]
-```
-
----
-
-# Level 3: Structure Rules
-
-## Higher High
-
-```text
-Current Swing High > Previous Swing High
-```
-
-## Lower High
-
-```text
-Current Swing High < Previous Swing High
-```
-
-## Higher Low
-
-```text
-Current Swing Low > Previous Swing Low
-```
-
-## Lower Low
-
-```text
-Current Swing Low < Previous Swing Low
-```
-
----
-
-# Level 4: Trend Rules
-
-Bullish:
-
-Need:
-
-```text
-HL
-↓
-
-HH
-↓
-
-HL
-↓
-
-HH
-```
-
-Algorithm:
-
-```ruby
-if last_two_highs.increasing? &&
-   last_two_lows.increasing?
-  trend = :bullish
-end
-```
-
----
-
-Bearish:
-
-```ruby
-if last_two_highs.decreasing? &&
-   last_two_lows.decreasing?
-  trend = :bearish
-end
-```
-
----
-
-Else:
-
-```ruby
-trend = :range
-```
-
----
-
-# Level 5: BOS Rules
-
-Bullish BOS:
-
-```text
-Close > Previous Confirmed HH
-```
-
-AND
-
-```text
-Trend == Bullish
-```
-
----
-
-Bearish BOS:
-
-```text
-Close < Previous Confirmed LL
-```
-
----
-
-# Level 6: CHoCH Rules
-
-Bullish CHoCH:
-
-Previous:
-
-```text
-LH → LL
-```
-
-Then:
-
-```text
-Close > Previous LH
-```
-
----
-
-Bearish:
-
-Previous:
-
-```text
-HL → HH
-```
-
-Then:
-
-```text
-Close < Previous HL
-```
-
----
-
-# Level 7: Trendline Rules
-
-Trendline:
-
-Connect:
-
-```text
-HL1
-↓
-
-HL2
-```
-
-or
-
-```text
-LH1
-↓
-
-LH2
-```
-
----
-
-Touch rule:
-
-Distance:
-
-```ruby
-(price - trendline_price).abs <= ATR * 0.2
-```
-
----
-
-Third touch:
-
-```ruby
-touch_count == 3
-```
-
----
-
-# Level 8: Support/Resistance Rules
-
-Support:
-
-Cluster lows.
-
-Example:
-
-```ruby
-abs(low1-low2)/price < 0.002
-```
-
-(0.2%)
-
-Need:
-
-```ruby
-count >= 2
-```
-
----
-
-Resistance:
-
-Same for highs.
-
----
-
-# Level 9: Liquidity Rules
-
-Equal highs:
-
-```ruby
-difference < ATR*0.1
-```
-
----
-
-Equal lows:
-
-```ruby
-difference < ATR*0.1
-```
-
----
-
-Sell-side sweep:
-
-```text
-Low breaks equal lows
-
-AND
-
-Close returns above lows
-```
-
----
-
-Buy-side sweep:
-
-```text
-High breaks equal highs
-
-AND
-
-Close returns below highs
-```
-
----
-
-# Level 10: Strong High / Low Rules
-
-Strong Low:
-
-Need:
-
-```text
-Swing Low
-
-↓
-
-Displacement Up
-
-↓
-
-BOS
-```
-
-Rule:
-
-```ruby
-bullish_displacement &&
-bullish_bos
-```
-
----
-
-Strong High:
-
-Mirror opposite.
-
----
-
-# Level 11: Order Block Rules
-
-Bullish OB:
-
-Last bearish candle before displacement.
-
-Conditions:
-
-```ruby
-candle.red? &&
-next_move.displacement? &&
-next_move.caused_bos?
-```
-
----
-
-Bearish OB:
-
-Mirror.
-
----
-
-Invalid OB:
-
-```ruby
-bos_without_ob_dependency
-```
-
-Discard.
-
----
-
-# Level 12: FVG Rules
-
-Bullish FVG:
-
-Three candles:
-
-```text
-C1 High
-
-↓
-
-C2 Large Bull Candle
-
-↓
-
-C3 Low > C1 High
-```
-
-Rule:
-
-```ruby
-low[i] > high[i-2]
-```
-
----
-
-Bearish:
-
-```ruby
-high[i] < low[i-2]
-```
-
----
-
-# Level 13: Premium/Discount Rules
-
-Define dealing range:
-
-```text
-Strong Low
-↓
-
-Strong High
-```
-
-Midpoint:
-
-```ruby
-eq = (high+low)/2
-```
-
----
-
-Discount:
-
-```ruby
-price < eq
-```
-
----
-
-Premium:
-
-```ruby
-price > eq
-```
-
----
-
-# Level 14: Session Rules
-
-Trade only:
-
-## London
-
-```text
-07:00–10:00 UTC
-```
-
----
-
-## New York
-
-```text
-13:30–16:00 UTC
-```
-
----
-
-Avoid:
-
-```text
-Lunch
-↓
-
-Low volume
-```
-
----
-
-# Level 15: Playbook Rules
-
-## PB2 S/R Flip
-
-Long:
-
-```text
-Resistance tested ≥2
-
-↓
-
-Close above resistance
-
-↓
-
-Retest
-
-↓
-
-Bullish rejection
-
-↓
-
-BUY
-```
-
----
-
-## PB3 BOS Pullback
-
-Long:
-
-```text
-Bullish BOS
-
-↓
-
-Pullback
-
-↓
-
-HL forms
-
-↓
-
-BUY
-```
-
----
-
-## PB5 OB Retest
-
-Long:
-
-```text
-Bullish BOS
-
-↓
-
-Bullish OB
-
-↓
-
-OB Retest
-
-↓
-
-BUY
-```
-
----
-
-## PB6 Sweep Reversal
-
-Long:
-
-```text
-SSL Sweep
-
-↓
-
-Bullish CHoCH
-
-↓
-
-BUY
-```
-
----
-
-## PB7 Sweep + OB
-
-Long:
-
-```text
-SSL Sweep
-
-↓
-
-Bullish CHoCH
-
-↓
-
-Bullish BOS
-
-↓
-
-Bullish OB
-
-↓
-
-OB Retest
-
-↓
-
-BUY
-```
-
-Short is the mirror image.
-
----
-
-# Level 16: Risk Rules
-
-Risk:
-
-```ruby
-risk_per_trade = 0.5%..1%
-```
-
----
-
-Daily loss:
-
-```ruby
-max_daily_loss = 2R
-```
-
----
-
-Max trades:
-
-```ruby
-3
-```
-
----
-
-# Level 17: Trade Management
-
-TP1:
-
-```text
-1R
-```
-
-Close:
-
-```ruby
-30%
-```
-
-Move SL:
-
-```ruby
-breakeven
-```
-
----
-
-TP2:
-
-```text
-Internal Liquidity
-```
-
-Close:
-
-```ruby
-40%
-```
-
----
-
-TP3:
-
-```text
-External Liquidity
-```
-
-Close:
-
-```ruby
-30%
-```
-
----
-
-# Final Rule Engine
-
-The complete system reduces to:
-
-```ruby
-IF
-
-HTF Trend == Bullish
-
-AND Session Allowed
-
-AND SSL Sweep
-
-AND Bullish CHoCH
-
-AND Bullish BOS
-
-AND Bullish OB Exists
-
-AND Price Retests OB
-
-AND Price In Discount
-
-THEN
-
-LONG
-
-SL = min(Sweep Low, OB Low)
-
-TP1 = 1R
-TP2 = Internal Liquidity
-TP3 = External Liquidity
-```
-
-For shorts:
-
-```ruby
-IF
-
-HTF Trend == Bearish
-
-AND Session Allowed
-
-AND BSL Sweep
-
-AND Bearish CHoCH
-
-AND Bearish BOS
-
-AND Bearish OB Exists
-
-AND Price Retests OB
-
-AND Price In Premium
-
-THEN
-
-SHORT
-```
-
-This means your entire SMC + ICT + Price Action playbook can be expressed as a deterministic rules engine and implemented as a finite-state machine for backtesting and live execution. The only truly discretionary pieces left are optional filters like news avoidance, visual quality of a setup, and trader confidence. Everything else can be encoded.
-
-## System Prompt: Institutional Market Structure AI Agent
-
-You are an **Institutional Market Structure AI Agent** specializing in SMC (Smart Money Concepts), ICT concepts, classical Price Action, and algorithmic execution.
-
-Your job is to transform OHLCV data into deterministic trading decisions using objective rules. You must avoid discretionary interpretations whenever possible.
-
----
-
-# Objective
-
-Given historical and/or live OHLCV data:
-
-```typescript
-{
-  o: number,
-  h: number,
-  l: number,
-  c: number,
-  v: number,
-  t: number
-}
-```
-
-or
-
-```typescript
-Candle[]
-```
-
-the agent must:
-
-1. Detect market structure.
-2. Identify institutional liquidity events.
-3. Detect trade setups.
-4. Generate LONG/SHORT signals.
-5. Produce SL, TP1, TP2, TP3.
-6. Backtest playbooks.
-7. Operate in replay, paper, or live environments.
-
----
-
-# Philosophy
-
-Never predict.
-
-Only react.
-
-The hierarchy is:
-
-```text
-Price
-↓
-Structure
-↓
-Liquidity
-↓
-Confirmation
-↓
-Execution
-↓
-Risk Management
-```
-
-If a condition is not objectively satisfied:
-
-```text
-NO TRADE
-```
-
----
-
-# Data Inputs
-
-Input:
-
-```typescript
-type Candle = {
-    o:number,
-    h:number,
-    l:number,
-    c:number,
-    v:number,
-    t:number
-}
-```
-
-Multi-timeframe inputs:
-
-```text
-HTF  = 1H
-ITF  = 15M
-LTF  = 5M
-ETF  = 1M
-```
-
-The timeframes should be configurable.
-
----
-
-# Core Engine
-
-The system shall execute the following stages sequentially.
-
----
-
-## Stage 1: Pivot Detection
-
-Detect pivots using pivot length N.
-
-Swing High:
-
-```text
-High[i] > High[i−1...i−N]
-AND
-High[i] > High[i+1...i+N]
-```
-
-Swing Low:
-
-```text
-Low[i] < Low[i−1...i−N]
-AND
-Low[i] < Low[i+1...i+N]
-```
-
-Output:
-
-```typescript
-Swing {
-    type: HIGH | LOW,
-    price,
-    index,
-    timestamp
-}
-```
-
----
-
-## Stage 2: Structure Classification
-
-Determine:
-
-### Higher High
-
-```text
-Current High Swing > Previous High Swing
-```
-
-### Lower High
-
-```text
-Current High Swing < Previous High Swing
-```
-
-### Higher Low
-
-```text
-Current Low Swing > Previous Low Swing
-```
-
-### Lower Low
-
-```text
-Current Low Swing < Previous Low Swing
-```
-
-Output:
-
-```text
-HH
-HL
-LH
-LL
-```
-
----
-
-## Stage 3: Trend Classification
-
-Bullish:
-
-```text
-HL → HH → HL → HH
-```
-
-Bearish:
-
-```text
-LH → LL → LH → LL
-```
-
-Otherwise:
-
-```text
-RANGE
-```
-
-Output:
-
-```typescript
-Trend:
-UNKNOWN
-BULLISH
-BEARISH
-RANGE
-```
-
----
-
-## Stage 4: BOS Detection
-
-Bullish BOS:
-
-```text
-Close > Previous HH
-```
-
-Bearish BOS:
-
-```text
-Close < Previous LL
-```
-
-Output:
-
-```typescript
-BOS {
-    direction
-}
-```
-
----
-
-## Stage 5: CHoCH Detection
-
-Bullish CHoCH:
-
-Previous structure:
-
-```text
-LH → LL
-```
-
-Then:
-
-```text
-Close > Previous LH
-```
-
-Bearish CHoCH:
-
-Previous structure:
-
-```text
-HL → HH
-```
-
-Then:
-
-```text
-Close < Previous HL
-```
-
-Output:
-
-```typescript
-CHOCH {
-    direction
-}
-```
-
----
-
-## Stage 6: Support and Resistance
-
-Support:
-
-Cluster swing lows.
-
-Conditions:
-
-```text
-Difference ≤ 0.2%
-Touches ≥ 2
-```
-
-Resistance:
-
-Cluster swing highs.
-
-Output:
-
-```typescript
-SupportResistanceZone
-```
-
----
-
-## Stage 7: Trendline Detection
-
-Bullish trendline:
-
-Connect HLs.
-
-Bearish trendline:
-
-Connect LHs.
-
-Touch definition:
-
-```text
-Distance ≤ ATR × tolerance
-```
-
-Third touch:
-
-```text
-touch_count == 3
-```
-
-Output:
-
-```typescript
-Trendline
-TrendlineTouch
-```
-
----
-
-## Stage 8: Liquidity Detection
-
-Equal Highs:
-
-```text
-Difference ≤ ATR × 0.1
-```
-
-Equal Lows:
-
-```text
-Difference ≤ ATR × 0.1
-```
-
-Sell-side sweep:
-
-```text
-Low breaks equal lows
-AND
-Close reclaims above
-```
-
-Buy-side sweep:
-
-```text
-High breaks equal highs
-AND
-Close closes below
-```
-
-Output:
-
-```typescript
-LiquiditySweep
-```
-
----
-
-## Stage 9: Strong High / Strong Low
-
-Strong Low:
-
-```text
-Swing Low
-↓
-Bullish displacement
-↓
-Bullish BOS
-```
-
-Strong High:
-
-```text
-Swing High
-↓
-Bearish displacement
-↓
-Bearish BOS
-```
-
-Output:
-
-```typescript
-ProtectedLevel
-```
-
----
-
-## Stage 10: Order Blocks
-
-Bullish Order Block:
-
-Last bearish candle before displacement that caused BOS.
-
-Bearish Order Block:
-
-Last bullish candle before displacement that caused BOS.
-
-Output:
-
-```typescript
-OrderBlock {
-    type,
-    high,
-    low,
-    created_by
-}
-```
-
-Invalid OBs:
-
-Discard OBs that did not directly contribute to BOS/CHoCH.
-
----
-
-## Stage 11: Fair Value Gaps
-
-Bullish:
-
-```text
-Low[i] > High[i−2]
-```
-
-Bearish:
-
-```text
-High[i] < Low[i−2]
-```
-
-Output:
-
-```typescript
-FairValueGap
-```
-
----
-
-## Stage 12: Premium and Discount
-
-Define dealing range:
-
-```text
-Protected Low ↔ Protected High
-```
-
-Equilibrium:
-
-```text
-EQ = midpoint
-```
-
-Discount:
-
-```text
-Price < EQ
-```
-
-Premium:
-
-```text
-Price > EQ
-```
-
----
-
-## Stage 13: Session Filters
-
-Allowed Sessions:
-
-London:
-
-```text
-07:00–10:00 UTC
-```
-
-New York:
-
-```text
-13:30–16:00 UTC
-```
-
-Avoid:
-
-```text
-Lunch
-Low-volume periods
-```
-
----
-
-# Playbooks
-
-Implement the following strategies.
-
----
-
-## PB1 Trendline Third Touch
-
-LONG:
-
-```text
-Bullish Trend
-AND Third Trendline Touch
-AND Bullish Rejection
-```
-
-SHORT:
-
-Mirror opposite.
-
----
-
-## PB2 Support/Resistance Flip
-
-LONG:
-
-```text
-Resistance
-↓
-BOS Above
-↓
-Retest
-↓
-Bullish Rejection
-```
-
-SHORT:
-
-Mirror opposite.
-
----
-
-## PB3 BOS Pullback
-
-LONG:
-
-```text
-Bullish BOS
-↓
-Pullback
-↓
-HL
-↓
-LONG
-```
-
-SHORT:
-
-Mirror opposite.
-
----
-
-## PB4 CHoCH Reversal
-
-LONG:
-
-```text
-Bearish Trend
-↓
-Bullish CHoCH
-↓
-LONG
-```
-
-SHORT:
-
-Mirror opposite.
-
----
-
-## PB5 Order Block Retest
-
-LONG:
-
-```text
-Bullish BOS
-↓
-Bullish OB
-↓
-OB Retest
-↓
-LONG
-```
-
-SHORT:
-
-Mirror opposite.
-
----
-
-## PB6 Liquidity Sweep Reversal
-
-LONG:
-
-```text
-Sell-side Sweep
-↓
-Bullish CHoCH
-↓
-LONG
-```
-
-SHORT:
-
-Mirror opposite.
-
----
-
-## PB7 Sweep + OB (Primary Strategy)
-
-LONG:
-
-```text
-Sell-side Sweep
-↓
-Bullish CHoCH
-↓
-Bullish BOS
-↓
-Bullish OB
-↓
-OB Retest
-↓
-LONG
-```
-
-SHORT:
-
-```text
-Buy-side Sweep
-↓
-Bearish CHoCH
-↓
-Bearish BOS
-↓
-Bearish OB
-↓
-OB Retest
-↓
-SHORT
-```
-
-This is the preferred strategy.
-
----
-
-## PB8 A+ Confluence
-
-LONG:
-
-```text
-HTF Bullish
-AND Trendline Support
-AND Third Touch
-AND Support Zone
-AND Sell-side Sweep
-AND Bullish CHoCH
-AND Bullish BOS
-AND Bullish OB
-AND OB Retest
-```
-
-SHORT:
-
-Mirror opposite.
-
-Use this as a sniper setup.
-
----
-
-# Risk Management
-
-Risk per trade:
-
-```text
-0.5%–1%
-```
-
-Daily loss limit:
-
-```text
-2R
-```
-
-Maximum trades:
-
-```text
-3
-```
-
----
-
-# Trade Management
-
-TP1:
-
-```text
-1R
-```
-
-Close:
-
-```text
-30%
-```
-
-Move SL to breakeven.
-
-TP2:
-
-```text
-Internal Liquidity
-```
-
-Close:
-
-```text
-40%
-```
-
-TP3:
-
-```text
-External Liquidity
-```
-
-Close:
-
-```text
-30%
-```
-
----
-
-# Agent Output Format
-
-Return:
-
-```json
-{
-  "signal": "LONG | SHORT | NO_TRADE",
-  "playbook": "PB1–PB8",
-  "confidence": 0.0,
-  "htf_trend": "",
-  "ltf_structure": "",
-  "entry": 0.0,
-  "stop_loss": 0.0,
-  "tp1": 0.0,
-  "tp2": 0.0,
-  "tp3": 0.0,
-  "risk_reward": "",
-  "reasons": [],
-  "invalidations": [],
-  "events": {
-    "bos": false,
-    "choch": false,
-    "liquidity_sweep": false,
-    "order_block": false,
-    "fvg": false
-  }
-}
-```
-
----
-
-# Non-Negotiable Rules
-
-* Never assume intent from price.
-* Never invent structure.
-* Never label discretionary setups without objective criteria.
-* If rules conflict, return:
-
-```text
-NO_TRADE
-```
-
-* Explain exactly which rules triggered the decision.
-* The agent must behave as a deterministic market structure engine, not as a predictor of future price.
-
-This is actually one of the most interesting design problems.
-
-The problem is:
-
-> PineScript doesn't have classes, inheritance, or complex state machines like Ruby/Python.
-
-But you can still do it.
-
-In fact, I would argue the **best Pine implementation is not a strategy per playbook**.
-
-Instead:
-
-> Build a single "Market State Engine" and let it tell you which playbook is currently active.
-
----
-
-# Architecture in Pine v6
-
-Instead of:
-
-```text
-PB1 Strategy
-PB2 Strategy
-PB3 Strategy
-...
-PB8 Strategy
-```
-
-You build:
-
-```text
-OHLCV
-↓
-Swings
-↓
-Structure
-↓
-Events
-↓
-Zones
-↓
-Playbook Detector
-↓
-Score Engine
-↓
-Signal Engine
-```
-
----
-
-# Step 1: Detect Building Blocks
-
-Every bar compute:
-
-## Structure
-
-```pine
-HH
-HL
-LH
-LL
-```
-
-## Trend
-
-```pine
-BULLISH
-BEARISH
-RANGE
-```
-
-## Events
-
-```pine
-BOS
-CHoCH
-SSL Sweep
-BSL Sweep
-```
-
-## Zones
-
-```pine
-Bullish OB
-Bearish OB
-Support
-Resistance
-Trendline
-FVG
-```
-
-Store them:
-
-```pine
-var bool bullishBos = false
-var bool bearishBos = false
-
-var bool bullishChoch = false
-var bool bearishChoch = false
-
-var bool sslSweep = false
-var bool bslSweep = false
-
-var bool bullOB = false
-var bool bearOB = false
-```
-
----
-
-# Step 2: Define Playbook Conditions
-
-Example:
-
-## PB1 Trendline
-
-```pine
-pb1Long =
-    bullishTrend and
-    thirdTrendlineTouch and
-    bullishRejection
-```
-
----
-
-## PB2 SR Flip
-
-```pine
-pb2Long =
-    resistanceBroken and
-    resistanceRetested and
-    bullishRejection
-```
-
----
-
-## PB3 BOS Pullback
-
-```pine
-pb3Long =
-    bullishBos and
-    pullback and
-    hl
-```
-
----
-
-## PB6 Sweep
-
-```pine
-pb6Long =
-    sslSweep and
-    bullishChoch
-```
-
----
-
-## PB7 Sweep + OB
-
-```pine
-pb7Long =
-    sslSweep and
-    bullishChoch and
-    bullishBos and
-    bullOB and
-    bullOBRetest
-```
-
----
-
-# Step 3: Active Playbook Engine
-
-Now determine:
-
-```pine
-string activePB = "NONE"
-```
-
-Priority matters.
-
-I would do:
-
-```pine
-if pb8Long
-    activePB := "PB8"
-
-else if pb7Long
-    activePB := "PB7"
-
-else if pb6Long
-    activePB := "PB6"
-
-else if pb5Long
-    activePB := "PB5"
-
-else if pb3Long
-    activePB := "PB3"
-
-else if pb2Long
-    activePB := "PB2"
-
-else if pb1Long
-    activePB := "PB1"
-```
-
-Same for shorts.
-
----
-
-# Step 4: Plot Active Playbook
-
-TradingView table:
-
-```pine
-var table dashboard = table.new(position.top_right,2,6)
-
-table.cell(dashboard,0,0,"PLAYBOOK")
-table.cell(dashboard,1,0,activePB)
-```
-
-Chart example:
-
-```text
-PLAYBOOK : PB7
-TREND    : BULLISH
-BIAS     : LONG
-RR       : 1:4
-```
-
----
-
-# Step 5: Confidence Score
-
-Instead of binary rules:
-
-Assign points.
-
-Example:
-
-## Long
-
-```pine
-score = 0
-
-if bullishTrend
-    score += 20
-
-if sslSweep
-    score += 20
-
-if bullishChoch
-    score += 20
-
-if bullishBos
-    score += 15
-
-if bullOB
-    score += 15
-
-if bullOBRetest
-    score += 10
-```
-
-Result:
-
-```pine
-confidence = score
-```
-
-Example:
-
-```text
-PB7 Active
-
-Confidence = 85%
-```
-
----
-
-# Step 6: Signal Engine
-
-Only trigger when:
-
-```pine
-confidence >= 80
-```
-
-Example:
-
-```pine
-longSignal =
-    activePB=="PB7" and
-    confidence>=80
-```
-
----
-
-# Step 7: Trade Management
-
-Depending on playbook.
-
-PB3:
-
-```text
-SL = HL
-TP = Previous HH
-```
-
-PB6:
-
-```text
-SL = Sweep Low
-TP = Liquidity
-```
-
-PB7:
-
-```text
-SL = min(Sweep Low, OB Low)
-
-TP1 = 1R
-TP2 = Internal Liquidity
-TP3 = External Liquidity
-```
-
----
-
-# Step 8: Dashboard
-
-The biggest advantage of Pine:
-
-You can visualize the engine.
-
-Example:
-
-```text
-━━━━━━━━━━━━━━━━━━
-HTF Trend  : BULLISH
-LTF Trend  : BULLISH
-
-BOS        : YES
-CHoCH      : YES
-
-SSL Sweep  : YES
-Bull OB    : YES
-
-Active PB  : PB7
-Confidence : 90%
-
-LONG READY
-━━━━━━━━━━━━━━━━━━
-```
-
----
-
-# Step 9: Alerts
-
-This becomes powerful.
-
-Instead of:
-
-```pine
-alert("BUY")
-```
-
-You send:
-
-```pine
-alert(
-    "PB7 LONG | Conf=90 | Entry="+str.tostring(close)+
-    " | SL="+str.tostring(sl)+
-    " | TP1="+str.tostring(tp1)
-)
-```
-
-Webhook:
-
-```json
-{
-  "playbook":"PB7",
-  "side":"LONG",
-  "confidence":90,
-  "entry":23500,
-  "sl":23450,
-  "tp1":23600,
-  "tp2":23700,
-  "tp3":23850
-}
-```
-
----
-
-# Updating PineScript v6
-
-The beauty of this approach is:
-
-You never rewrite the whole script.
-
-Suppose you discover a new playbook:
-
-PB9:
-
-```text
-AMD
-↓
-Sweep
-↓
-FVG
-↓
-OB
-```
-
-You simply add:
-
-```pine
-pb9Long = ...
-
-if pb9Long
-    activePB := "PB9"
-```
-
-Everything else remains unchanged.
-
----
-
-# What I Would Build
-
-If I were implementing this in Pine v6, I'd use:
-
-```text
-Core Engine
-├─ Structure Engine
-├─ Liquidity Engine
-├─ Zone Engine
-├─ Playbook Engine
-├─ Scoring Engine
-├─ Signal Engine
-├─ Trade Manager
-└─ Dashboard
-```
-
-with PB7 (Sweep → CHoCH → BOS → OB Retest) as the default priority setup.
-
-This turns Pine from a simple indicator into an **Institutional Playbook Scanner**, where every bar answers:
-
-> "Which playbook is active right now, how confident is it, and what are the exact entry, SL, and TP levels?"
-
-This is exactly the right question.
-
-Because the answer is:
-
-> **Don't build a PineScript. Don't build a Ruby bot. Don't build a Python bot.**
->
-> Build a **Trading Domain Engine (TDE)**.
-
-Everything else becomes an adapter.
-
----
-
-## The Real Architecture
-
-Instead of:
-
-```text
-PineScript Strategy
-Ruby Backtester
-Python Bot
-CoinDCX Bot
-```
-
-Build:
-
-```text
-Trading Domain Engine
-       ↓
-Adapters
-```
-
----
-
-## Layer 1: Domain Specification (The Truth)
-
-Define everything as a specification.
-
-For example:
-
-```yaml
-playbook: PB7
-
-conditions:
-  - ssl_sweep
-  - bullish_choch
-  - bullish_bos
-  - bullish_order_block
-  - bullish_ob_retest
-
-entry:
-  side: long
-
-stop:
-  type: sweep_low_or_ob_low
-
-targets:
-  - type: 1R
-    exit: 30
-
-  - type: internal_liquidity
-    exit: 40
-
-  - type: external_liquidity
-    exit: 30
-```
-
-This YAML becomes the source of truth.
-
----
-
-## Layer 2: Trading DSL
-
-Create a DSL.
-
-Example:
-
-```ruby
-playbook "PB7" do
-  long do
-    require :ssl_sweep
-    require :bullish_choch
-    require :bullish_bos
-    require :bullish_ob
-    require :ob_retest
-
-    stop :min, :sweep_low, :ob_low
-
-    tp 1.r, 30.percent
-    tp :internal_liquidity, 40.percent
-    tp :external_liquidity, 30.percent
-  end
-end
-```
-
-Now:
-
-> Strategies are configuration.
-
-Not code.
-
----
-
-## Layer 3: Canonical Domain Objects
-
-Every implementation uses these.
-
-```typescript
-Candle
-Pivot
-Swing
-Structure
-Trend
-BOS
-CHoCH
-LiquiditySweep
-OrderBlock
-FVG
-Trendline
-SRZone
-Signal
-Position
-Trade
-Portfolio
-```
-
-These never change.
-
----
-
-## Layer 4: Rule Engine
-
-Rules evaluate domain objects.
-
-Example:
-
-```ruby
-class BullishBosRule
-  def call(ctx)
-    ctx.close > ctx.previous_hh
-  end
-end
-```
-
-```ruby
-class SslSweepRule
-  def call(ctx)
-    ctx.low < ctx.equal_lows &&
-      ctx.close > ctx.equal_lows
-  end
-end
-```
-
----
-
-## Layer 5: Playbook Engine
-
-Composes rules.
-
-```ruby
-PB7 =
-  AllOf[
-    SslSweepRule,
-    BullishChochRule,
-    BullishBosRule,
-    BullishOrderBlockRule,
-    ObRetestRule
-  ]
-```
-
----
-
-## Layer 6: Event Engine
-
-The engine publishes events.
-
-```text
-CANDLE_CLOSED
-
-SWING_DETECTED
-
-BOS_DETECTED
-
-CHOCH_DETECTED
-
-ORDER_BLOCK_CREATED
-
-SIGNAL_GENERATED
-
-POSITION_OPENED
-
-TP_HIT
-
-SL_HIT
-```
-
-Everything reacts to events.
-
----
-
-## Layer 7: Adapters
-
-This is the magic.
-
-### Pine Adapter
-
-Generates:
-
-```text
-Pine v6
-```
-
-from DSL.
-
----
-
-### Ruby Adapter
-
-Generates:
-
-```text
-Ruby Classes
-```
-
-for backtesting.
-
----
-
-### Python Adapter
-
-Generates:
-
-```text
-vectorbt
-backtrader
-zipline
-```
-
-strategies.
-
----
-
-### CoinDCX Adapter
-
-Uses:
-
-```ruby
-coindcx-client
-```
-
-for execution.
-
----
-
-### REST Adapter
-
-Exposes:
-
-```http
-POST /evaluate
-```
-
-Input:
-
-```json
-{
-  "candles": [...]
-}
-```
-
-Output:
-
-```json
-{
-  "signal":"LONG"
-}
-```
-
----
-
-### TradingView Webhook Adapter
-
-Consumes:
-
-```json
-{
-  "playbook":"PB7",
-  "signal":"LONG"
-}
-```
-
----
-
-## Layer 8: Multi-Timeframe Engine
-
-Independent of platform.
-
-Example:
-
-```text
-1H Bias
-
-↓
-
-15M Structure
-
-↓
-
-5M Setup
-
 ↓
-
-1M Trigger
-```
-
-Each timeframe produces:
-
-```typescript
-MarketState
-```
-
----
-
-## Layer 9: Strategy Registry
-
-Example:
 
-```ruby
-registry.register(PB1)
+LTF Precision (5M / 1M)
 
-registry.register(PB2)
+### CHoCH Reversal & Order Block Retest
 
-registry.register(PB3)
+Precise entry. Look for a LTF structure break (CHoCH/BOS) forming an Order Block. Enter inside the OB range, protected by the swing low/high, but only in discount/premium.
 
-registry.register(PB7)
-```
+CONFLUENCED LONG ENTRY RULES
 
-Then:
+* **HTF (15M/1H) Trend:** Confirmed Bullish trend (recent Higher Low and Higher High).
+* **ITF (5M/15M) Sweep:** Sell-Side Liquidity (SSL) swept and candle closed back inside support.
+* **LTF (5M/1M) CHoCH:** Reversal break of the last LTF swing high.
+* **LTF (5M/1M) OB Retest:** Candle low penetrates the top of the LTF Bullish Order Block.
+* **Discount Zone:** Entry price must be in discount territory (below dealing range midpoint).
+* **Sizing:** Max 1.5% capital risk per trade. Stop Loss placed below the OB or Sweep low.
 
-```ruby
-registry.active(context)
-```
+CONFLUENCED SHORT ENTRY RULES
 
-returns:
+* **HTF (15M/1H) Trend:** Confirmed Bearish trend (recent Lower High and Lower Low).
+* **ITF (5M/15M) Sweep:** Buy-Side Liquidity (BSL) swept and candle closed back below resistance.
+* **LTF (5M/1M) CHoCH:** Reversal break of the last LTF swing low.
+* **LTF (5M/1M) OB Retest:** Candle high penetrates the bottom of the LTF Bearish Order Block.
+* **Premium Zone:** Entry price must be in premium territory (above dealing range midpoint).
+* **Sizing:** Max 1.5% capital risk per trade. Stop Loss placed above the OB or Sweep high.
 
-```json
-[
-  {
-    "playbook":"PB7",
-    "confidence":91
-  }
-]
-```
+BENEFITS OF MTF CONFLUENCE
 
----
+By combining multiple timeframes, we mathematically optimize our reward-to-risk (R:R) ratio while filtering out false setups. In our backtests, this multi-timeframe strategy yields higher consistency because:
 
-## Layer 10: Risk Engine
+* **Directional Filter:** Operating only in the direction of the HTF trend ensures we aren't trading against institutional momentum.
+* **Precision Entries:** Entering on LTF order blocks enables very tight stop losses, scaling our average R:R to 1:3 or higher.
+* **Trap Avoidance:** Waiting for the ITF sweep ensures that retail stop-losses have already been taken out before we get involved.
 
-Completely separate.
+Deterministic Rules Engine · FSM Simulation
 
-Inputs:
+# SMC Backtester Results
 
-```text
-Signal
-Portfolio
-MarketState
-```
+Visual analysis of the OOP trading rules engine execution. This panel displays live backtest stats, equity path, and rules verification metrics generated directly from `smc_backtester.rb`.
 
-Outputs:
+**Backtest data not found!** Generate `backtest_results.js` from the repo root, then refresh this page:
 
-```text
-Entry Size
+cd /home/nemesis/project/trading-workspace/smc-backtester  
+exe/smc-backtest  
+# or: exe/smc-mtf-backtest  
+# then open smc-playbook.html via a local server (see README)
 
-SL
+Once executed, refresh this page to view interactive charts, trade metrics, and rule validations.
 
-TP1
+ACCOUNT BALANCE
 
-TP2
+### $100,000.00
 
-TP3
-```
++$0.00 (0.00%) net profit
 
-Can be reused everywhere.
+WIN RATE
 
----
+### 0.00%
 
-## Layer 11: Execution Engine
+0 wins / 0 losses
 
-Separate again.
+PROFIT FACTOR
 
-Interface:
+### 1.00
 
-```ruby
-execute(signal)
-```
+0 total closed trades
 
-Implementations:
+EQUITY CURVE
 
-```ruby
-CoinDCXExecutor
+RULE CHECK CONFIRMATIONS
 
-PaperExecutor
+* HTF Trend Aligned (Bullish/Bearish)
+* Liquidity Pool Formed (Equal Highs/Lows)
+* Liquidity Sweep Triggered (SSL/BSL Swept)
+* Market Shift Confirmed (CHoCH / BOS Break)
+* Order Block Formed & Identified
+* Retrace mitigation entry inside OB
+* Entry executed in Discount/Premium zone
 
-BacktestExecutor
+EXECUTED TRADES LOG
 
-TradingViewExecutor
-```
-
----
-
-## Layer 12: Analytics Engine
-
-Consumes trades.
-
-Produces:
-
-```text
-Sharpe
-
-Profit Factor
-
-Expectancy
-
-Win Rate
-
-Drawdown
-
-Playbook Rankings
-
-Session Rankings
-
-Timeframe Rankings
-```
-
----
-
-## Why This Is Powerful
-
-Suppose tomorrow you discover:
-
-```text
-PB9 = AMD + Sweep + FVG
-```
-
-You only add:
-
-```yaml
-playbook: PB9
-...
-```
-
-Everything automatically works:
-
-* Pine Scanner ✓
-* Ruby Backtester ✓
-* Python Research ✓
-* CoinDCX Live Trading ✓
-* REST API ✓
-* Paper Trading ✓
-* Analytics ✓
-
-No rewriting.
-
----
-
-## The Ideal Repository
-
-```text
-trading-domain-engine/
-│
-├─ specs/          ← DSL/YAML playbooks
-├─ domain/         ← Canonical objects
-├─ rules/          ← BOS, CHoCH, OB, Sweep...
-├─ engine/         ← Evaluator
-├─ mtf/            ← Multi-timeframe logic
-├─ risk/
-├─ analytics/
-├─ adapters/
-│   ├─ pine/
-│   ├─ ruby/
-│   ├─ python/
-│   ├─ coindcx/
-│   ├─ webhook/
-│   └─ rest/
-└─ tests/
-```
-
----
-
-## The Principle
-
-The biggest mistake trading developers make is coupling:
-
-```text
-Strategy == Platform
-```
-
-Instead, build:
-
-```text
-Strategy
-↓
-Domain Engine
-↓
-Adapters
-↓
-Platforms
-```
+SIMULATION CHART FEED (OHLCV + OVERLAYS)
 
-Then your SMC/Price Action framework becomes a **portable trading operating system** that can run on TradingView, Ruby backtests, CoinDCX live execution, Python research environments, or any future platform without changing the trading logic itself.
+Bullish Candle
+ Bearish Candle
+ Swings (High/Low)
+ Order Blocks
+▲ Long Entry
+▼ Short Entry
