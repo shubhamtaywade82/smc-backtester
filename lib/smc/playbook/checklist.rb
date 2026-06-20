@@ -386,14 +386,9 @@ module SMC
       end
 
       def check_ote(ctx)
-        # OTE check is a simplified proxy: verify OB retest is within 50–100% of OB body.
-        # A full fib implementation would need swing range data.
-        ob_result = check_ob(ctx)
-        if ob_result[:pass]
-          { pass: true, reason: 'OB present for OTE proxy check' }
-        else
-          { pass: false, reason: 'no OB for OTE evaluation' }
-        end
+        # OTE/Fibonacci detector not yet implemented in core SMC.
+        # A full implementation needs swing range data and actual fib retracement computation.
+        { pass: false, reason: 'OTE/Fibonacci detector not implemented in core SMC' }
       end
 
       # --- Liquidity build ---
@@ -437,33 +432,20 @@ module SMC
         { pass: false, reason: 'unable to parse session time' }
       end
 
-      # --- FVG (Fair Value Gap) — stub ---
+      # --- FVG (Fair Value Gap) — strict stub ---
 
       def check_fvg(ctx)
-        # FVG detection not yet in core SMC module; stubbed as pass-true when displacement exists.
-        ms = ctx[:market_structure]
-        recent_bos = (ms&.bos_events || []).select { |e| e[:index] >= (ctx[:current_idx] - ctx[:lookback]) }
-        if recent_bos.any?
-          { pass: true, reason: 'recent BOS implies potential FVG' }
-        else
-          { pass: false, reason: 'no recent BOS for FVG inference' }
-        end
+        # FVG detection not yet implemented in core SMC module.
+        # Returning false to prevent false positives until a real FVGDetector exists.
+        { pass: false, reason: 'FVG detector not implemented in core SMC' }
       end
 
-      # --- Breaker Block — stub ---
+      # --- Breaker Block — strict stub ---
 
       def check_breaker(ctx)
-        # Breaker detection not yet in core; proxy via invalidated OB + new structure break.
-        obd = ctx[:ob_detector]
-        invalidated = (obd&.order_blocks || []).select(&:invalidated?)
-        ms = ctx[:market_structure]
-        recent_structure = (ms&.bos_events || []).select { |e| e[:index] >= (ctx[:current_idx] - ctx[:lookback]) }
-
-        if invalidated.any? && recent_structure.any?
-          { pass: true, reason: 'invalidated OB + new structure suggests breaker' }
-        else
-          { pass: false, reason: 'no breaker conditions met' }
-        end
+        # Breaker Block detection not yet implemented in core SMC module.
+        # Returning false to prevent false positives until a real BreakerBlockDetector exists.
+        { pass: false, reason: 'Breaker Block detector not implemented in core SMC' }
       end
     end
   end

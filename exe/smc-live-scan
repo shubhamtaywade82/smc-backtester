@@ -1,0 +1,370 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
+
+require 'optparse'
+require 'json'
+require 'time'
+require 'smc'
+
+# --- CoinDCX Client Integration ---
+coindcx_paths = [
+  File.expand_path('../../coindcx/coindcx-client/lib', __dir__),
+  File.expand_path('../../../coindcx/coindcx-client/lib', __dir__)
+]
+coindcx_paths.each { |p| $LOAD_PATH.unshift(p) unless $LOAD_PATH.include?(p) }
+
+begin
+  require 'coindcx'
+rescue LoadError
+  puts "WARNING: coindcx-client not found. CoinDCX fetching disabled."
+  puts "Install from: /home/nemesis/project/trading-workspace/coindcx/coindcx-client"
+end
+
+# --- Configuration ---
+OPTIONS = {
+  pair: 'B-BTC_USDT',
+  interval: '5m',
+  limit: 200,
+  playbook: 'PB-7',
+  min_rr: 3.0,
+  poll_seconds: 300,
+  max_polls: 100,
+  formation_min: 15,  # minimum formation % to show (0-100)
+  verbose: true,
+  api: :coindcx
+}.freeze
+
+def parse_options
+  options = OPTIONS.dup
+  OptionParser.new do |opts|
+    opts.banner = "Usage: smc-live-scan [options]"
+    opts.on("-p", "--pair PAIR", "Trading pair (default: B-BTC_USDT)") { |v| options[:pair] = v }
+    opts.on("-i", "--interval INTERVAL", "Candle interval: 1m, 5m, 15m, 1h (default: 5m)") { |v| options[:interval] = v }
+    opts.on("-l", "--limit LIMIT", Integer, "Candle history to fetch (default: 200)") { |v| options[:limit] = v }
+    opts.on("-b", "--playbook ID", "Playbook to scan (default: PB-7)") { |v| options[:playbook] = v }
+    opts.on("-r", "--min-rr RR", Float, "Min R:R filter (default: 3.0)") { |v| options[:min_rr] = v }
+    opts.on("-s", "--poll-seconds SEC", Integer, "Poll interval seconds (default: 300)") { |v| options[:poll_seconds] = v }
+    opts.on("-n", "--max-polls N", Integer, "Max poll cycles (default: 100)") { |v| options[:max_polls] = v }
+    opts.on("-f", "--formation MIN", Integer, "Min formation % to show (default: 15)") { |v| options[:formation_min] = v }
+    opts.on("--quiet", "Only show forming/ready playbooks") { options[:verbose] = false }
+    opts.on("--dry-run", "Print signals but do not execute") { options[:dry_run] = true }
+    opts.on("-h", "--help", "Show this help") { puts opts; exit }
+  end.parse!
+  options
+end
+
+# --- Data Fetchers ---
+module LiveDataFetcher
+  def self.fetch_coindcx(pair:, interval:, limit:)
+    raise "CoinDCX client not available" unless defined?(CoinDCX)
+
+    CoinDCX.configure do |config|
+      config.api_key = ENV.fetch("COINDCX_API_KEY", "dummy_key")
+      config.api_secret = ENV.fetch("COINDCX_API_SECRET", "dummy_secret")
+    end
+
+    raw = CoinDCX.client.public.market_data.list_candles(
+      pair: pair, interval: interval, limit: limit
+    )
+
+    return [] if raw.nil? || raw.empty?
+
+    raw.reverse.map do |c|
+      SMC::Candle.new(
+        time: Time.at(c["time"] / 1000).utc,
+        open: c["open"].to_f,
+        high: c["high"].to_f,
+        low: c["low"].to_f,
+        close: c["close"].to_f,
+        volume: c["volume"].to_f
+      )
+    end
+  end
+end
+
+# --- Pipeline ---
+def build_pipeline
+  {
+    pivot_detector: SMC::PivotDetector.new(left_bars: 4, right_bars: 4),
+    market_structure: SMC::MarketStructure.new,
+    liquidity_sweep: SMC::LiquiditySweep.new(tolerance_pct: 0.0015),
+    ob_detector: SMC::OrderBlockDetector.new
+  }
+end
+
+def warm_up_pipeline(candles, pipeline)
+  pd = pipeline[:pivot_detector]
+  ms = pipeline[:market_structure]
+  ls = pipeline[:liquidity_sweep]
+  obd = pipeline[:ob_detector]
+  start_idx = [pd.left_bars + pd.right_bars + 15, 30].max
+
+  (start_idx..(candles.size - 1)).each do |i|
+    swings = pd.detect_swings(candles[0..i])
+    ms.update(swings, candles[i], i)
+    ls.update_equal_levels(swings)
+    ls.detect_sweeps(swings, candles[i], i)
+    ms.bos_events.last&.then { |e| obd.check_for_new_ob(e, candles, i) if e[:index] == i }
+    ms.choch_events.last&.then { |e| obd.check_for_new_ob(e, candles, i) if e[:index] == i }
+    obd.update_mitigations(candles[i], i)
+  end
+  pipeline
+end
+
+def process_new_candle(candles, pipeline, idx)
+  pd = pipeline[:pivot_detector]
+  ms = pipeline[:market_structure]
+  ls = pipeline[:liquidity_sweep]
+  obd = pipeline[:ob_detector]
+
+  swings = pd.detect_swings(candles[0..idx])
+  ms.update(swings, candles[idx], idx)
+  ls.update_equal_levels(swings)
+  ls.detect_sweeps(swings, candles[idx], idx)
+  ms.bos_events.last&.then { |e| obd.check_for_new_ob(e, candles, idx) if e[:index] == idx }
+  ms.choch_events.last&.then { |e| obd.check_for_new_ob(e, candles, idx) if e[:index] == idx }
+  obd.update_mitigations(candles[idx], idx)
+end
+
+# --- Formation Analysis ---
+def analyze_formations(candles, pipeline, options)
+  fa = SMC::Playbook::FormationAnalyzer.new(
+    candles: candles,
+    current_idx: candles.size - 1,
+    pivot_detector: pipeline[:pivot_detector],
+    market_structure: pipeline[:market_structure],
+    liquidity_sweep: pipeline[:liquidity_sweep],
+    ob_detector: pipeline[:ob_detector]
+  )
+
+  reports = fa.analyze_all(min_formation: options[:formation_min] / 100.0)
+
+  if reports.empty?
+    puts "   No playbooks forming yet."
+    return []
+  end
+
+  puts ""
+  puts "   ┌─────────────────────────────────────────────────────────────┐"
+  puts "   │           PLAYBOOK FORMATION TRACKER                        │"
+  puts "   ├─────────────────────────────────────────────────────────────┤"
+
+  reports.each do |r|
+    pb_icon = case r.status
+              when :executing then "🔥"
+              when :ready     then "✅"
+              when :forming   then "⚡"
+              when :warming_up then "🌡️"
+              else "•"
+              end
+
+    progress_bar = build_progress_bar(r.formation_pct)
+    puts format(
+      "   │ %s %-5s | %-28s | %s | %5.1f%% %s %-27s │",
+      pb_icon,
+      r.direction.to_s.upcase,
+      truncate(r.playbook.name, 28),
+      status_label(r.status),
+      r.formation_pct,
+      progress_bar,
+      ""
+    )
+
+    if r.next_trigger && options[:verbose]
+      puts format(
+        "   │          ➤ NEXT: %-45s│",
+        truncate("#{r.next_trigger[:rule]} → #{r.next_trigger[:description]}", 45)
+      )
+    end
+
+    if r.projected_levels.any? && r.formation_pct >= 40
+      lv = r.projected_levels
+      puts format(
+        "   │          📐 ENTRY: %-8s SL: %-8s TP3: %-8s R:R 1:%-5s│",
+        lv[:entry] || "-", lv[:sl] || "-",
+        lv[:tp3] || "-", lv[:rr] || "-"
+      )
+    end
+
+    if options[:verbose] && r.phases.any?(&:pending?)
+      pending = r.phases.select(&:pending?)
+      pending.first(2).each do |phase|
+        puts format(
+          "   │          ⏳ [%s] %s",
+          phase.required? ? "REQ" : "opt",
+          truncate(phase.detail, 50)
+        )
+      end
+    end
+  end
+
+  puts "   └─────────────────────────────────────────────────────────────┘"
+  reports
+end
+
+def status_label(status)
+  case status
+  when :executing then "EXEC  "
+  when :ready     then "READY "
+  when :forming   then "FORM  "
+  when :warming_up then "WARM  "
+  else "      "
+  end
+end
+
+def build_progress_bar(pct, width: 20)
+  filled = (pct / 100.0 * width).round
+  empty = width - filled
+  "█" * [filled, width].min + "░" * [empty, 0].max
+end
+
+def truncate(str, max)
+  s = str.to_s
+  s.length > max ? s[0..(max - 4)] + "..." : s.ljust(max)
+end
+
+# --- Specific Signal Evaluation ---
+def evaluate_focussed(candles, pipeline, options)
+  pd = pipeline[:pivot_detector]
+  ms = pipeline[:market_structure]
+  ls = pipeline[:liquidity_sweep]
+  obd = pipeline[:ob_detector]
+  idx = candles.size - 1
+
+  pb = SMC::Playbook::PlaybookRegistry.default.find(options[:playbook])
+  return nil unless pb
+
+  strategy = if pb.strategy_class
+               pb.strategy_class.new
+             else
+               SMC::Strategy::PlaybookStrategyAdapter.new(
+                 playbook_or_id: options[:playbook],
+                 min_risk_reward: options[:min_rr]
+               )
+             end
+
+  strategy.evaluate(candles, idx, pd, ms, ls, obd)
+end
+
+# --- Main Loop ---
+def main
+  options = parse_options
+
+  puts "=================================================="
+  puts "   SMC Live Formation Scanner v2.0                "
+  puts "=================================================="
+  puts "Pair      : #{options[:pair]}"
+  puts "Interval  : #{options[:interval]}"
+  puts "Focus     : #{options[:playbook]}"
+  puts "Min R:R   : 1:#{options[:min_rr]}"
+  puts "Formation : >= #{options[:formation_min]}%"
+  puts "Poll time : #{options[:poll_seconds]}s"
+  puts "Mode      : #{options[:dry_run] ? 'DRY RUN' : 'LIVE'}"
+  puts "=================================================="
+
+  unless defined?(CoinDCX)
+    puts "\nERROR: CoinDCX client not loaded. Cannot fetch live data."
+    exit 1
+  end
+
+  puts "\n[INIT] Fetching #{options[:limit]} candles..."
+  candles = LiveDataFetcher.fetch_coindcx(
+    pair: options[:pair], interval: options[:interval], limit: options[:limit]
+  )
+
+  if candles.empty?
+    puts "ERROR: No candles fetched."
+    exit 1
+  end
+
+  puts "       Loaded #{candles.size} candles (latest: #{candles.last.time})"
+
+  pipeline = build_pipeline
+  warm_up_pipeline(candles, pipeline)
+
+  last_fetched_time = candles.last.time
+  poll_count = 0
+
+  puts "\n[READY] Monitoring formation across all playbooks..."
+
+  loop do
+    sleep(options[:poll_seconds])
+    poll_count += 1
+
+    puts "\n[POLL #{poll_count} | #{Time.now.utc.strftime('%H:%M:%S')}]"
+
+    begin
+      fresh = LiveDataFetcher.fetch_coindcx(
+        pair: options[:pair], interval: options[:interval], limit: 5
+      )
+    rescue StandardError => e
+      puts "       Fetch error: #{e.message}"
+      next
+    end
+
+    new_candles = fresh.select { |c| c.time > last_fetched_time }
+
+    if new_candles.empty?
+      puts "       No new candles yet."
+      next
+    end
+
+    new_candles.each do |c|
+      candles << c
+      last_fetched_time = c.time
+      process_new_candle(candles, pipeline, candles.size - 1)
+    end
+
+    ms = pipeline[:market_structure]
+    puts "       Bar: #{candles.last.close} | Swings: #{ms.swings.size} | BOS: #{ms.bos_events.size} | CHoCH: #{ms.choch_events.size} | #{'Trend: %8s' % ms.trend}"
+
+    # Formation analysis
+    reports = analyze_formations(candles, pipeline, options)
+
+    # Focus playbook specific signal
+    try_signal = evaluate_focussed(candles, pipeline, options)
+
+    if try_signal
+      puts ""
+      puts "   ╔═════════════════════════════════════════════════════════════╗"
+      puts "   ║  🔥🔥🔥 SIGNAL DETECTED 🔥🔥🔥                             ║"
+      puts "   ╠═════════════════════════════════════════════════════════════╣"
+      puts format("   ║  Playbook : %-47s ║", try_signal[:playbook])
+      puts format("   ║  Direction: %-47s ║", try_signal[:type].to_s.upcase)
+      puts format("   ║  Entry    : %-47.2f ║", try_signal[:entry])
+      puts format("   ║  SL       : %-47.2f ║", try_signal[:sl])
+      puts format("   ║  TP1      : %-47.2f ║", try_signal[:tp1])
+      puts format("   ║  TP2      : %-47.2f ║", try_signal[:tp2])
+      puts format("   ║  TP3      : %-47.2f ║", try_signal[:tp3])
+      puts format("   ║  R:R      : 1:%-45.2f ║", try_signal[:risk_reward])
+      puts "   ╚═════════════════════════════════════════════════════════════╝"
+
+      # Show which rules were confirmed
+      passed_checks = try_signal[:rules_checked]&.select { |_, v| v }&.keys
+      if passed_checks
+        puts "   Confirmed: #{passed_checks.first(6).join(', ')}#{passed_checks.size > 6 ? '...' : ''}"
+      end
+
+      unless options[:dry_run]
+        puts "\n   [EXECUTE] → Place #{try_signal[:type]} order..."
+      end
+    elsif reports.any? { |r| r.status == :forming }
+      puts ""
+      puts "   ⚡ Close to signal — #{reports.select { |r| r.status == :forming }.size} playbook(s) ≥ 50% formed."
+    elsif reports.any? { |r| r.status == :warming_up }
+      puts ""
+      puts "   🌡️ Setup building — monitoring #{reports.select { |r| r.status == :warming_up }.size} playbook(s)."
+    else
+      puts ""
+      puts "   ⚪ No formations above #{options[:formation_min]}% threshold."
+    end
+
+    break if poll_count >= options[:max_polls]
+  end
+
+  puts "\n[EXIT] Max polls reached. Shutting down."
+end
+
+main if __FILE__ == $0
