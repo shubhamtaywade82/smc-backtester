@@ -2,6 +2,12 @@ PATH
   remote: .
   specs:
     smc-backtester (1.0.0)
+      pastel (~> 0.8)
+      tty-box (~> 0.7)
+      tty-font (~> 0.5)
+      tty-progressbar (~> 0.18)
+      tty-spinner (~> 0.9)
+      tty-table (~> 0.12)
 
 PATH
   remote: /home/nemesis/project/ai-workspace/ollama_agent
@@ -195,6 +201,7 @@ GEM
       tty-cursor (~> 0.7)
     tty-color (0.6.0)
     tty-cursor (0.7.1)
+    tty-font (0.5.0)
     tty-logger (0.6.0)
       pastel (~> 0.8)
     tty-markdown (0.7.2)
@@ -204,6 +211,11 @@ GEM
       strings (~> 0.2.0)
       tty-color (~> 0.5)
       tty-screen (~> 0.8)
+    tty-progressbar (0.18.3)
+      strings-ansi (~> 0.2)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      unicode-display_width (>= 1.6, < 3.0)
     tty-prompt (0.23.1)
       pastel (~> 0.8)
       tty-reader (~> 0.8)
@@ -212,6 +224,8 @@ GEM
       tty-screen (~> 0.8)
       wisper (~> 2.0)
     tty-screen (0.8.2)
+    tty-spinner (0.9.3)
+      tty-cursor (~> 0.7)
     tty-table (0.12.0)
       pastel (~> 0.8)
       strings (~> 0.2.0)
@@ -313,11 +327,14 @@ CHECKSUMS
   tty-box (0.7.0) sha256=17f453a0c1df43871fdb6de461ee797b78574dacc652372fa2ae98a00785df8b
   tty-color (0.6.0) sha256=6f9c37ca3a4e2367fb2e6d09722762647d6f455c111f05b59f35730eeb24332a
   tty-cursor (0.7.1) sha256=79534185e6a777888d88628b14b6a1fdf5154a603f285f80b1753e1908e0bf48
+  tty-font (0.5.0) sha256=495ee588701be4abaf03da8b14382794003cb2d836127b02c78cda18aaf451e2
   tty-logger (0.6.0) sha256=9352d0e3ebc4f9d59b63135806e38c0d6012adc04c907dde96db33daa64e50eb
   tty-markdown (0.7.2) sha256=1ed81db97028d006ba81e2cfd9fe0a04b0eb28650ad0d4086ed6e5627f4ac511
+  tty-progressbar (0.18.3) sha256=6cbb4260e55e74a9180d502143eb6a467d2c8e51bf5f3c9509fb5cacc3d4a5f6
   tty-prompt (0.23.1) sha256=fcdbce905238993f27eecfdf67597a636bc839d92192f6a0eef22b8166449ec8
   tty-reader (0.9.0) sha256=c62972c985c0b1566f0e56743b6a7882f979d3dc32ff491ed490a076f899c2b1
   tty-screen (0.8.2) sha256=c090652115beae764336c28802d633f204fb84da93c6a968aa5d8e319e819b50
+  tty-spinner (0.9.3) sha256=0e036f047b4ffb61f2aa45f5a770ec00b4d04130531558a94bfc5b192b570542
   tty-table (0.12.0) sha256=fdc27a4750835c1a16efe19a0b857e3ced3652cc7aceafe6dca94908965b9939
   unicode-display_width (2.6.0) sha256=12279874bba6d5e4d2728cef814b19197dbb10d7a7837a869bab65da943b7f5a
   unicode_utils (1.4.0) sha256=b922d0cf2313b6b7136ada6645ce7154ffc86418ca07d53b058efe9eb72f2a40

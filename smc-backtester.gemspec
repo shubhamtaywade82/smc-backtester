@@ -17,9 +17,15 @@ Gem::Specification.new do |spec|
   # Specify which files should be added to the gem when it is built.
   spec.files = Dir["lib/**/*.rb", "exe/*", "README.md", "Rakefile", "spec/**/*.rb", "smc-playbook.html"]
   spec.bindir        = "exe"
-  spec.executables   = ["smc-backtest", "smc-mtf-backtest", "smc-fetch-coindcx"]
+  spec.executables   = ["smc-backtest", "smc-mtf-backtest", "smc-fetch-coindcx", "smc-live-scan"]
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.12"
+  spec.add_runtime_dependency "tty-spinner", "~> 0.9"
+  spec.add_runtime_dependency "tty-box", "~> 0.7"
+  spec.add_runtime_dependency "tty-table", "~> 0.12"
+  spec.add_runtime_dependency "tty-font", "~> 0.5"
+  spec.add_runtime_dependency "tty-progressbar", "~> 0.18"
+  spec.add_runtime_dependency "pastel", "~> 0.8"
 end

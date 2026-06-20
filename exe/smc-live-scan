@@ -7,6 +7,10 @@ require 'optparse'
 require 'json'
 require 'time'
 require 'smc'
+require 'tty-font'
+require 'pastel'
+require 'tty-spinner'
+require 'tty-table'
 
 # --- CoinDCX Client Integration ---
 coindcx_paths = [
@@ -18,8 +22,7 @@ coindcx_paths.each { |p| $LOAD_PATH.unshift(p) unless $LOAD_PATH.include?(p) }
 begin
   require 'coindcx'
 rescue LoadError
-  puts "WARNING: coindcx-client not found. CoinDCX fetching disabled."
-  puts "Install from: /home/nemesis/project/trading-workspace/coindcx/coindcx-client"
+  puts "WARNING: coindcx-client not found. Install from /home/nemesis/project/trading-workspace/coindcx/coindcx-client"
 end
 
 # --- Configuration ---
@@ -31,7 +34,7 @@ OPTIONS = {
   min_rr: 3.0,
   poll_seconds: 300,
   max_polls: 100,
-  formation_min: 15,  # minimum formation % to show (0-100)
+  formation_min: 5,
   verbose: true,
   api: :coindcx
 }.freeze
@@ -40,24 +43,37 @@ def parse_options
   options = OPTIONS.dup
   OptionParser.new do |opts|
     opts.banner = "Usage: smc-live-scan [options]"
-    opts.on("-p", "--pair PAIR", "Trading pair (default: B-BTC_USDT)") { |v| options[:pair] = v }
-    opts.on("-i", "--interval INTERVAL", "Candle interval: 1m, 5m, 15m, 1h (default: 5m)") { |v| options[:interval] = v }
-    opts.on("-l", "--limit LIMIT", Integer, "Candle history to fetch (default: 200)") { |v| options[:limit] = v }
-    opts.on("-b", "--playbook ID", "Playbook to scan (default: PB-7)") { |v| options[:playbook] = v }
-    opts.on("-r", "--min-rr RR", Float, "Min R:R filter (default: 3.0)") { |v| options[:min_rr] = v }
-    opts.on("-s", "--poll-seconds SEC", Integer, "Poll interval seconds (default: 300)") { |v| options[:poll_seconds] = v }
-    opts.on("-n", "--max-polls N", Integer, "Max poll cycles (default: 100)") { |v| options[:max_polls] = v }
-    opts.on("-f", "--formation MIN", Integer, "Min formation % to show (default: 15)") { |v| options[:formation_min] = v }
-    opts.on("--quiet", "Only show forming/ready playbooks") { options[:verbose] = false }
-    opts.on("--dry-run", "Print signals but do not execute") { options[:dry_run] = true }
-    opts.on("-h", "--help", "Show this help") { puts opts; exit }
+    opts.on("-p", "--pair PAIR", "Trading pair") { |v| options[:pair] = v }
+    opts.on("-i", "--interval INTERVAL", "1m, 5m, 15m, 1h") { |v| options[:interval] = v }
+    opts.on("-l", "--limit LIMIT", Integer, "Candle history") { |v| options[:limit] = v }
+    opts.on("-b", "--playbook ID", "Focus playbook") { |v| options[:playbook] = v }
+    opts.on("-r", "--min-rr RR", Float, "Min R:R filter") { |v| options[:min_rr] = v }
+    opts.on("-s", "--poll-seconds SEC", Integer, "Poll interval") { |v| options[:poll_seconds] = v }
+    opts.on("-n", "--max-polls N", Integer, "Max poll cycles") { |v| options[:max_polls] = v }
+    opts.on("-f", "--formation MIN", Integer, "Min formation % to show (default: 5)") { |v| options[:formation_min] = v }
+    opts.on("-q", "--quiet", "Only show forming/ready playbooks") { options[:verbose] = false }
+    opts.on("--dry-run", "Print signals only, do not execute") { options[:dry_run] = true }
+    opts.on("-h", "--help", "Show help") { puts opts; exit }
   end.parse!
   options
 end
 
+# --- Colors ---
+def pastel
+  @pastel ||= Pastel.new
+end
+
+STATUS_STYLES = {
+  executing: ->(t) { pastel.on_bright_green.black(t) },
+  ready:     ->(t) { pastel.bright_green(t) },
+  forming:   ->(t) { pastel.yellow(t) },
+  warming_up:->(t) { pastel.dim(t) },
+  dormant:   ->(t) { pastel.dim(t) },
+}.freeze
+
 # --- Data Fetchers ---
 module LiveDataFetcher
-  def self.fetch_coindcx(pair:, interval:, limit:)
+  def self.fetch_coindcx(pair:, interval:, limit:, spinner: nil)
     raise "CoinDCX client not available" unless defined?(CoinDCX)
 
     CoinDCX.configure do |config|
@@ -65,13 +81,13 @@ module LiveDataFetcher
       config.api_secret = ENV.fetch("COINDCX_API_SECRET", "dummy_secret")
     end
 
+    spinner&.update(title: "Fetching #{pair} #{interval}…") if spinner
     raw = CoinDCX.client.public.market_data.list_candles(
       pair: pair, interval: interval, limit: limit
     )
-
     return [] if raw.nil? || raw.empty?
 
-    raw.reverse.map do |c|
+    candles = raw.reverse.map do |c|
       SMC::Candle.new(
         time: Time.at(c["time"] / 1000).utc,
         open: c["open"].to_f,
@@ -81,24 +97,19 @@ module LiveDataFetcher
         volume: c["volume"].to_f
       )
     end
+    spinner&.success if spinner
+    candles
   end
 end
 
 # --- Pipeline ---
-def build_pipeline
-  {
-    pivot_detector: SMC::PivotDetector.new(left_bars: 4, right_bars: 4),
-    market_structure: SMC::MarketStructure.new,
-    liquidity_sweep: SMC::LiquiditySweep.new(tolerance_pct: 0.0015),
-    ob_detector: SMC::OrderBlockDetector.new
-  }
-end
+def build_and_warm(candles, spinner: nil)
+  pd = SMC::PivotDetector.new(left_bars: 4, right_bars: 4)
+  ms = SMC::MarketStructure.new
+  ls = SMC::LiquiditySweep.new(tolerance_pct: 0.0015)
+  obd = SMC::OrderBlockDetector.new
 
-def warm_up_pipeline(candles, pipeline)
-  pd = pipeline[:pivot_detector]
-  ms = pipeline[:market_structure]
-  ls = pipeline[:liquidity_sweep]
-  obd = pipeline[:ob_detector]
+  spinner&.update(title: "Warming up pipeline…")
   start_idx = [pd.left_bars + pd.right_bars + 15, 30].max
 
   (start_idx..(candles.size - 1)).each do |i|
@@ -110,7 +121,8 @@ def warm_up_pipeline(candles, pipeline)
     ms.choch_events.last&.then { |e| obd.check_for_new_ob(e, candles, i) if e[:index] == i }
     obd.update_mitigations(candles[i], i)
   end
-  pipeline
+  spinner&.success if spinner
+  { pivot_detector: pd, market_structure: ms, liquidity_sweep: ls, ob_detector: obd }
 end
 
 def process_new_candle(candles, pipeline, idx)
@@ -118,7 +130,6 @@ def process_new_candle(candles, pipeline, idx)
   ms = pipeline[:market_structure]
   ls = pipeline[:liquidity_sweep]
   obd = pipeline[:ob_detector]
-
   swings = pd.detect_swings(candles[0..idx])
   ms.update(swings, candles[idx], idx)
   ls.update_equal_levels(swings)
@@ -128,243 +139,223 @@ def process_new_candle(candles, pipeline, idx)
   obd.update_mitigations(candles[idx], idx)
 end
 
-# --- Formation Analysis ---
-def analyze_formations(candles, pipeline, options)
-  fa = SMC::Playbook::FormationAnalyzer.new(
-    candles: candles,
-    current_idx: candles.size - 1,
-    pivot_detector: pipeline[:pivot_detector],
-    market_structure: pipeline[:market_structure],
-    liquidity_sweep: pipeline[:liquidity_sweep],
-    ob_detector: pipeline[:ob_detector]
-  )
+# --- Tables ---
+def build_progress_bar(pct, width: 16)
+  filled = (pct / 100.0 * width).round.clamp(0, width)
+  empty = width - filled
+  █ = "█"
+  ░ = "░"
+  # color scale
+  bar = if pct >= 85 then pastel.bright_green(█ * filled)
+        elsif pct >= 50 then pastel.yellow(█ * filled)
+        elsif pct >= 25 then pastel.cyan(█ * filled)
+        else pastel.red(█ * filled)
+        end
+  bar + pastel.dim(░ * empty)
+end
 
-  reports = fa.analyze_all(min_formation: options[:formation_min] / 100.0)
+def print_header(options)
+  font = TTY::Font.new(:standard)
+  puts pastel.bright_blue(font.write("SMC"))
+  puts pastel.cyan("  Live Formation Scanner")
+  puts ""
+  puts pastel.dim("  Pair: #{options[:pair]} | Interval: #{options[:interval]} | Focus: #{options[:playbook]} | Min RR: 1:#{options[:min_rr]}")
+  puts ""
+end
 
-  if reports.empty?
-    puts "   No playbooks forming yet."
-    return []
+def print_banner(text, color: :bright_blue)
+  puts pastel.public_send(color, "═" * 60)
+  puts pastel.public_send(color, "  #{text}")
+  puts pastel.public_send(color, "═" * 60)
+end
+
+def print_signal_box(signal)
+  puts ""
+  puts pastel.on_bright_green.black("  🔥  SIGNAL DETECTED  🔥")
+  puts ""
+  puts pastel.bright_white("  Playbook : #{signal[:playbook]}")
+  puts pastel.bright_white("  Direction: #{signal[:type].to_s.upcase}")
+  puts ""
+  puts pastel.green("  Entry  : #{signal[:entry]&.round(2)}")
+  puts pastel.red("  SL     : #{signal[:sl]&.round(2)}")
+  puts pastel.yellow("  TP1    : #{signal[:tp1]&.round(2)}")
+  puts pastel.yellow("  TP2    : #{signal[:tp2]&.round(2)}")
+  puts pastel.bright_yellow("  TP3    : #{signal[:tp3]&.round(2)}")
+  puts ""
+  puts pastel.cyan("  R:R    : 1:#{signal[:risk_reward]}")
+  passed_rules = signal[:rules_checked]&.select { |_, v| v }&.keys
+  puts pastel.dim("  Rules  : #{passed_rules&.first(6)&.join(', ')}#{passed_rules&.size.to_i > 6 ? '…' : ''}")
+  puts ""
+end
+
+def print_formation_table(reports, verbose: true)
+  return if reports.empty?
+
+  rows = reports.map do |r|
+    bar = build_progress_bar(r.formation_pct)
+    status_icon = case r.status
+                  when :executing then "🔥"
+                  when :ready     then "✅"
+                  when :forming   then "⚡"
+                  when :warming_up then "🌡️"
+                  else "•"
+                  end
+
+    pb_name = r.playbook.name.length > 24 ? "#{r.playbook.name[0..22]}…" : r.playbook.name
+
+    [
+      "#{status_icon} #{r.direction.to_s.upcase}",
+      pb_name,
+      STATUS_STYLES[r.status]&.call(r.status.to_s.upcase) || r.status.to_s.upcase,
+      "#{r.formation_pct}%",
+      bar
+    ]
   end
 
-  puts ""
-  puts "   ┌─────────────────────────────────────────────────────────────┐"
-  puts "   │           PLAYBOOK FORMATION TRACKER                        │"
-  puts "   ├─────────────────────────────────────────────────────────────┤"
+  table = TTY::Table.new(header: ["Dir", "Playbook", "Status", "Formed", "Progress"], rows: rows)
+  puts table.render(:unicode, padding: [0, 1])
 
-  reports.each do |r|
-    pb_icon = case r.status
-              when :executing then "🔥"
-              when :ready     then "✅"
-              when :forming   then "⚡"
-              when :warming_up then "🌡️"
-              else "•"
-              end
+  if verbose
+    reports.each do |r|
+      next unless r.next_trigger
 
-    progress_bar = build_progress_bar(r.formation_pct)
-    puts format(
-      "   │ %s %-5s | %-28s | %s | %5.1f%% %s %-27s │",
-      pb_icon,
-      r.direction.to_s.upcase,
-      truncate(r.playbook.name, 28),
-      status_label(r.status),
-      r.formation_pct,
-      progress_bar,
-      ""
-    )
+      puts "  #{pastel.cyan('▸')} #{pastel.bright_white(r.playbook.id)} | #{pastel.yellow(r.next_trigger[:description])}"
 
-    if r.next_trigger && options[:verbose]
-      puts format(
-        "   │          ➤ NEXT: %-45s│",
-        truncate("#{r.next_trigger[:rule]} → #{r.next_trigger[:description]}", 45)
-      )
-    end
-
-    if r.projected_levels.any? && r.formation_pct >= 40
-      lv = r.projected_levels
-      puts format(
-        "   │          📐 ENTRY: %-8s SL: %-8s TP3: %-8s R:R 1:%-5s│",
-        lv[:entry] || "-", lv[:sl] || "-",
-        lv[:tp3] || "-", lv[:rr] || "-"
-      )
-    end
-
-    if options[:verbose] && r.phases.any?(&:pending?)
-      pending = r.phases.select(&:pending?)
-      pending.first(2).each do |phase|
-        puts format(
-          "   │          ⏳ [%s] %s",
-          phase.required? ? "REQ" : "opt",
-          truncate(phase.detail, 50)
-        )
+      if r.projected_levels && r.projected_levels[:entry]
+        lv = r.projected_levels
+        proj = "📐 ENTRY #{lv[:entry]} | SL #{lv[:sl] || '-'} | TP3 #{lv[:tp3] || '-'} | R:R 1:#{lv[:rr] || '-'}"
+        puts "     #{pastel.dim(proj)}"
       end
     end
   end
-
-  puts "   └─────────────────────────────────────────────────────────────┘"
-  reports
 end
 
-def status_label(status)
-  case status
-  when :executing then "EXEC  "
-  when :ready     then "READY "
-  when :forming   then "FORM  "
-  when :warming_up then "WARM  "
-  else "      "
-  end
-end
-
-def build_progress_bar(pct, width: 20)
-  filled = (pct / 100.0 * width).round
-  empty = width - filled
-  "█" * [filled, width].min + "░" * [empty, 0].max
-end
-
-def truncate(str, max)
-  s = str.to_s
-  s.length > max ? s[0..(max - 4)] + "..." : s.ljust(max)
-end
-
-# --- Specific Signal Evaluation ---
-def evaluate_focussed(candles, pipeline, options)
-  pd = pipeline[:pivot_detector]
-  ms = pipeline[:market_structure]
-  ls = pipeline[:liquidity_sweep]
-  obd = pipeline[:ob_detector]
-  idx = candles.size - 1
-
-  pb = SMC::Playbook::PlaybookRegistry.default.find(options[:playbook])
-  return nil unless pb
-
-  strategy = if pb.strategy_class
-               pb.strategy_class.new
-             else
-               SMC::Strategy::PlaybookStrategyAdapter.new(
-                 playbook_or_id: options[:playbook],
-                 min_risk_reward: options[:min_rr]
-               )
-             end
-
-  strategy.evaluate(candles, idx, pd, ms, ls, obd)
-end
-
-# --- Main Loop ---
+# --- Main ---
 def main
   options = parse_options
 
-  puts "=================================================="
-  puts "   SMC Live Formation Scanner v2.0                "
-  puts "=================================================="
-  puts "Pair      : #{options[:pair]}"
-  puts "Interval  : #{options[:interval]}"
-  puts "Focus     : #{options[:playbook]}"
-  puts "Min R:R   : 1:#{options[:min_rr]}"
-  puts "Formation : >= #{options[:formation_min]}%"
-  puts "Poll time : #{options[:poll_seconds]}s"
-  puts "Mode      : #{options[:dry_run] ? 'DRY RUN' : 'LIVE'}"
-  puts "=================================================="
+  print_header(options)
 
   unless defined?(CoinDCX)
-    puts "\nERROR: CoinDCX client not loaded. Cannot fetch live data."
+    puts pastel.red("ERROR: CoinDCX client not loaded. Cannot fetch live data.")
     exit 1
   end
 
-  puts "\n[INIT] Fetching #{options[:limit]} candles..."
+  spinner = TTY::Spinner.new("[:spinner] :title", format: :arrow, hide_cursor: true)
+  spinner.auto_spin
+
+  spinner.update(title: "Fetching #{options[:limit]} candles for #{options[:pair]}…")
   candles = LiveDataFetcher.fetch_coindcx(
-    pair: options[:pair], interval: options[:interval], limit: options[:limit]
+    pair: options[:pair], interval: options[:interval], limit: options[:limit], spinner: spinner
   )
 
   if candles.empty?
-    puts "ERROR: No candles fetched."
+    spinner.error("No candles fetched")
+    puts pastel.red("ERROR: Check API credentials and pair name.")
     exit 1
   end
+  spinner.success("Loaded #{candles.size} candles")
 
-  puts "       Loaded #{candles.size} candles (latest: #{candles.last.time})"
+  pipeline = build_and_warm(candles, spinner: spinner)
+  ms = pipeline[:market_structure]
 
-  pipeline = build_pipeline
-  warm_up_pipeline(candles, pipeline)
+  puts "  Bars: #{candles.size} | Swings: #{ms.swings.size} | BOS: #{ms.bos_events.size} | CHoCH: #{ms.choch_events.size} | Trend: #{ms.trend}"
+  puts ""
 
   last_fetched_time = candles.last.time
   poll_count = 0
-
-  puts "\n[READY] Monitoring formation across all playbooks..."
 
   loop do
     sleep(options[:poll_seconds])
     poll_count += 1
 
-    puts "\n[POLL #{poll_count} | #{Time.now.utc.strftime('%H:%M:%S')}]"
+    puts ""
+    print_banner("POLL #{poll_count} — #{Time.now.utc.strftime('%H:%M:%S UTC')}")
 
     begin
-      fresh = LiveDataFetcher.fetch_coindcx(
+      fresh = CoinDCX.client.public.market_data.list_candles(
         pair: options[:pair], interval: options[:interval], limit: 5
       )
     rescue StandardError => e
-      puts "       Fetch error: #{e.message}"
+      puts pastel.red("  Fetch error: #{e.message}")
       next
     end
 
-    new_candles = fresh.select { |c| c.time > last_fetched_time }
+    new_candles = fresh.reverse.select { |c| Time.at(c["time"] / 1000).utc > last_fetched_time }
 
     if new_candles.empty?
-      puts "       No new candles yet."
+      puts pastel.dim("  No new candles yet.")
       next
     end
 
-    new_candles.each do |c|
+    new_candles.each do |raw|
+      c = SMC::Candle.new(
+        time: Time.at(raw["time"] / 1000).utc,
+        open: raw["open"].to_f, high: raw["high"].to_f,
+        low: raw["low"].to_f, close: raw["close"].to_f,
+        volume: raw["volume"].to_f
+      )
       candles << c
       last_fetched_time = c.time
       process_new_candle(candles, pipeline, candles.size - 1)
     end
 
     ms = pipeline[:market_structure]
-    puts "       Bar: #{candles.last.close} | Swings: #{ms.swings.size} | BOS: #{ms.bos_events.size} | CHoCH: #{ms.choch_events.size} | #{'Trend: %8s' % ms.trend}"
+    puts "  New: #{new_candles.size} bar(s) | Latest close: #{pastel.yellow(candles.last.close.round(2).to_s)} | Trend: #{ms.trend}"
 
     # Formation analysis
-    reports = analyze_formations(candles, pipeline, options)
+    fa = SMC::Playbook::FormationAnalyzer.new(
+      candles: candles, current_idx: candles.size - 1,
+      pivot_detector: pipeline[:pivot_detector],
+      market_structure: pipeline[:market_structure],
+      liquidity_sweep: pipeline[:liquidity_sweep],
+      ob_detector: pipeline[:ob_detector]
+    )
+    reports = fa.analyze_all(min_formation: options[:formation_min] / 100.0)
+
+    puts ""
+    print_banner("FORMATION TRACKER", color: :bright_cyan)
+    print_formation_table(reports, verbose: options[:verbose])
 
     # Focus playbook specific signal
-    try_signal = evaluate_focussed(candles, pipeline, options)
+    pb = SMC::Playbook::PlaybookRegistry.default.find(options[:playbook])
+    strategy = if pb&.strategy_class
+                 pb.strategy_class.new
+               else
+                 SMC::Strategy::PlaybookStrategyAdapter.new(
+                   playbook_or_id: options[:playbook], min_risk_reward: options[:min_rr]
+                 )
+               end
 
-    if try_signal
+    signal = strategy.evaluate(
+      candles, candles.size - 1,
+      pipeline[:pivot_detector], pipeline[:market_structure],
+      pipeline[:liquidity_sweep], pipeline[:ob_detector]
+    )
+
+    if signal
+      print_signal_box(signal)
+      puts pastel.bright_white("  DRAY RUN — no order placed.") if options[:dry_run]
+    elsif reports.any? { |r| r.status == :forming || r.status == :ready }
+      forming = reports.select { |r| r.status == :forming || r.status == :ready }
       puts ""
-      puts "   ╔═════════════════════════════════════════════════════════════╗"
-      puts "   ║  🔥🔥🔥 SIGNAL DETECTED 🔥🔥🔥                             ║"
-      puts "   ╠═════════════════════════════════════════════════════════════╣"
-      puts format("   ║  Playbook : %-47s ║", try_signal[:playbook])
-      puts format("   ║  Direction: %-47s ║", try_signal[:type].to_s.upcase)
-      puts format("   ║  Entry    : %-47.2f ║", try_signal[:entry])
-      puts format("   ║  SL       : %-47.2f ║", try_signal[:sl])
-      puts format("   ║  TP1      : %-47.2f ║", try_signal[:tp1])
-      puts format("   ║  TP2      : %-47.2f ║", try_signal[:tp2])
-      puts format("   ║  TP3      : %-47.2f ║", try_signal[:tp3])
-      puts format("   ║  R:R      : 1:%-45.2f ║", try_signal[:risk_reward])
-      puts "   ╚═════════════════════════════════════════════════════════════╝"
-
-      # Show which rules were confirmed
-      passed_checks = try_signal[:rules_checked]&.select { |_, v| v }&.keys
-      if passed_checks
-        puts "   Confirmed: #{passed_checks.first(6).join(', ')}#{passed_checks.size > 6 ? '...' : ''}"
+      puts pastel.yellow("  ⚡ #{forming.size} playbook(s) ≥ 50% formed — watching for execution…")
+      forming.each do |r|
+        puts pastel.dim("     #{r.playbook.id} #{r.direction.to_s.upcase}: #{r.formation_pct.round(1)}% | Next: #{r.next_trigger&.dig(:description)}")
       end
-
-      unless options[:dry_run]
-        puts "\n   [EXECUTE] → Place #{try_signal[:type]} order..."
-      end
-    elsif reports.any? { |r| r.status == :forming }
-      puts ""
-      puts "   ⚡ Close to signal — #{reports.select { |r| r.status == :forming }.size} playbook(s) ≥ 50% formed."
     elsif reports.any? { |r| r.status == :warming_up }
       puts ""
-      puts "   🌡️ Setup building — monitoring #{reports.select { |r| r.status == :warming_up }.size} playbook(s)."
+      puts pastel.dim("  🌡️ #{reports.select { |r| r.status == :warming_up }.size} playbook(s) warming up.")
     else
       puts ""
-      puts "   ⚪ No formations above #{options[:formation_min]}% threshold."
+      puts pastel.red("  No formations above #{options[:formation_min]}% threshold.")
     end
 
     break if poll_count >= options[:max_polls]
   end
 
-  puts "\n[EXIT] Max polls reached. Shutting down."
+  puts ""
+  puts pastel.dim("[EXIT] Max polls reached. Shutting down.")
 end
 
 main if __FILE__ == $0
