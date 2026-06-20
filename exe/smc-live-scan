@@ -30,12 +30,13 @@ OPTIONS = {
   pair: 'B-BTC_USDT',
   interval: '5m',
   limit: 200,
-  playbook: 'PB-7',
+  playbook: nil,
   min_rr: 3.0,
   poll_seconds: 300,
   max_polls: 100,
   formation_min: 5,
   verbose: true,
+  any_playbook: true,
   api: :coindcx
 }.freeze
 
@@ -52,6 +53,8 @@ def parse_options
     opts.on("-n", "--max-polls N", Integer, "Max poll cycles") { |v| options[:max_polls] = v }
     opts.on("-f", "--formation MIN", Integer, "Min formation % to show (default: 5)") { |v| options[:formation_min] = v }
     opts.on("-q", "--quiet", "Only show forming/ready playbooks") { options[:verbose] = false }
+    opts.on("--any-playbook", "Evaluate ALL playbooks — fire whichever signals first (default)") { options[:any_playbook] = true }
+    opts.on("-b", "--playbook ID", "Focus playbook (overrides --any-playbook)") { |v| options[:playbook] = v; options[:any_playbook] = false }
     opts.on("--dry-run", "Print signals only, do not execute") { options[:dry_run] = true }
     opts.on("-h", "--help", "Show help") { puts opts; exit }
   end.parse!
@@ -159,7 +162,14 @@ def print_header(options)
   puts pastel.bright_blue(font.write("SMC"))
   puts pastel.cyan("  Live Formation Scanner")
   puts ""
-  puts pastel.dim("  Pair: #{options[:pair]} | Interval: #{options[:interval]} | Focus: #{options[:playbook]} | Min RR: 1:#{options[:min_rr]}")
+  mode = if options[:any_playbook]
+           "ANY playbook (fire first)"
+         elsif options[:playbook]
+           "Focus: #{options[:playbook]}"
+         else
+           "ANY playbook (fire first)"
+         end
+  puts pastel.dim("  Pair: #{options[:pair]} | Interval: #{options[:interval]} | Mode: #{mode} | Min RR: 1:#{options[:min_rr]}")
   puts ""
 end
 
@@ -169,11 +179,16 @@ def print_banner(text, color: :bright_blue)
   puts pastel.public_send(color, "═" * 60)
 end
 
-def print_signal_box(signal)
+def print_signal_box(signal, triggered_playbook = nil)
   puts ""
-  puts pastel.on_bright_green.black("  🔥  SIGNAL DETECTED  🔥")
+  if triggered_playbook.is_a?(SMC::Playbook::FormationReport)
+    puts pastel.on_bright_green.black("  🔥  #{triggered_playbook.playbook.id} #{triggered_playbook.direction.to_s.upcase} — SIGNAL FIRED! 🔥")
+    puts pastel.bright_white("  #{triggered_playbook.playbook.name}")
+  else
+    puts pastel.on_bright_green.black("  🔥  SIGNAL DETECTED  🔥")
+    puts pastel.bright_white("  Playbook : #{signal[:playbook]}")
+  end
   puts ""
-  puts pastel.bright_white("  Playbook : #{signal[:playbook]}")
   puts pastel.bright_white("  Direction: #{signal[:type].to_s.upcase}")
   puts ""
   puts pastel.green("  Entry  : #{signal[:entry]&.round(2)}")
@@ -317,25 +332,59 @@ def main
     print_banner("FORMATION TRACKER", color: :bright_cyan)
     print_formation_table(reports, verbose: options[:verbose])
 
-    # Focus playbook specific signal
-    pb = SMC::Playbook::PlaybookRegistry.default.find(options[:playbook])
-    strategy = if pb&.strategy_class
-                 pb.strategy_class.new
-               else
-                 SMC::Strategy::PlaybookStrategyAdapter.new(
-                   playbook_or_id: options[:playbook], min_risk_reward: options[:min_rr]
-                 )
-               end
+    # Evaluate strategies — any-playbook mode fires on whichever signals first
+    signal = nil
+    triggered_playbook = nil
 
-    signal = strategy.evaluate(
-      candles, candles.size - 1,
-      pipeline[:pivot_detector], pipeline[:market_structure],
-      pipeline[:liquidity_sweep], pipeline[:ob_detector]
-    )
+    if options[:any_playbook] || options[:playbook].nil?
+      ready_reports = reports.select { |r| r.status == :ready || r.status == :executing }
+      ready_reports.each do |r|
+        pb = r.playbook
+        next unless pb
+
+        strat = if pb.strategy_class
+                  pb.strategy_class.new
+                else
+                  SMC::Strategy::PlaybookStrategyAdapter.new(
+                    playbook_or_id: pb.id, min_risk_reward: options[:min_rr]
+                  )
+                end
+
+        sig = strat.evaluate(
+          candles, candles.size - 1,
+          pipeline[:pivot_detector], pipeline[:market_structure],
+          pipeline[:liquidity_sweep], pipeline[:ob_detector]
+        )
+
+        if sig
+          signal = sig
+          triggered_playbook = r
+          break  # fire on first valid signal
+        end
+      end
+    else
+      # Focus mode: only evaluate the chosen playbook
+      pb = SMC::Playbook::PlaybookRegistry.default.find(options[:playbook])
+      if pb
+        strategy = if pb.strategy_class
+                     pb.strategy_class.new
+                   else
+                     SMC::Strategy::PlaybookStrategyAdapter.new(
+                       playbook_or_id: options[:playbook], min_risk_reward: options[:min_rr]
+                     )
+                   end
+        signal = strategy.evaluate(
+          candles, candles.size - 1,
+          pipeline[:pivot_detector], pipeline[:market_structure],
+          pipeline[:liquidity_sweep], pipeline[:ob_detector]
+        )
+        triggered_playbook = options[:playbook] if signal
+      end
+    end
 
     if signal
-      print_signal_box(signal)
-      puts pastel.bright_white("  DRAY RUN — no order placed.") if options[:dry_run]
+      print_signal_box(signal, triggered_playbook)
+      puts pastel.bright_white("  DRY RUN — no order placed.") if options[:dry_run]
     elsif reports.any? { |r| r.status == :forming || r.status == :ready }
       forming = reports.select { |r| r.status == :forming || r.status == :ready }
       puts ""
