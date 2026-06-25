@@ -10,6 +10,14 @@ PATH
       tty-table (~> 0.12)
 
 PATH
+  remote: /home/nemesis/project/ai-workspace/ollama-client/ollama-client
+  specs:
+    ollama-client (1.3.0)
+      bigdecimal
+      dotenv (~> 2.8)
+      json-schema (~> 4.0)
+
+PATH
   remote: /home/nemesis/project/ai-workspace/ollama_agent
   specs:
     ollama_agent (1.0.1)
@@ -63,6 +71,7 @@ GEM
       fiber-annotation
       fiber-local (~> 1.1)
       json
+    csv (3.3.5)
     diff-lcs (1.6.2)
     domain_name (0.6.20240107)
     dotenv (2.8.1)
@@ -104,6 +113,7 @@ GEM
       dry-initializer (~> 3.2)
       dry-schema (~> 1.14)
       zeitwerk (~> 2.6)
+    event_emitter (0.2.6)
     eventmachine (1.2.7)
     faraday (1.10.5)
       faraday-em_http (~> 1.0)
@@ -144,6 +154,10 @@ GEM
     http-cookie (1.1.6)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
+    httparty (0.24.2)
+      csv
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     io-event (1.16.2)
     json (2.19.9)
     json-schema (4.3.1)
@@ -155,14 +169,13 @@ GEM
       rake (~> 13.0)
     logger (1.7.0)
     metrics (0.15.0)
+    mini_mime (1.1.5)
+    multi_xml (0.9.1)
+      bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.1)
     oj (3.17.3)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
-    ollama-client (1.3.0)
-      bigdecimal
-      dotenv (~> 2.8)
-      json-schema (~> 4.0)
     ostruct (0.6.3)
     pastel (0.8.0)
       tty-color (~> 0.5)
@@ -187,6 +200,11 @@ GEM
     ruby2_keywords (0.0.5)
     semantic_logger (4.18.0)
       concurrent-ruby (~> 1.0)
+    socket.io-client-simple (1.2.1)
+      event_emitter
+      httparty
+      json
+      websocket-client-simple (~> 0.3.0)
     sqlite3 (2.9.5-x86_64-linux-gnu)
     strings (0.2.1)
       strings-ansi (~> 0.2)
@@ -233,6 +251,9 @@ GEM
     unicode-display_width (2.6.0)
     unicode_utils (1.4.0)
     websocket (1.2.11)
+    websocket-client-simple (0.3.1)
+      event_emitter
+      websocket
     websocket-eventmachine-base (1.2.0)
       eventmachine (~> 1.0)
       websocket (~> 1.0)
@@ -247,10 +268,12 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  ollama-client!
   ollama_agent!
   rake (~> 13.0)
   rspec (~> 3.12)
   smc-backtester!
+  socket.io-client-simple
   trading_agent!
 
 CHECKSUMS
@@ -260,6 +283,7 @@ CHECKSUMS
   binance-connector-ruby (1.7.1) sha256=fe4fbd474ebcebb4faa2b6dab74e651e73323611c96eb3552aa2adfdd96b38e1
   concurrent-ruby (1.3.7) sha256=4412caec3a5ea2e5fdc52076724c071a81f2c0593d83b2ac8cbb8ca63b3151b0
   console (1.36.0) sha256=45599ea906cf80a73d8941f03abf873fe66a6a954e0bac5bc1c01e2cdc406f07
+  csv (3.3.5) sha256=6e5134ac3383ef728b7f02725d9872934f523cb40b961479f69cf3afa6c8e73f
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
   domain_name (0.6.20240107) sha256=5f693b2215708476517479bf2b3802e49068ad82167bcd2286f899536a17d933
   dotenv (2.8.1) sha256=c5944793349ae03c432e1780a2ca929d60b88c7d14d52d630db0508c3a8a17d8
@@ -272,6 +296,7 @@ CHECKSUMS
   dry-schema (1.16.0) sha256=cd3aaeabc0f1af66ec82a29096d4c4fb92a0a58b9dae29a22b1bbceb78985727
   dry-types (1.9.1) sha256=baebeecdb9f8395d6c9d227b62011279440943e3ef2468fe8ccc1ba11467f178
   dry-validation (1.11.1) sha256=70900bb5a2d911c8aab566d3e360c6bff389b8bf92ea8e04885ce51c41ff8085
+  event_emitter (0.2.6) sha256=c72697bd5cce9d36594be1972c17f1c9a573236f44303a4d1d548080364e1391
   eventmachine (1.2.7) sha256=994016e42aa041477ba9cff45cbe50de2047f25dd418eba003e84f0d16560972
   faraday (1.10.5) sha256=b144f1d2b045652fa820b5f532723e1643cc28b93dae911d784e5c5f88e8f6ed
   faraday-em_http (1.0.0) sha256=7a3d4c7079789121054f57e08cd4ef7e40ad1549b63101f38c7093a9d6c59689
@@ -292,6 +317,7 @@ CHECKSUMS
   http (5.3.1) sha256=c50802d8e9be3926cb84ac3b36d1a31fbbac383bc4cbecdce9053cb604231d7d
   http-cookie (1.1.6) sha256=ba4b82be64de61dc281243dac70e3c382c45142f20268ed9276a3670c93feaa9
   http-form_data (2.3.0) sha256=cc4eeb1361d9876821e31d7b1cf0b68f1cf874b201d27903480479d86448a5f3
+  httparty (0.24.2) sha256=8fca6a54aa0c4aa4303a0fd33e5e2156175d6a5334f714263b458abd7fda9c38
   io-event (1.16.2) sha256=9f9cb0a96ea5c3850a672606c65f27bc96d7621399ef6196acbfe2be0cd1279c
   json (2.19.9) sha256=9b9025b7cdddafa38d316eca0b2358488e42d417045c1b90d216a9fefe46b79a
   json-schema (4.3.1) sha256=d5e68dc32b94408d0b06ad04f9382ccbb6fe5a44910e066f8547f56c471a7825
@@ -299,9 +325,11 @@ CHECKSUMS
   llhttp-ffi (0.5.1) sha256=9a25a7fc19311f691a78c9c0ac0fbf4675adbd0cca74310228fdf841018fa7bc
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   metrics (0.15.0) sha256=61ded5bac95118e995b1bc9ed4a5f19bc9814928a312a85b200abbdac9039072
+  mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
+  multi_xml (0.9.1) sha256=7ce766b59c17241ed62976caeae1fae9b2431b263398c35396239a68c4a64e57
   multipart-post (2.4.1) sha256=9872d03a8e552020ca096adadbf5e3cb1cd1cdd6acd3c161136b8a5737cdb4a8
   oj (3.17.3) sha256=ebe3967b0bb7ac4f206561d0d9ac8875b9973f778600d7b61b5c355662a707ed
-  ollama-client (1.3.0) sha256=f3cf45ab7625900bf15e05d3623774c3a484f5588bd2ae37d47116f1409c8851
+  ollama-client (1.3.0)
   ollama_agent (1.0.1)
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
   pastel (0.8.0) sha256=481da9fb7d2f6e6b1a08faf11fa10363172dc40fd47848f096ae21209f805a75
@@ -318,6 +346,7 @@ CHECKSUMS
   ruby2_keywords (0.0.5) sha256=ffd13740c573b7301cf7a2e61fc857b2a8e3d3aff32545d6f8300d8bae10e3ef
   semantic_logger (4.18.0) sha256=b00e4480b63d844628ce383e80d564626fe2fdb525ecf378dbc4df7828dead8b
   smc-backtester (1.0.0)
+  socket.io-client-simple (1.2.1) sha256=7d51d12d9ca2557b334fad85ab699a9240ea0d020a362101e6bf3b818c97db48
   sqlite3 (2.9.5-x86_64-linux-gnu) sha256=233dbcb6714148dd23bc5aeb33e8efd6eac974969564ddd5794c23d5f52b231e
   strings (0.2.1) sha256=933293b3c95cf85b81eb44b3cf673e3087661ba739bbadfeadf442083158d6fb
   strings-ansi (0.2.0) sha256=90262d760ea4a94cc2ae8d58205277a343409c288cbe7c29416b1826bd511c88
@@ -339,6 +368,7 @@ CHECKSUMS
   unicode-display_width (2.6.0) sha256=12279874bba6d5e4d2728cef814b19197dbb10d7a7837a869bab65da943b7f5a
   unicode_utils (1.4.0) sha256=b922d0cf2313b6b7136ada6645ce7154ffc86418ca07d53b058efe9eb72f2a40
   websocket (1.2.11) sha256=b7e7a74e2410b5e85c25858b26b3322f29161e300935f70a0e0d3c35e0462737
+  websocket-client-simple (0.3.1) sha256=79c6e0b3b467cd282693c99eff1b1d40eacef28ff60d804a89229b5a8a33ade7
   websocket-eventmachine-base (1.2.0) sha256=396438982fa26cc1f9adca51570d7d49bc2bc94ab4e4c68298433fce6a303f72
   websocket-eventmachine-client (1.3.0) sha256=15c33e3240292c47ba9ae574be5c5c61bcd409e786af7d80d0c7638a497c90c4
   websocket-native (1.0.0) sha256=b64126977b3f1beb1b2d49d16d3129b56b46749605d9df1a98f0c0efdf68fbcd

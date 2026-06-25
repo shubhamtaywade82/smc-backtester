@@ -11,6 +11,22 @@ require 'tty-font'
 require 'pastel'
 require 'tty-spinner'
 require 'tty-table'
+require 'tty-box'
+
+begin
+  require 'dotenv'
+  ollama_env = ENV.fetch('OLLAMA_AGENT_ENV', File.expand_path('~/.config/ollama_agent/.env'))
+  Dotenv.load(ollama_env) if File.exist?(ollama_env)
+rescue LoadError
+  # Dotenv not loaded
+end
+
+begin
+  require 'ollama_client'
+rescue LoadError
+  # ollama_client gem not found
+end
+
 
 # --- CoinDCX Client Integration ---
 coindcx_paths = [
@@ -37,7 +53,8 @@ OPTIONS = {
   formation_min: 5,
   verbose: true,
   any_playbook: true,
-  api: :coindcx
+  api: :coindcx,
+  ai: true
 }.freeze
 
 def parse_options
@@ -56,6 +73,7 @@ def parse_options
     opts.on("--any-playbook", "Evaluate ALL playbooks — fire whichever signals first (default)") { options[:any_playbook] = true }
     opts.on("-b", "--playbook ID", "Focus playbook (overrides --any-playbook)") { |v| options[:playbook] = v; options[:any_playbook] = false }
     opts.on("--dry-run", "Print signals only, do not execute") { options[:dry_run] = true }
+    opts.on("--[no-]ai", "Enable/disable AI insights using ollama-client (default: true)") { |v| options[:ai] = v }
     opts.on("-h", "--help", "Show help") { puts opts; exit }
   end.parse!
   options
@@ -245,7 +263,94 @@ def print_formation_table(reports, verbose: true)
   end
 end
 
+def ai_client
+  return nil unless defined?(Ollama::Client)
+
+  @ai_client ||= begin
+    config = Ollama::Config.new
+    config.base_url = ENV['OLLAMA_BASE_URL'] if ENV['OLLAMA_BASE_URL']
+    config.model = ENV['OLLAMA_AGENT_MODEL'] || ENV['OLLAMA_MODEL'] || 'llama3.2:3b'
+    config.api_key = ENV['OLLAMA_API_KEY'] if ENV['OLLAMA_API_KEY']
+    Ollama::Client.new(config: config)
+  rescue => e
+    nil
+  end
+end
+
+def fetch_ai_insights(options, candles, pipeline, reports, signal = nil)
+  client = ai_client
+  return nil unless client
+
+  ms = pipeline[:market_structure]
+
+  active_playbooks_desc = reports.select { |r| r.formation_pct >= 50 }.map do |r|
+    "- #{r.playbook.id} (#{r.playbook.name}): #{r.direction.to_s.upcase} | #{r.formation_pct}% formed | Status: #{r.status} | Next: #{r.next_trigger&.dig(:description)}"
+  end.join("\n")
+
+  signal_desc = if signal
+    "ACTIVE SIGNAL DETECTED:\n" \
+    "- Playbook: #{signal[:playbook]}\n" \
+    "- Direction: #{signal[:type].to_s.upcase}\n" \
+    "- Entry: #{signal[:entry]}\n" \
+    "- Stop Loss: #{signal[:sl]}\n" \
+    "- Take Profit (TP3): #{signal[:tp3]}\n" \
+    "- Risk/Reward Ratio: 1:#{signal[:risk_reward]}"
+  else
+    "No active entry signals triggered yet."
+  end
+
+  prompt = <<~PROMPT
+    You are an AI Trading Assistant specializing in Smart Money Concepts (SMC) and ICT institutional trading playbook rules.
+    Analyze the current live market state and provide a concise, high-impact "AI Market Insight" for the trader.
+
+    [Market State]
+    - Pair: #{options[:pair]}
+    - Interval: #{options[:interval]}
+    - Latest Close: #{candles.last.close}
+    - Current Trend: #{ms.trend} (BOS: #{ms.bos_events.size}, CHoCH: #{ms.choch_events.size})
+
+    [Forming Playbooks (>= 50%)]
+    #{active_playbooks_desc.empty? ? "None" : active_playbooks_desc}
+
+    [Trade Signals]
+    #{signal_desc}
+
+    Instructions:
+    - Provide 3-4 bullet points of crisp, actionable insights.
+    - Evaluate which playbook is most promising or if the current signal is high-quality.
+    - Note any potential traps (e.g., lack of liquidity sweeps, aggressive CHoCH without displacement, bad risk-to-reward ratio).
+    - Keep the output format simple: only bullet points (using standard '-' prefix), no title, no markdown blocks, max 100 words.
+  PROMPT
+
+  begin
+    model = ENV['OLLAMA_AGENT_MODEL'] || ENV['OLLAMA_MODEL'] || 'llama3.2:3b'
+    response = client.generate(prompt: prompt, model: model)
+    response.to_s.strip
+  rescue => e
+    "AI Insights Error: #{e.message}"
+  end
+end
+
+def print_ai_insights(insights)
+  return if insights.nil? || insights.empty?
+
+  puts ""
+  box = TTY::Box.frame(
+    width: 60,
+    align: :left,
+    padding: 1,
+    title: { top_left: " 🤖 AI INSIGHTS " },
+    style: {
+      border: {
+        fg: :cyan
+      }
+    }
+  ) { pastel.cyan(insights) }
+  puts box
+end
+
 # --- Main ---
+
 def main
   options = parse_options
 
@@ -398,6 +503,11 @@ def main
     else
       puts ""
       puts pastel.red("  No formations above #{options[:formation_min]}% threshold.")
+    end
+
+    if options[:ai]
+      insights = fetch_ai_insights(options, candles, pipeline, reports, signal)
+      print_ai_insights(insights)
     end
 
     break if poll_count >= options[:max_polls]
